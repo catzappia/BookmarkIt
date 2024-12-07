@@ -4,14 +4,7 @@ import { Link } from 'react-router-dom';
 import Auth from '../../utils/auth';
 import { login } from '../../utils/API';
 import { useMutation } from '@apollo/react-hooks';
-
-interface SignUpFormData {
-    name: string;
-    email: string;
-    username: string;
-    password: string;
-    confirmPassword: string;
-}
+import SignUpFormData from './models/signUpFormData'
 
 const SignUp: React.FC = () => {
     const [formData, setFormData] = useState<SignUpFormData>({
@@ -27,3 +20,5 @@ const SignUp: React.FC = () => {
 
     // handle form input changes
 }
+
+export default SignUp;

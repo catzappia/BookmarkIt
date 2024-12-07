@@ -2,6 +2,7 @@ import { Schema, model, type Document } from 'mongoose';
 
 export interface IGroup extends Document {
     name: string,
+    open: boolean,
     users: Schema.Types.ObjectId,
     currentBook: Schema.Types.ObjectId,
     books: Schema.Types.ObjectId[],
@@ -14,6 +15,11 @@ export const groupSchema = new Schema<IGroup>({
         unique: true,
         maxlength: 40,
         minlength: 3
+    },
+    open: {
+        type: Boolean,
+        required: true,
+        default: true
     },
     users: [
         {
