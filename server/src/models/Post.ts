@@ -2,6 +2,7 @@ import { Schema, model, type Document } from 'mongoose';
 
 
 export interface IPost extends Document {
+    postId: string,
     text: string,
     username: Schema.Types.ObjectId,
     comments?: Schema.Types.ObjectId
@@ -21,7 +22,8 @@ export const postSchema = new Schema<IPost>({
     comments: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Comment'
+            ref: 'comment',
+            default: []
         }
     ],
     },
@@ -33,6 +35,6 @@ export const postSchema = new Schema<IPost>({
     }
 )
 
-const Post = model<IPost>('Post', postSchema);
+const Post = model<IPost>('post', postSchema);
 
 export default Post

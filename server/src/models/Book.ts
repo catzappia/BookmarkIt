@@ -1,9 +1,12 @@
 import { Schema, model, type Document } from 'mongoose';
 
 export interface IBook extends Document {
+    bookId: string,
     title: string,
-    author: string[],
+    authors: string[],
+    description: string,
     image: string,
+    link: string
 
     posts: Schema.Types.ObjectId
 }
@@ -13,13 +16,19 @@ export const bookSchema = new Schema<IBook>({
         type: String,
         required: true
     },
-    author: {
+    authors: {
         type: [String],
         required: true
+    },
+    description: {
+        type: String
     },
     image: {
         type: String
     },
+    link: {
+        type: String
+    }
     },
     {
         toJSON: {
@@ -29,6 +38,6 @@ export const bookSchema = new Schema<IBook>({
     }
 )
 
-const Book = model('Book', bookSchema);
+const Book = model('book', bookSchema);
 
 export default Book

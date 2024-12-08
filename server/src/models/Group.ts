@@ -1,6 +1,7 @@
 import { Schema, model, type Document } from 'mongoose';
 
 export interface IGroup extends Document {
+    groupId: string,
     name: string,
     open: boolean,
     users: Schema.Types.ObjectId,
@@ -24,17 +25,20 @@ export const groupSchema = new Schema<IGroup>({
     users: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Users'
+            ref: 'user',
+            default: []
         }
     ],
     currentBook: {
         type: Schema.Types.ObjectId,
-        ref: 'Books'
+        ref: 'book',
+        default: undefined
     },
     books:[
         {
             type: Schema.Types.ObjectId,
-            ref: 'Books'
+            ref: 'book',
+            default: []
         }
     ],
     },
@@ -46,6 +50,6 @@ export const groupSchema = new Schema<IGroup>({
     }
 )
 
-const Group = model('Group', groupSchema);
+const Group = model('group', groupSchema);
 
 export default Group
