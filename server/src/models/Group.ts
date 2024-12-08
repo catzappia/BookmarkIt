@@ -1,11 +1,14 @@
 import { Schema, model, type Document } from 'mongoose';
+import { IBook, bookSchema } from './Book.js';
+import { IUser } from './User.js';
 
 export interface IGroup extends Document {
+    groupId: string,
     name: string,
     open: boolean,
-    users: Schema.Types.ObjectId,
-    currentBook: Schema.Types.ObjectId,
-    books: Schema.Types.ObjectId[],
+    users: IUser[],
+    currentBook: IBook,
+    books: IBook[],
 }
 
 export const groupSchema = new Schema<IGroup>({
@@ -24,19 +27,17 @@ export const groupSchema = new Schema<IGroup>({
     users: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Users'
+            ref: 'User',
         }
     ],
     currentBook: {
-        type: Schema.Types.ObjectId,
-        ref: 'Books'
+        type: bookSchema,
+        default: null
     },
-    books:[
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Books'
-        }
-    ],
+    books:{
+        type: [bookSchema],
+        default: []
+    },
     },
     {
         toJSON: {
@@ -46,6 +47,6 @@ export const groupSchema = new Schema<IGroup>({
     }
 )
 
-const Group = model('Group', groupSchema);
+const Group = model('group', groupSchema);
 
 export default Group
