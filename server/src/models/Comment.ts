@@ -3,7 +3,7 @@ import { Schema, model, type Document } from 'mongoose';
 export interface IComment extends Document {
     commentId: string,
     text: string,
-    username: Schema.Types.ObjectId
+    username: string
 }
 
 export const commentSchema = new Schema<IComment>({
@@ -14,7 +14,7 @@ export const commentSchema = new Schema<IComment>({
         minlength: 1
     },
     username: {
-        type: Schema.Types.ObjectId,
+        type: String,
         required: true
     },
     },

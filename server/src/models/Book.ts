@@ -7,8 +7,6 @@ export interface IBook extends Document {
     description: string,
     image: string,
     link: string
-
-    posts: Schema.Types.ObjectId
 }
 
 export const bookSchema = new Schema<IBook>({
