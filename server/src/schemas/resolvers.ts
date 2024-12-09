@@ -74,7 +74,11 @@ const resolvers = {
         const user = await User.create({ ...input });
         const token = signToken(user.username, user.email, user._id);
         return { token, user };
-    }
+    },
+    addGroup: async (
+      _parent: any,
+      { input }
+    )
   },
 };
 

@@ -6,9 +6,9 @@ export interface IGroup extends Document {
     groupId: string,
     name: string,
     open: boolean,
-    users: IUser[],
-    currentBook: IBook,
-    books: IBook[],
+    users?: IUser[],
+    currentBook?: IBook,
+    books?: IBook[],
 }
 
 export const groupSchema = new Schema<IGroup>({

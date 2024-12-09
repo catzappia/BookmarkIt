@@ -7,10 +7,8 @@ import { fileURLToPath } from 'url';
 
 import { typeDefs, resolvers } from './schemas/index.js';
 import db from './config/connection.js';
-import { authenticationToken } from './utils/auth.js';
+// import { authenticationToken } from './utils/auth.js';
 
-const PORT = process.env.PORT || 3001;
-const app = express();
 const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -19,18 +17,16 @@ const server = new ApolloServer({
 
 const startApolloServer = async () => {
     await server.start();
+    await db();
 
-    try {
-        await db();
-    } catch (err) {
-        console.error('MongoDB connection error:', err);
-    }
-
+    const app = express();
+    const PORT = process.env.PORT || 3001;
+    
     app.use(express.urlencoded({ extended: true}));
     app.use(express.json());
 
     app.use('/graphql', expressMiddleware(server as any,
-        { context: authenticationToken as any }
+        // { context: authenticationToken as any }
     ));
 
     if (process.env.NODE_ENV === 'production') {
