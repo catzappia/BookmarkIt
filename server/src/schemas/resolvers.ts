@@ -1,5 +1,6 @@
 import { signToken, AuthenticationError } from '../utils/auth.js';
 import User, { IUser } from '../models/User.js';
+import Group, { IGroup } from '../models/Group.js';
 
 interface Context {
     user?: IUser;
@@ -21,13 +22,16 @@ interface AddUserArgs {
     }
 }
 
+interface CreateGroupArgs {
+    input: {
+        name: string,
+        open: boolean,
+    }
+}
+
 const resolvers = {
   Query: {
-    me: async (
-      _parent: any,
-      _args: any,
-      context: Context
-    ): Promise<IUser | null> => {
+    me: async (_parent: any, _args: any, context: Context): Promise<IUser | null> => {
       if (!context.user) {
         throw new AuthenticationError("Not Logged In");
       }
@@ -37,6 +41,14 @@ const resolvers = {
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get user");
+      }
+    },
+    allGroups: async (_parent: any, _args: any): Promise<IGroup[]> => {
+      try {
+        return await Group.find({});
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to get groups");
       }
     },
   },
@@ -75,11 +87,20 @@ const resolvers = {
         const token = signToken(user.username, user.email, user._id);
         return { token, user };
     },
-    addGroup: async (
-      _parent: any,
-      { input }
-    )
+    createGroup: async ( _parent: any, { input }: CreateGroupArgs, context: Context): Promise<IGroup> => {
+        if (!context.user) {
+            throw new AuthenticationError("Not Logged In");
+        }
+
+        try {
+            const group = await Group.create({ ...input, admin: context.user._id });
+            return group;
+        } catch (err) {
+            console.error(err);
+            throw new Error("Failed to create group");
+        }
+    },
   },
-};
+}
 
 export default resolvers;

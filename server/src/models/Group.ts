@@ -6,6 +6,7 @@ export interface IGroup extends Document {
     groupId: string,
     name: string,
     open: boolean,
+    admin: IUser,
     users?: IUser[],
     currentBook?: IBook,
     books?: IBook[],
@@ -23,6 +24,11 @@ export const groupSchema = new Schema<IGroup>({
         type: Boolean,
         required: true,
         default: true
+    },
+    admin: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
     users: [
         {

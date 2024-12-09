@@ -36,3 +36,35 @@ export const QUERY__SINGLE_USER = gql`
     }
 }`;
 
+export const QUERY_ALL_GROUPS = gql`
+    query groups {
+      groups {
+        _id
+        name
+        open
+        admin {
+          _id
+          username
+        }
+        users {
+          _id
+          username
+        }
+        currentBook {
+          _id
+          title
+          authors
+          description
+          image
+          link
+        }
+        books {
+          _id
+          title
+          authors
+          description
+          image
+          link
+        }
+      }
+    }`;

@@ -68,14 +68,21 @@ const typeDefs = `
         image: String
         link: String
     }
+    
+    input NewGroupInput {
+        name: String!
+        open: Boolean!
+    }
 
     type Query {
         me: User
+        allGroups: [Group]
     }
     
     type Mutation {
         addUser(input: NewUserInput!): Auth
         login(input: LoginInput!): Auth
+        createGroup(input: NewGroupInput!): Group
     }
 `;
 
