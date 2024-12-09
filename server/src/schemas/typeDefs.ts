@@ -54,10 +54,10 @@ const typeDefs = gql`
         password: String!
     }
     
-    input LoginInput {
-        email: String!
-        password: String!
-    }
+    # input LoginInput {
+    #     email: String!
+    #     password: String!
+    # }
 
     input BookData {
         bookId: ID!
@@ -74,7 +74,7 @@ const typeDefs = gql`
     
     type Mutation {
         addUser(input: NewUserInput): Auth
-        login(input: LoginInput!): Auth
+        login(email: String!, password: String!): Auth
     }
 `;
 

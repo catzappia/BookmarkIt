@@ -4,8 +4,8 @@ import User  from '../models/User.js';
 
 interface LoginArgs {
     
-        email: string,
-        password: string
+  email: string;
+  password: string;
     
 }
 
@@ -35,7 +35,7 @@ const resolvers = {
   Mutation: {
     login: async (_parent: any,{ email, password }: LoginArgs) => {
       try {
-        const user = await User.findOne({ email});
+        const user = await User.findOne({ email });
 
         if (!user) {
           throw new AuthenticationError(
@@ -49,7 +49,7 @@ const resolvers = {
           throw new AuthenticationError("Incorrect password");
         }
 
-        const token = signToken(user.username, user.email, user._id);
+        const token = signToken(user.username, user.email, user.id);
         return { token, user };
       } catch (err) {
         console.error(err);

@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { GraphQLError } from 'graphql';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const authenticationToken = ({ req }: any) => {
     let token = req.body.token || req.query.token || req.headers.authorization;
