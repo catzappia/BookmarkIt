@@ -73,7 +73,7 @@ const typeDefs = gql`
     }
     
     type Mutation {
-        addUser(input: NewUserInput!): Auth
+        addUser(input: NewUserInput): Auth
         login(input: LoginInput!): Auth
     }
 `;
