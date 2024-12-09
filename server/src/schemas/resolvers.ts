@@ -14,7 +14,6 @@ interface LoginArgs {
 
 interface AddUserArgs {
     input: {
-        name: string,
         username: string,
         email: string,
         password: string

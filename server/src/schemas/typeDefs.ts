@@ -1,7 +1,6 @@
 const typeDefs = `
     type User {
         _id: ID!
-        name: String
         username: String
         email: String
         password: String
@@ -45,11 +44,10 @@ const typeDefs = `
 
     type Auth {
         token: ID!
-        user: User!    
+        user: User   
     }
 
     input NewUserInput {
-        name: String!
         username: String!
         email: String!
         password: String!

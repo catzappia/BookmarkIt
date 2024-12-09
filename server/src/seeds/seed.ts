@@ -1,6 +1,6 @@
 import db from "../config/connection.js";
-import User from "../models/index.js";
-import cleanDB from "./cleanDB.js";
+import User from "../models/User.js";
+// import cleanDB from "./cleanDB.js";
 import userData from './userData.json' with { type: "json" };
 
 
