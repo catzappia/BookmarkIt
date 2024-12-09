@@ -1,7 +1,13 @@
 [
     {
         "username": "testUser",
-        "password": "Password!1",
-        "email": "tes@test.com"
+        "email": "tes@test.com",
+        "password": "Password!1"
+        
+    },
+    {
+        "username": "Tom Brady",
+        "email": "tombrady@guru.com",
+        "password": "password"
     }
 ]

@@ -9,7 +9,7 @@ const db = async () => {
         return mongoose.connection;
     } catch (err) {
         console.log('Error connection to the database', err);
-        throw new Error('Error connecting to dabase');
+        throw new Error('Error connecting to database');
     }
 };
 

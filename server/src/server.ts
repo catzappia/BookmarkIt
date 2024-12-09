@@ -3,18 +3,16 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import path from 'path';
 import { Request, Response } from 'express';
-import { fileURLToPath } from 'url';
+// import { fileURLToPath } from 'url';
 
 import { typeDefs, resolvers } from './schemas/index.js';
 import db from './config/connection.js';
 import { authenticationToken } from './utils/auth.js';
 
-const PORT = process.env.PORT || 3001;
-const app = express();
+
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    introspection: true,
 });
 
 const startApolloServer = async () => {
@@ -26,6 +24,9 @@ const startApolloServer = async () => {
         console.error('MongoDB connection error:', err);
     }
 
+    const PORT = process.env.PORT || 3001;
+    const app = express();
+
     app.use(express.urlencoded({ extended: true}));
     app.use(express.json());
 
@@ -35,12 +36,12 @@ const startApolloServer = async () => {
 
     if (process.env.NODE_ENV === 'production') {
         console.log(`In production mode, from NODE_ENV: ${process.env.NODE_ENV}`);
-        const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
-        app.use(express.static(path.join(__dirname, '../client/dist')));
+        // const __filename = fileURLToPath(import.meta.url);
+        // const __dirname = path.dirname(__filename);
+        app.use(express.static(path.resolve(process.cwd(), '../client/dist')));
     
         app.get('*', (_req: Request, res: Response) => {
-          res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+        res.sendFile(path.resolve(process.cwd(), '../client/dist/index.html'));
         });
       }
 
