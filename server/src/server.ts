@@ -3,16 +3,17 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import path from 'path';
 import { Request, Response } from 'express';
-// import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url';
 
 import { typeDefs, resolvers } from './schemas/index.js';
 import db from './config/connection.js';
-import { authenticationToken } from './utils/auth.js';
+// import { authenticationToken } from './utils/auth.js';
 
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    introspection: true,
 });
 
 const startApolloServer = async () => {
@@ -31,14 +32,14 @@ const startApolloServer = async () => {
     app.use(express.json());
 
     app.use('/graphql', expressMiddleware(server as any,
-        { context: authenticationToken as any }
+        // { context: authenticationToken as any }
     ));
 
     if (process.env.NODE_ENV === 'production') {
         console.log(`In production mode, from NODE_ENV: ${process.env.NODE_ENV}`);
-        // const __filename = fileURLToPath(import.meta.url);
-        // const __dirname = path.dirname(__filename);
-        app.use(express.static(path.resolve(process.cwd(), '../client/dist')));
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        app.use(express.static(path.join(__dirname, '../client/dist')));
     
         app.get('*', (_req: Request, res: Response) => {
         res.sendFile(path.resolve(process.cwd(), '../client/dist/index.html'));
