@@ -1,17 +1,24 @@
 import db from "../config/connection.js";
-import models from "../models/index.js";
-import cleanDB from "./cleanDB.js";
+import User from "../models/User.js";
+// import cleanDB from "./cleanDB.js";
+import userData from './userData.json' with { type: "json" };
 
-const { User } = models;
 
-import userData from './userData.json' assert { type: "json" };
 
-const connection = await db();
-connection.once('open', async () => {
-  await cleanDB('User', 'users');
+const seedDB = async () => {
+  try {
+    await db().then((d) => d.dropCollection('users'));
+   
 
-  await User.insertMany(userData);
+    await User.create(userData);
 
-  console.log('Users Seeded!');
-  process.exit(0);
-});
+    console.log("Data seeded successfully!");
+
+    process.exit(0);
+  } catch (err) {
+    console.error("Error seeding data:", err);
+    process.exit(1);
+  }
+}
+
+seedDB();

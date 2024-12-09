@@ -7,7 +7,6 @@ import { IComment, commentSchema } from './Comment.js';
 
 export interface IUser extends Document {
     id: string,
-    name: string,
     username: string,
     email: string,
     password: string,
@@ -21,11 +20,6 @@ export interface IUser extends Document {
 }
 
 export const userSchema: Schema<IUser> = new Schema<IUser>({
-    name: {
-        type: String,
-        required: true,
-        unique: false,
-    },
     username: {
         type: String,
         required: true,
@@ -38,6 +32,7 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
         type: String,
         required: true,
         unique: true,
+        match: [/.+@.+\..+/, 'Must use a valid email address']
     },
     password: {
         type: String,
@@ -69,10 +64,20 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
         timestamps: true,
     }
 );
+// hash user password
+userSchema.pre('save', async function (next) {
+    if (this.isNew || this.isModified('password')) {
+      const saltRounds = 10;
+      this.password = await bcrypt.hash(this.password, saltRounds);
+    }
+  
+    next();
+  });
 
 userSchema.methods.isCorrectPassword = async function (password: string) {
     return await bcrypt.compare(password, this.password);
 }
-const User = model<IUser>('user', userSchema);
+const User = model<IUser>('User', userSchema);
+// put an uppercase on User
 
 export default User

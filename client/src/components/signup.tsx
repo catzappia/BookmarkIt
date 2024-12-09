@@ -7,14 +7,14 @@ import { useMutation } from '@apollo/client';
 import { SignUpFormData } from '../models/signUpFormData';
 import { ADD_USER } from '../utils/mutations';
 
-const SignUp: React.FC = () => {
-    const [formData, setFormData] = useState<SignUpFormData>({
-        name: '',
-        email: '',
-        username: '',
-        password: '',
-        confirmPassword: ''
-    });
+// const SignUp: React.FC = () => {
+//     const [formData, setFormData] = useState<SignUpFormData>({
+//         name: '',
+//         email: '',
+//         username: '',
+//         password: '',
+//         confirmPassword: ''
+//     });
 
     // error state
     const [error, setError] = useState<string | null>(null);
@@ -115,4 +115,4 @@ const SignUp: React.FC = () => {
     )
 }
 
-export default SignUp;
+// export default SignUp;
