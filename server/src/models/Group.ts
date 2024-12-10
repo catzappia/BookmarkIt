@@ -5,10 +5,11 @@ import { IUser } from './User.js';
 export interface IGroup extends Document {
     groupId: string,
     name: string,
-    open: boolean,
-    users: IUser[],
-    currentBook: IBook,
-    books: IBook[],
+    is_private: boolean,
+    admin: IUser,
+    users?: IUser[],
+    currentBook?: IBook,
+    books?: IBook[],
 }
 
 export const groupSchema = new Schema<IGroup>({
@@ -19,10 +20,15 @@ export const groupSchema = new Schema<IGroup>({
         maxlength: 40,
         minlength: 3
     },
-    open: {
+    is_private: {
         type: Boolean,
         required: true,
-        default: true
+        default: false
+    },
+    admin: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        // required: true
     },
     users: [
         {

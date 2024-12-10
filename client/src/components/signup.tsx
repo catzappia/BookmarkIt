@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
@@ -109,4 +110,7 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
   );
 };
 
-export default SignupForm;
+
+
+// export default SignUp;
+

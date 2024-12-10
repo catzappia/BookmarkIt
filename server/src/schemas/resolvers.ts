@@ -1,5 +1,6 @@
 import { signToken, AuthenticationError } from '../utils/auth.js';
 import User  from '../models/User.js';
+import Group, { IGroup} from '../models/Group.js';
 
 
 interface LoginArgs {
@@ -17,6 +18,13 @@ interface AddUserArgs {
     }
 }
 
+interface CreateGroupArgs {
+    input: {
+        name: string,
+        open: boolean,
+    }
+}
+
 const resolvers = {
   Query: {
     me: async (_parent: any, _args: any, context: any) => {
@@ -29,6 +37,14 @@ const resolvers = {
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get user");
+      }
+    },
+    allGroups: async (_parent: any, _args: any): Promise<IGroup[]> => {
+      try {
+        return await Group.find({});
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to get groups");
       }
     },
   },
@@ -60,8 +76,21 @@ const resolvers = {
         const user = await User.create({ ...input });
         const token = signToken(user.username, user.email, user._id);
         return { token, user };
-    }
+    },
+    createGroup: async ( _parent: any, { input }: CreateGroupArgs): Promise<IGroup> => { // context: any
+        // if (!context.user) {
+        //     throw new AuthenticationError("Not Logged In");
+        // }
+
+        try {
+            const group = await Group.create({ ...input }); //, admin: context.user._id
+            return group;
+        } catch (err) {
+            console.error(err);
+            throw new Error("Failed to create group");
+        }
+    },
   },
-};
+}
 
 export default resolvers;

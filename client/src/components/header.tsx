@@ -58,6 +58,11 @@ return (
                         Book Clubs
                     </Link>
                 </li>
+                <li>
+                    <Link to="/discover" onClick={closeMenu}>
+                        Discover
+                    </Link>
+                </li>
             </ul>
         </nav>
     </header>

@@ -62,18 +62,21 @@ const typeDefs = gql`
         image: String
         link: String
     }
+    
+    input NewGroupInput {
+        name: String!
+        is_private: Boolean!
+    }
 
     type Query {
         me: User
+        allGroups: [Group]
     }
     
     type Mutation {
         addUser(input: NewUserInput): Auth
         login(email: String!, password: String!): Auth
-        
-        
-        # Create a new group
-        createGroup(name: String!): Group
+        createGroup(input: NewGroupInput!): Group
         # Join a group
         joinGroup(groupId: ID!, userId: ID!): Group
         # Leave a group
