@@ -1,21 +1,17 @@
 import { signToken, AuthenticationError } from '../utils/auth.js';
-import User, { IUser } from '../models/User.js';
-import Group, { IGroup } from '../models/Group.js';
+import User  from '../models/User.js';
+import Group, { IGroup} from '../models/Group.js';
 
-interface Context {
-    user?: IUser;
-}
 
 interface LoginArgs {
-    input: {
-        email: string,
-        password: string
-    }
+    
+  email: string;
+  password: string;
+    
 }
 
 interface AddUserArgs {
     input: {
-        name: string,
         username: string,
         email: string,
         password: string
@@ -31,13 +27,13 @@ interface CreateGroupArgs {
 
 const resolvers = {
   Query: {
-    me: async (_parent: any, _args: any, context: Context): Promise<IUser | null> => {
+    me: async (_parent: any, _args: any, context: any) => {
       if (!context.user) {
         throw new AuthenticationError("Not Logged In");
       }
 
       try {
-        return await User.findOne({ _id: context.user._id });
+        return await User.findOne({ _id: context.user.email });
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get user");
@@ -53,12 +49,9 @@ const resolvers = {
     },
   },
   Mutation: {
-    login: async (
-      _parent: any,
-      { input }: LoginArgs
-    ): Promise<{ token: string; user: IUser }> => {
+    login: async (_parent: any,{ email, password }: LoginArgs) => {
       try {
-        const user = await User.findOne({ email: input.email });
+        const user = await User.findOne({ email });
 
         if (!user) {
           throw new AuthenticationError(
@@ -66,34 +59,31 @@ const resolvers = {
           );
         }
 
-        const correctPw = await user.isCorrectPassword(input.password);
+        const correctPw = await user.isCorrectPassword(password);
 
         if (!correctPw) {
           throw new AuthenticationError("Incorrect password");
         }
 
-        const token = signToken(user.username, user.email, user._id);
+        const token = signToken(user.username, user.email, user.id);
         return { token, user };
       } catch (err) {
         console.error(err);
         throw new Error("Failed to login");
       }
     },
-    addUser: async (
-        _parent: any,
-        { input }: AddUserArgs
-    ): Promise<{ token: string; user: IUser }> => {
+    addUser: async (_parent: any,{ input }: AddUserArgs) => {
         const user = await User.create({ ...input });
         const token = signToken(user.username, user.email, user._id);
         return { token, user };
     },
-    createGroup: async ( _parent: any, { input }: CreateGroupArgs, context: Context): Promise<IGroup> => {
-        if (!context.user) {
-            throw new AuthenticationError("Not Logged In");
-        }
+    createGroup: async ( _parent: any, { input }: CreateGroupArgs): Promise<IGroup> => { // context: any
+        // if (!context.user) {
+        //     throw new AuthenticationError("Not Logged In");
+        // }
 
         try {
-            const group = await Group.create({ ...input, admin: context.user._id });
+            const group = await Group.create({ ...input }); //, admin: context.user._id
             return group;
         } catch (err) {
             console.error(err);
