@@ -65,7 +65,7 @@ const typeDefs = gql`
     
     input NewGroupInput {
         name: String!
-        open: Boolean!
+        is_private: Boolean!
     }
 
     type Query {
@@ -76,10 +76,7 @@ const typeDefs = gql`
     type Mutation {
         addUser(input: NewUserInput): Auth
         login(email: String!, password: String!): Auth
-        
-        
-        # Create a new group
-        createGroup(name: String!): Group
+        createGroup(input: NewGroupInput!): Group
         # Join a group
         joinGroup(groupId: ID!, userId: ID!): Group
         # Leave a group

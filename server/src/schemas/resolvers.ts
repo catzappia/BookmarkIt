@@ -77,13 +77,13 @@ const resolvers = {
         const token = signToken(user.username, user.email, user._id);
         return { token, user };
     },
-    createGroup: async ( _parent: any, { input }: CreateGroupArgs, context: any): Promise<IGroup> => {
-        if (!context.user) {
-            throw new AuthenticationError("Not Logged In");
-        }
+    createGroup: async ( _parent: any, { input }: CreateGroupArgs): Promise<IGroup> => { // context: any
+        // if (!context.user) {
+        //     throw new AuthenticationError("Not Logged In");
+        // }
 
         try {
-            const group = await Group.create({ ...input, admin: context.user._id });
+            const group = await Group.create({ ...input }); //, admin: context.user._id
             return group;
         } catch (err) {
             console.error(err);
