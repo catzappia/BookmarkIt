@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import stylesheet
 import Auth from '../utils/auth';
 // import { login } from '../../utils/API';
 import { useMutation } from '@apollo/client';
 import { SignUpFormData } from '../models/signUpFormData';
 import { ADD_USER } from '../utils/mutations';
+import '../styles/signup.css';
 
 const SignUp: React.FC = () => {
     const [formData, setFormData] = useState<SignUpFormData>({
@@ -58,11 +59,13 @@ const SignUp: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="main">
+            <div className="signup-container">
             <h2>Sign Up</h2>
 
             <form onSubmit={handleFormSubmit}>
-                <div>
+                <div className="signup-form">
+                <div className="input-field">
                     <label htmlFor="name">Name:</label>
                     <input 
                         type="text"
@@ -70,7 +73,7 @@ const SignUp: React.FC = () => {
                         id="name"
                         onChange={handleInputChange} />
                 </div>
-                <div>
+                <div className="input-field">
                     <label htmlFor="email">Email:</label>
                     <input
                         type="email"
@@ -78,7 +81,7 @@ const SignUp: React.FC = () => {
                         id="email"
                         onChange={handleInputChange} />
                 </div>
-                <div>
+                <div className="input-field">
                     <label htmlFor="username">Username:</label>
                     <input
                         type="text"
@@ -86,7 +89,7 @@ const SignUp: React.FC = () => {
                         id="username"
                         onChange={handleInputChange} />
                 </div>
-                <div>
+                <div className="input-field">
                     <label htmlFor="password">Password:</label>
                     <input
                         type="password"
@@ -94,7 +97,7 @@ const SignUp: React.FC = () => {
                         id="password"
                         onChange={handleInputChange} />
                 </div>
-                <div>
+                <div className="input-field">
                     <label htmlFor="confirmPassword">Confirm Password:</label>
                     <input
                         type="password"
@@ -102,15 +105,18 @@ const SignUp: React.FC = () => {
                         id="confirmPassword"
                         onChange={handleInputChange} />
                 </div>
-
-                <button type="submit">Submit</button>
+                </div>
+                <button type="submit" className="signup-btn">Submit</button>
+                <p className="existing-user">Already have an account? <Link to="/login>">Sign In</Link></p>
             </form>
-
+        <div className="error-messages">
             {error && (
                 <div>
                     {error}
                 </div>
             )}
+        </div>
+        </div>
         </div>
     )
 }
