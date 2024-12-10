@@ -1,3 +1,4 @@
+
 import { jwtDecode } from 'jwt-decode';
 
 interface UserToken {
@@ -40,6 +41,7 @@ class AuthService {
         localStorage.removeItem('id_token');
         window.location.assign('/')
     }
+
 }
 
 export default new AuthService();

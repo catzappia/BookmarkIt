@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
@@ -8,7 +7,7 @@ import { ADD_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 // biome-ignore lint/correctness/noEmptyPattern: <explanation>
-const SignupForm = ({}: { handleModalClose: () => void }) => {
+const SignupForm = () => {
   // set initial form state
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: ''});
   // set state for form validation
@@ -110,7 +109,4 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
   );
 };
 
-
-
-// export default SignUp;
-
+export default SignupForm;
