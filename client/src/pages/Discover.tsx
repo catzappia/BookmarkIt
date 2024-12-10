@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -9,20 +9,19 @@ import Col from "react-bootstrap/Col";
 
 import { QUERY_ALL_GROUPS } from "../utils/queries";
 import { CREATE_GROUP } from "../utils/mutations";
+import BookSearch from "../components/bookSearch";
+import { Book } from "../models/Book";
 
 const Discover = () => {
   const { data } = useQuery(QUERY_ALL_GROUPS);
   const groupData: [] = data?.allGroups;
   console.log(groupData);
 
-  useEffect(() => {
-
-  },[])
-
   const [createGroup] = useMutation(CREATE_GROUP);
   const [newGroupData, setNewGroupData] = useState({
     name: "",
     is_private: false,
+    currentBook: {},
   });
 
   const [show, setShow] = useState(false);
@@ -49,13 +48,21 @@ const Discover = () => {
       });
       console.log(data);
       handleClose();
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
   };
 
-  // const handleJoinGroup = async (event: any) => {
-  // }
+  const handleViewButton = (group: any) => {
+    window.location.replace('/' + group.name);
+  }
+
+  const handleChildData = (data: Book): void => {
+    const newCurrentBook = data;
+    console.log('DISCOVER CHILD DATA:', newCurrentBook);
+    setNewGroupData({ ...newGroupData, currentBook: newCurrentBook });
+  }
 
   return (
     <>
@@ -63,7 +70,7 @@ const Discover = () => {
         Create Group
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} size={'xl'}>
         <Modal.Header closeButton>
           <Modal.Title>Create Your Own Group</Modal.Title>
         </Modal.Header>
@@ -87,6 +94,7 @@ const Discover = () => {
               />
               <Form.Check.Label>Private Group</Form.Check.Label>
             </Form.Check>
+            <BookSearch onDataChange={handleChildData}/>
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -98,13 +106,15 @@ const Discover = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
       <Container>
         <h1>Groups</h1>
         <Row>
           {!groupData && <h2>No groups yet</h2>}
           {groupData?.map((group: any) => (
-            <Col>{group.name}
-            <Button variant="primary">Join</Button>
+            <Col key={group._id}>{group.name}
+            <Button variant="primary"
+            onClick={() => handleViewButton(group)}>View</Button>
             </Col>
           ))}
         </Row>

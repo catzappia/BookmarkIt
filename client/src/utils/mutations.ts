@@ -63,6 +63,7 @@ export const REMOVE_BOOK = gql`
 export const CREATE_GROUP = gql`
   mutation createGroup($input: NewGroupInput!) {
     createGroup(input: $input) {
+      _id
       name
     }
   } 
