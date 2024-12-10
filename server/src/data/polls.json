@@ -1,0 +1,130 @@
+[
+    {
+        "title": "Which fantasy world would you like to live in?",
+        "options": ["Westeros", "Middle Earth", "Narnia", "Discworld", "Arrakis"]
+    },
+    {
+        "title": "Whats your favorite book genre?",
+        "options": ["Fantasy", "Science Fiction", "Mystery", "Romance", "Horror"]
+    },
+    {
+        "title": "Do you prefer reading...?",
+        "options": ["Ebooks", "Physical Books", "Audiobooks"]
+    },
+    {
+        "title": "How do you choose your next read?",
+        "options": ["Recommendations", "Bestseller Lists", "Bookstore Displays", "Book Blogs", "Book Reviews"]
+    },
+    {
+        "title": "what is your ideal book length?",
+        "options": ["Short (100-300 pages)", "Medium (300-500 pages)", "Long (500+ pages)"]
+    },
+    {
+        "title": "Where do you prefer to read?",
+        "options": ["At Home", "At the Library", "At a Coffee Shop", "On the Beach", "On a Plane"]
+    },
+    {
+        "title": "How many books do you read in a month?",
+        "options": ["1-2", "3-5", "6-10", "10+"]
+    },
+    {
+        "title": "Do you re-read books?",
+        "options": ["Yes, frequently", "Occasionally", "Rarely", "Never"]
+    },
+    {
+        "title": "Do you judge books by their covers?",
+        "options": ["Always", "Sometimes", "Never"]
+    },
+    {
+        "title": "Do you read multiple books at once?",
+        "options": ["Yes", "Sometimes", "No"]
+    },
+    {
+        "title": "Do you prefer standalone books or series?",
+        "options": ["Standalone", "Series", "Either"]
+    },
+    {
+        "title": "Do you prefer new or used books?",
+        "options": ["New", "Used", "Both"]
+    },
+    {
+        "title": "How do you organize your bookshelves?",
+        "options": ["By genre", "By author", "By color", "Randomly", "Don't organize"]
+    },
+    {
+        "title": "Do you write in your books?",
+        "options": ["Yes", "No"]
+    },
+    {
+        "title": "Which classic book is a must read?",
+        "options": ["Pride and Prejudice", "To Kill a Mockingbird", "1984", "The Great Gatsby", "Moby Dick"]
+    },
+    {
+        "title": "Who is your favorite fantasy author?",
+        "options": ["George R.R. Martin", "J.R.R. Tolkien", "Brandon Sanderson", "Neil Gaiman"]
+    },
+    {
+        "title": "What's the best book-to-movie adaptation?",
+        "options": ["The Lord of the Rings", "Harry Potter", "The Hunger Games", "Little Women", "The Shawshank Redemption", "Jurassic Park", "Jaws"]
+    },
+    {
+        "title": "Which book character do you wish were real?",
+        "options": ["Sherlock Holmes", "Elizabeth Bennet", "Dumbledore", "Katniss Everdeen"]
+    },
+    {
+        "title": "What's the best dystopian novel?",
+        "options": ["The Hunger Games", "1984", "Brave New World", "The Handmaid's Tale"]
+    },
+    {
+        "title": "What's your favorite way to tackle a reading slump?",
+        "options": ["Start a short book", "Re-read a favorite", "Join a book club", "Take a break"]
+    },
+    {
+        "title": "How do you feel about DNF-ing (Did Not Finish)?",
+        "options": ["Never do it", "Sometimes", "Frequently", "Always"]
+    },
+    {
+        "title": "What's your favorite book-to-tv adaptation?",
+        "options": ["Game of Thrones", "Outlander", "The Witcher", "The Handmaid's Tale", "Big Little Lies"]
+    },
+    {
+        "title": "What's your favorite book-to-video game adaptation?",
+        "options": ["The Witcher", "Harry Potter", "Game of Thrones", "The Lord of the Rings"]
+    },
+    {
+        "title": "What's your favorite book-to-musical adaptation?",
+        "options": ["Les Miserables", "Phantom of the Opera", "Wicked", "Matilda"]
+    },
+    {
+        "title": "What's your favorite book-to-play adaptation?",
+        "options": ["To Kill a Mockingbird", "Harry Potter and the Cursed Child", "The Curious Incident of the Dog in the Night-Time", "The Color Purple"]
+    },
+    {
+        "title": "What motivates you to read more?",
+        "options": ["Reading Challenges", "Book Clubs", "A great book", "Social Media"]
+    },
+    {
+        "title": "Do you keep track of the books you've read?",
+        "options": ["Yes, always", "Occasionally", "Rarely", "Never"]
+    },
+    {
+        "title": "What's your reading goal this year?",
+        "options": ["Less than 10 books", "10-30 books", "31-50 books", "51 or more"]
+    },
+    {
+        "title": "What makes a great book club book",
+        "options": ["Complex characters", "Twists and turns", "Discussion-worthy themes", "Emotional impact"]
+    },
+    {
+        "title": "Whats your favorite part of being in a book club?",
+        "options": ["Discussing books", "Meeting new people", "Trying new genres", "Reading books you wouldn't normally pick up"]
+    },
+    {
+        "title": "Would you rather read...?",
+        "options": ["A book with a great plot and weak characters", "A book with great characters and a weak plot"]
+    },
+    {
+        "title": "How do you prepare for book club meetings?",
+        "options": ["Read the book", "Take notes", "Prepare discussion questions", "Don't prepare"]
+    }
+]

@@ -1,10 +1,10 @@
-import React from 'react';
+// import React from 'react';
 import './App.css';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Outlet } from 'react-router-dom';
 
-import Header from './components/Header/header';
-import Footer from './components/Footer/footer';
+import Header from './components/header';
+import Footer from './components/footer';
 
 const client = new ApolloClient({
   uri: '/graphql',
