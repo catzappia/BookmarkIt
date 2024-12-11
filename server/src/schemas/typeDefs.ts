@@ -67,10 +67,22 @@ const typeDefs = gql`
         currentBook: BookData
     }
 
-    input UserJoinGroupInput {
-        groupId: String
-     
+    input addUserToGroupInput {
+        groupId: ID!
+        userId: ID!
+      
     }
+   
+    input BookInput {
+    author: [String]
+    title: String, 
+    author: String, 
+    description: String,
+    image: String,
+    bookId: String
+    }
+  
+    
 
     
     
@@ -79,31 +91,25 @@ const typeDefs = gql`
         me: User
         allGroups: [Group]
         group(groupName: String): Group
-
-     
-    
-    
-
-
-
-
     }
     
     type Mutation {
         addUser(input: NewUserInput): Auth
         login(email: String!, password: String!): Auth
+        # Create a group
         createGroup(input: NewGroupInput!): Group
-        # Join a group
-        joinGroup(groupId: String): Group
-        # Leave a group
-        leaveGroup(groupId: ID!, userId: ID!): User
         # Delete a group
-        deleteGroup(groupId: ID!): Boolean
+        removeGroup(groupId: ID!): Group
+        # Join a group
+        addUserToGroup(input: addUserToGroupInput): Group
+        # Leave a group
+        leaveGroup(groupId: ID!, userId: ID!): Group
+      
         
         # Add a book to a group
-        addBook(groupId: ID!, title: String!, author: String!, description: String): Book
+        addBook(groupId: ID!,  ): Book
         # Update book details
-        updateBook(bookId: ID!, title: String, author: String, description: String): Book
+        updateBook(bookId: ID!, ): Book
         # Remove a book from the group
         removeBook(bookId: ID!, groupId: ID!): Boolean
 

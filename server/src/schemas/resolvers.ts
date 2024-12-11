@@ -28,11 +28,25 @@ interface CreateGroupArgs {
     }
 }
 
-interface UserJoinGroupInput {
-    input: {
-        groupId: string
-    }
+interface UserJoinGroupArgs {
+  input: {
+    groupId: string
+    userId: string
+    
+  }
+    
 }
+
+interface RemoveGroupArgs {
+    groupId: string
+}
+
+// interface LeaveGroupArgs {
+//   input: {
+//     groupId: string
+//     userId: string
+//   }
+// }
 
 const resolvers = {
   Query: {
@@ -66,7 +80,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    login: async (_parent: any,{ email, password }: LoginArgs) => {
+    login: async (_parent: any, { email, password }: LoginArgs) => {
       try {
         const user = await User.findOne({ email });
 
@@ -89,40 +103,63 @@ const resolvers = {
         throw new Error("Failed to login");
       }
     },
-    addUser: async (_parent: any,{ input }: AddUserArgs) => {
-        const user = await User.create({ ...input });
-        const token = signToken(user.username, user.email, user._id);
-        return { token, user };
+    addUser: async (_parent: any, { input }: AddUserArgs) => {
+      const user = await User.create({ ...input });
+      const token = signToken(user.username, user.email, user._id);
+      return { token, user };
     },
     createGroup: async (_parent: any, { input }: CreateGroupArgs) => {
-        try {
-            return await Group.create({ ...input });
-        } catch (err) {
-            console.error(err);
-            throw new Error("Failed to create group");
+      try {
+        return await Group.create({ ...input });
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to create group");
       }
     },
-    // Users can join groups
-    joinGroup: async (_parent: any, { input }: UserJoinGroupInput, context :any) => {
-        if (!context.user) {
-            throw new AuthenticationError("Not Logged In");
-        }
-        try {
-            const group = await Group.findOne({ _id: input.groupId });
-            if (!group) {
-                throw new Error("No group found with this id");
-            }
-            if (!group.users) {
-                group.users = [];
-            }
-            group.users.push(context.user._id);
-            await group.save();
-            return group;
-        } catch (err) {
-            console.error(err);
-            throw new Error("Failed to join group");
-        }
-  },
+    
+    //remove group
+    removeGroup: async (_parent: any, { groupId }: RemoveGroupArgs) => {
+      try {
+        return await Group.findOneAndDelete({ _id: groupId });
+          
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to remove group");
+      }
+    },
+
+    // Users can join a group 
+    addUserToGroup: async (_parent: any, { input: { groupId, userId, } }: UserJoinGroupArgs) => {
+      try {
+        return await Group.findOneAndUpdate(
+          { _id: groupId },
+          {
+            $addToSet: { users: userId,  },
+          },
+          { new: true }
+        );
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to add user to group");
+      }
+    }
+    // Users can leave a group
+    // leaveGroup: async (_parent: any, { userId, groupId }: LeaveGroupArgs) => {
+    //   try {
+    //     return await User.findOneAndDelete({ _id: userId });
+    //   } catch (err) {
+    //     console.error(err);
+    //     throw new Error("Failed to leave group");
+    //   }
+
+    // },
+    
+    
+
+  
+  
+   
+  
   },
 };
 
