@@ -6,6 +6,8 @@ import Home from './pages/Home';
 // import Profile from './pages/Profile';
 import Discover from './pages/Discover.js';
 import ErrorPage from './pages/Error';
+import Login from './pages/LoginPage/Login.js'
+import Group from './pages/Group.js'
 
 const router = createBrowserRouter([
     {
@@ -28,6 +30,28 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <Discover />
+            },
+        ]
+    },
+    {
+        path: '/login',
+        element: <App />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                index: true,
+                element: <Login />
+            },
+        ]
+    },
+    {
+        path: '/:groupName',
+        element: <App />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                index: true,
+                element: <Group />
             },
         ]
     }

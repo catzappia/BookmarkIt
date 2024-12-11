@@ -18,13 +18,12 @@ const typeDefs = gql`
         authors: [String]
         description: String
         image: String
-        link: String
     }
 
     type Group {
         _id: ID!
         name: String
-        open: Boolean
+        is_private: Boolean
         users: [User]
         currentBook: Book
         books: [Book]
@@ -60,12 +59,12 @@ const typeDefs = gql`
         description: String
         title: String
         image: String
-        link: String
     }
     
     input NewGroupInput {
         name: String!
         is_private: Boolean!
+        currentBook: BookData
     }
 
     input UserJoinGroupInput {
@@ -79,9 +78,12 @@ const typeDefs = gql`
     type Query {
         me: User
         allGroups: [Group]
-        group(groupId: String): Group
+        group(groupName: String): Group
+
+     
     
     
+
 
 
 

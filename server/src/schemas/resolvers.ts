@@ -1,6 +1,7 @@
 import { signToken, AuthenticationError } from '../utils/auth.js';
 import User  from '../models/User.js';
 import Group, { IGroup} from '../models/Group.js';
+import { IBook } from '../models/Book.js';
 
 
 interface LoginArgs {
@@ -22,6 +23,8 @@ interface CreateGroupArgs {
     input: {
         name: string,
         is_private: boolean,
+        currentBook: IBook
+
     }
 }
 
@@ -51,6 +54,14 @@ const resolvers = {
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get groups");
+      }
+    },
+    group: async (_parent: any, { groupName }: any): Promise<IGroup | null> => {
+      try {
+        return await Group.findOne({ name: groupName });
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to get group");
       }
     },
   },

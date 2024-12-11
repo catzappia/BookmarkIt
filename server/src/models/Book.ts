@@ -6,7 +6,6 @@ export interface IBook extends Document {
     authors: string[],
     description: string,
     image: string,
-    link: string
 }
 
 export const bookSchema = new Schema<IBook>({
@@ -22,9 +21,6 @@ export const bookSchema = new Schema<IBook>({
         type: String
     },
     image: {
-        type: String
-    },
-    link: {
         type: String
     }
     },
