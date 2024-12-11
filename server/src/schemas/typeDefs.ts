@@ -27,6 +27,7 @@ const typeDefs = gql`
         users: [User]
         currentBook: Book
         books: [Book]
+        posts: [Post]
     }
 
     type Post {
