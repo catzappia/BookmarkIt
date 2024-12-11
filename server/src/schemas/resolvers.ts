@@ -4,20 +4,17 @@ import User  from '../models/User.js';
 import Group, { IGroup} from '../models/Group.js';
 import { IBook } from '../models/Book.js';
 
-
 interface LoginArgs {
-    
   email: string;
   password: string;
-    
 }
 
 interface AddUserArgs {
-    input: {
-        username: string,
-        email: string,
-        password: string
-    }
+  input: {
+    username: string;
+    email: string;
+    password: string;
+  };
 }
 
 interface CreateGroupArgs {
@@ -175,13 +172,6 @@ const resolvers = {
         throw new Error("Failed to add post to group");
       }
     }
-  
-    
-
-  
-  
-   
-  
   },
 };
 

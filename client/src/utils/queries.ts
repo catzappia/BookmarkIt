@@ -49,6 +49,7 @@ export const QUERY_GROUP_BY_NAME = gql`
     group(groupName: $groupName) {
       _id
       name
+      description
       is_private
       currentBook {
         title

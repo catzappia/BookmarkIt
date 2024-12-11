@@ -9,8 +9,6 @@ import Col from "react-bootstrap/Col";
 
 import { QUERY_ALL_GROUPS } from "../utils/queries";
 import { CREATE_GROUP } from "../utils/mutations";
-import BookSearch from "../components/bookSearch";
-import { Book } from "../models/Book";
 
 const Discover = () => {
   const { data } = useQuery(QUERY_ALL_GROUPS);
@@ -20,8 +18,7 @@ const Discover = () => {
   const [createGroup] = useMutation(CREATE_GROUP);
   const [newGroupData, setNewGroupData] = useState({
     name: "",
-    is_private: false,
-    currentBook: {},
+    description: "",
   });
 
   const [show, setShow] = useState(false);
@@ -32,11 +29,6 @@ const Discover = () => {
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setNewGroupData({ ...newGroupData, [name]: value });
-  };
-
-  const handleCheckboxChange = (event: any) => {
-    const { name, checked } = event.target;
-    setNewGroupData({ ...newGroupData, [name]: checked });
   };
 
   const handleFormSubmit = async (event: any) => {
@@ -55,14 +47,8 @@ const Discover = () => {
   };
 
   const handleViewButton = (group: any) => {
-    window.location.replace('/' + group.name);
-  }
-
-  const handleChildData = (data: Book): void => {
-    const newCurrentBook = data;
-    console.log('DISCOVER CHILD DATA:', newCurrentBook);
-    setNewGroupData({ ...newGroupData, currentBook: newCurrentBook });
-  }
+    window.location.replace("/" + group.name);
+  };
 
   return (
     <>
@@ -70,7 +56,7 @@ const Discover = () => {
         Create Group
       </Button>
 
-      <Modal show={show} onHide={handleClose} size={'xl'}>
+      <Modal show={show} onHide={handleClose} size={"xl"}>
         <Modal.Header closeButton>
           <Modal.Title>Create Your Own Group</Modal.Title>
         </Modal.Header>
@@ -86,15 +72,15 @@ const Discover = () => {
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Check>
-              <Form.Check.Input
-                type="checkbox"
-                name="is_private"
-                onChange={handleCheckboxChange}
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                name="description"
+                type="text"
+                placeholder="Description"
+                onChange={handleInputChange}
               />
-              <Form.Check.Label>Private Group</Form.Check.Label>
-            </Form.Check>
-            <BookSearch onDataChange={handleChildData}/>
+            </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -112,9 +98,11 @@ const Discover = () => {
         <Row>
           {!groupData && <h2>No groups yet</h2>}
           {groupData?.map((group: any) => (
-            <Col key={group._id}>{group.name}
-            <Button variant="primary"
-            onClick={() => handleViewButton(group)}>View</Button>
+            <Col key={group._id}>
+              {group.name}
+              <Button variant="primary" onClick={() => handleViewButton(group)}>
+                View
+              </Button>
             </Col>
           ))}
         </Row>
