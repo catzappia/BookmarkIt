@@ -13,7 +13,7 @@ const typeDefs = gql`
     }
 
     type Book {
-        bookId: ID!
+        bookId: String
         title: String
         authors: [String]
         description: String
@@ -22,7 +22,7 @@ const typeDefs = gql`
     }
 
     type Group {
-        groupId: ID!
+        _id: ID!
         name: String
         open: Boolean
         users: [User]
@@ -31,14 +31,14 @@ const typeDefs = gql`
     }
 
     type Post {
-        postId: ID!
+        _id: ID!
         text: String
         username: User
         comments: [Comment]
     }
 
     type Comment {
-        commentId: ID!
+        commentId: String
         text: String
         username: User
     }
@@ -55,7 +55,7 @@ const typeDefs = gql`
     }
 
     input BookData {
-        bookId: ID!
+        bookId: String
         authors: [String]
         description: String
         title: String
@@ -68,9 +68,23 @@ const typeDefs = gql`
         is_private: Boolean!
     }
 
+    input UserJoinGroupInput {
+        groupId: String
+     
+    }
+
+    
+    
+    
     type Query {
         me: User
         allGroups: [Group]
+        group(groupId: String): Group
+    
+    
+
+
+
     }
     
     type Mutation {
@@ -78,7 +92,7 @@ const typeDefs = gql`
         login(email: String!, password: String!): Auth
         createGroup(input: NewGroupInput!): Group
         # Join a group
-        joinGroup(groupId: ID!, userId: ID!): Group
+        joinGroup(groupId: String): Group
         # Leave a group
         leaveGroup(groupId: ID!, userId: ID!): User
         # Delete a group
