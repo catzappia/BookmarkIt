@@ -12,12 +12,15 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
-      token
+  mutation Mutation($input: NewUserInput!) {
+    addUser(input: $input) {
       user {
+        username
+        email 
+        password
         _id
       }
+      token
     }
   }
 `;
@@ -84,4 +87,20 @@ export const EDIT_GROUP_CURRENT_BOOK = gql`
       }
     }
   }
+`;
+
+export const ADD_USER_TO_GROUP = gql`
+  mutation addUserToGroup($input: AddUserToGroupInput!) {
+  addUserToGroup(input: $input) {
+      _id
+      users {
+        _id
+      }
+      
+    
+      
+      }
+    }
+  
+
 `

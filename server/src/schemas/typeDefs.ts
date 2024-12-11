@@ -1,3 +1,4 @@
+
 import { gql } from "graphql-tag";
 const typeDefs = gql`
   type User {
@@ -20,17 +21,17 @@ const typeDefs = gql`
     image: String
   }
 
-    type Group {
-        _id: ID!
-        name: String
-        description: String
-        is_private: Boolean
-        users: [User]
-        currentBook: Book
-        books: [Book]
-        posts: [Post]
-    }
-
+  type Group {
+      _id: ID!
+      name: String
+      description: String
+      is_private: Boolean
+      users: [User]
+      currentBook: Book
+      books: [Book]
+      posts: [Post]
+  }
+    
   type Post {
     _id: ID!
     text: String

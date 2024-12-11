@@ -1,7 +1,8 @@
-import { signToken, AuthenticationError } from "../utils/auth.js";
-import User from "../models/User.js";
-import Group, { IGroup } from "../models/Group.js";
-import { IBook } from "../models/Book.js";
+import { signToken, AuthenticationError } from '../utils/auth.js';
+import { ObjectId } from 'mongodb';
+import User  from '../models/User.js';
+import Group, { IGroup} from '../models/Group.js';
+import { IBook } from '../models/Book.js';
 
 interface LoginArgs {
   email: string;
@@ -25,9 +26,31 @@ interface CreateGroupArgs {
     }
 }
 
-interface UserJoinGroupInput {
+interface UserJoinGroupArgs {
+  input: {
+    groupId: string
+    userId: string
+    
+  }
+    
+}
+
+interface RemoveGroupArgs {
+    groupId: string
+}
+
+interface LeaveGroupArgs {
+  
+    groupId: string
+    userId: string
+  
+}
+
+interface AddPostToGroupArgs {
     input: {
-        groupId: string
+        groupId: string,
+        text: string,
+        username: string
     }
 }
 
@@ -92,34 +115,63 @@ const resolvers = {
       return { token, user };
     },
     createGroup: async (_parent: any, { input }: CreateGroupArgs) => {
-        try {
-            return await Group.create({ ...input });
-        } catch (err) {
-            console.error(err);
-            throw new Error("Failed to create group");
+      try {
+        return await Group.create({ ...input });
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to create group");
       }
     },
-    // Users can join groups
-    joinGroup: async (_parent: any, { input }: UserJoinGroupInput, context :any) => {
-        if (!context.user) {
-            throw new AuthenticationError("Not Logged In");
-        }
-        try {
-            const group = await Group.findOne({ _id: input.groupId });
-            if (!group) {
-                throw new Error("No group found with this id");
-            }
-            if (!group.users) {
-                group.users = [];
-            }
-            group.users.push(context.user._id);
-            await group.save();
-            return group;
-        } catch (err) {
-            console.error(err);
-            throw new Error("Failed to join group");
-        }
-  },
+    
+    //remove group
+    removeGroup: async (_parent: any, { groupId }: RemoveGroupArgs) => {
+      try {
+        return await Group.findOneAndDelete({ _id: groupId });
+          
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to remove group");
+      }
+    },
+
+    // Users can join a group 
+    addUserToGroup: async (_parent: any, { input: { groupId, userId, } }: UserJoinGroupArgs) => {
+      try {
+        return await Group.findOneAndUpdate(
+          { _id: groupId },
+          {
+            $addToSet: { users: userId,  },
+          },
+          { new: true }
+        );
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to add user to group");
+      }
+    },
+    // Users can leave a group
+    leaveGroup: async (_parent: any, { userId, groupId }: LeaveGroupArgs) => {
+      try {
+        return await Group.findOneAndUpdate(
+          { _id: groupId },
+          { $pull: { users: new ObjectId(userId) } },
+          { new: true }
+        );
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to leave group");
+      }
+    },
+
+    // add post to group
+    addPostToGroup: async (_parent: any, { input: { groupId, text, username } }: AddPostToGroupArgs) => {
+      try {
+        return await Group.create({ groupId, text, username });
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to add post to group");
+      }
+    }
   },
 };
 
