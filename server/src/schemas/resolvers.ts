@@ -1,21 +1,18 @@
 import { signToken, AuthenticationError } from '../utils/auth.js';
-import User, { IUser } from '../models/User.js';
-import Group, { IGroup } from '../models/Group.js';
+import User  from '../models/User.js';
+import Group, { IGroup} from '../models/Group.js';
+import { IBook } from '../models/Book.js';
 
-interface Context {
-    user?: IUser;
-}
 
 interface LoginArgs {
-    input: {
-        email: string,
-        password: string
-    }
+    
+  email: string;
+  password: string;
+    
 }
 
 interface AddUserArgs {
     input: {
-        name: string,
         username: string,
         email: string,
         password: string
@@ -25,19 +22,41 @@ interface AddUserArgs {
 interface CreateGroupArgs {
     input: {
         name: string,
-        open: boolean,
+        is_private: boolean,
+        currentBook: IBook
+
     }
 }
 
+interface UserJoinGroupArgs {
+  input: {
+    groupId: string
+    userId: string
+    
+  }
+    
+}
+
+interface RemoveGroupArgs {
+    groupId: string
+}
+
+// interface LeaveGroupArgs {
+//   input: {
+//     groupId: string
+//     userId: string
+//   }
+// }
+
 const resolvers = {
   Query: {
-    me: async (_parent: any, _args: any, context: Context): Promise<IUser | null> => {
+    me: async (_parent: any, _args: any, context: any) => {
       if (!context.user) {
         throw new AuthenticationError("Not Logged In");
       }
 
       try {
-        return await User.findOne({ _id: context.user._id });
+        return await User.findOne({ _id: context.user.email });
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get user");
@@ -51,14 +70,19 @@ const resolvers = {
         throw new Error("Failed to get groups");
       }
     },
+    group: async (_parent: any, { groupName }: any): Promise<IGroup | null> => {
+      try {
+        return await Group.findOne({ name: groupName });
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to get group");
+      }
+    },
   },
   Mutation: {
-    login: async (
-      _parent: any,
-      { input }: LoginArgs
-    ): Promise<{ token: string; user: IUser }> => {
+    login: async (_parent: any, { email, password }: LoginArgs) => {
       try {
-        const user = await User.findOne({ email: input.email });
+        const user = await User.findOne({ email });
 
         if (!user) {
           throw new AuthenticationError(
@@ -66,41 +90,77 @@ const resolvers = {
           );
         }
 
-        const correctPw = await user.isCorrectPassword(input.password);
+        const correctPw = await user.isCorrectPassword(password);
 
         if (!correctPw) {
           throw new AuthenticationError("Incorrect password");
         }
 
-        const token = signToken(user.username, user.email, user._id);
+        const token = signToken(user.username, user.email, user.id);
         return { token, user };
       } catch (err) {
         console.error(err);
         throw new Error("Failed to login");
       }
     },
-    addUser: async (
-        _parent: any,
-        { input }: AddUserArgs
-    ): Promise<{ token: string; user: IUser }> => {
-        const user = await User.create({ ...input });
-        const token = signToken(user.username, user.email, user._id);
-        return { token, user };
+    addUser: async (_parent: any, { input }: AddUserArgs) => {
+      const user = await User.create({ ...input });
+      const token = signToken(user.username, user.email, user._id);
+      return { token, user };
     },
-    createGroup: async ( _parent: any, { input }: CreateGroupArgs, context: Context): Promise<IGroup> => {
-        if (!context.user) {
-            throw new AuthenticationError("Not Logged In");
-        }
+    createGroup: async (_parent: any, { input }: CreateGroupArgs) => {
+      try {
+        return await Group.create({ ...input });
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to create group");
+      }
+    },
+    
+    //remove group
+    removeGroup: async (_parent: any, { groupId }: RemoveGroupArgs) => {
+      try {
+        return await Group.findOneAndDelete({ _id: groupId });
+          
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to remove group");
+      }
+    },
 
-        try {
-            const group = await Group.create({ ...input, admin: context.user._id });
-            return group;
-        } catch (err) {
-            console.error(err);
-            throw new Error("Failed to create group");
-        }
-    },
+    // Users can join a group 
+    addUserToGroup: async (_parent: any, { input: { groupId, userId, } }: UserJoinGroupArgs) => {
+      try {
+        return await Group.findOneAndUpdate(
+          { _id: groupId },
+          {
+            $addToSet: { users: userId,  },
+          },
+          { new: true }
+        );
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to add user to group");
+      }
+    }
+    // Users can leave a group
+    // leaveGroup: async (_parent: any, { userId, groupId }: LeaveGroupArgs) => {
+    //   try {
+    //     return await User.findOneAndDelete({ _id: userId });
+    //   } catch (err) {
+    //     console.error(err);
+    //     throw new Error("Failed to leave group");
+    //   }
+
+    // },
+    
+    
+
+  
+  
+   
+  
   },
-}
+};
 
 export default resolvers;

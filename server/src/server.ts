@@ -9,19 +9,25 @@ import { typeDefs, resolvers } from './schemas/index.js';
 import db from './config/connection.js';
 // import { authenticationToken } from './utils/auth.js';
 
+
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    introspection: true,
+   
 });
 
 const startApolloServer = async () => {
     await server.start();
-    await db();
 
-    const app = express();
+    try {
+        await db();
+    } catch (err) {
+        console.error('MongoDB connection error:', err);
+    }
+
     const PORT = process.env.PORT || 3001;
-    
+    const app = express();
+
     app.use(express.urlencoded({ extended: true}));
     app.use(express.json());
 
@@ -36,12 +42,12 @@ const startApolloServer = async () => {
         app.use(express.static(path.join(__dirname, '../client/dist')));
     
         app.get('*', (_req: Request, res: Response) => {
-          res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+        res.sendFile(path.resolve(process.cwd(), '../client/dist/index.html'));
         });
       }
 
     app.listen(PORT, () => {
-        console.log(`API server runnong on port ${PORT}`);
+        console.log(`API server running on port ${PORT}`);
         console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
     });
 };
