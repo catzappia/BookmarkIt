@@ -71,5 +71,20 @@ export const CREATE_GROUP = gql`
       
 
     }
-  } 
+  }
+`;
+
+export const ADD_USER_TO_GROUP = gql`
+  mutation addUserToGroup($input: AddUserToGroupInput!) {
+  addUserToGroup(input: $input) {
+      _id
+      users {
+        _id
+      }
+      
+    
+      
+      }
+    }
+  
 `

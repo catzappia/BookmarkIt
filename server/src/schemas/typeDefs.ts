@@ -68,20 +68,13 @@ const typeDefs = gql`
         currentBook: BookData
     }
 
-    input addUserToGroupInput {
+    input AddUserToGroupInput {
         groupId: ID!
         userId: ID!
       
     }
    
-    input BookInput {
-    author: [String]
-    title: String, 
-    author: String, 
-    description: String,
-    image: String,
-    bookId: String
-    }
+   
   
     
 
@@ -102,7 +95,7 @@ const typeDefs = gql`
         # Delete a group
         removeGroup(groupId: ID!): Group
         # Join a group
-        addUserToGroup(input: addUserToGroupInput): Group
+        addUserToGroup(input: AddUserToGroupInput): Group
         # Leave a group
         leaveGroup(groupId: ID!, userId: ID!): Group
       

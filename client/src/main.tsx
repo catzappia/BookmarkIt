@@ -18,65 +18,41 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
         
+        
             {
                 index: true,
                 element: <Home />
             },
-        ]
-    },
-    {
-        path: '/discover',
-        element: <App />,
-        errorElement: <ErrorPage />,
-        children: [
+        
+    
             {
-                index: true,
-                element: <Discover />
+                path: '/discover',
+                element: <Discover />,
+                errorElement: <ErrorPage />,
+        
             },
-        ]
-    },
-    {
-        path: '/login',
-        element: <App />,
-        errorElement: <ErrorPage />,
-        children: [
             {
-                index: true,
-                element: <Login />
+                path: '/login',
+                element: <Login />,
+                errorElement: <Login />,
             },
-        ]
-    },
-    {
-        path: '/profile',
-        element: <App />,
-        errorElement: <ErrorPage />,
-        children: [
             {
-                index: true,
-                element: <Profile />
+                path: '/profile',
+                element: <Profile />,
+                errorElement: <Profile />,
             },
-        ]
-    },
-    {
-        path: '/signup',
-        element: <App />,
-        errorElement: <ErrorPage />,
-        children: [
             {
-                index: true,
-                element: <SignupForm />
+                path: '/signup',
+                element: <SignupForm />,
+                errorElement: <ErrorPage />,
             },
-        ]
-    },
-    {
-        path: '/:groupName',
-        element: <App />,
-        errorElement: <ErrorPage />,
-        children: [
-            {
-                index: true,
-                element: <Group />
+           {
+                path: '/:groupName',
+                element: <Group />,
+                errorElement: <ErrorPage />,
+        
             },
+        
         ]
     }
 ]);
