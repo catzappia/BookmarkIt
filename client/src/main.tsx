@@ -8,6 +8,7 @@ import Discover from './pages/Discover.js';
 import ErrorPage from './pages/Error';
 import Login from './pages/LoginPage/Login.js'
 import Group from './pages/Group.js'
+import SignupForm from './pages/Signup.js';
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,17 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <Login />
+            },
+        ]
+    },
+    {
+        path: '/signup',
+        element: <App />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                index: true,
+                element: <SignupForm />
             },
         ]
     },
