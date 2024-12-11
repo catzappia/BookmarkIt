@@ -74,7 +74,11 @@ const typeDefs = gql`
       
     }
    
-   
+    input leaveGroupInput {
+        groupId: ID!
+        userId: ID!
+    }
+
   
     
 
@@ -96,8 +100,10 @@ const typeDefs = gql`
         removeGroup(groupId: ID!): Group
         # Join a group
         addUserToGroup(input: AddUserToGroupInput): Group
-        # Leave a group
-        leaveGroup(groupId: ID!, userId: ID!): Group
+        # Leave a group (having issues with this)
+        leaveGroup(groupId: ID!, userId: ID!): Group 
+        # Add post to group
+        addPost(groupId: ID!, userId: ID!, content: String!): Post
       
         
         # Add a book to a group

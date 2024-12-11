@@ -1,4 +1,5 @@
 import { signToken, AuthenticationError } from '../utils/auth.js';
+import { ObjectId } from 'mongodb';
 import User  from '../models/User.js';
 import Group, { IGroup} from '../models/Group.js';
 import { IBook } from '../models/Book.js';
@@ -41,12 +42,12 @@ interface RemoveGroupArgs {
     groupId: string
 }
 
-// interface LeaveGroupArgs {
-//   input: {
-//     groupId: string
-//     userId: string
-//   }
-// }
+interface LeaveGroupArgs {
+  
+    groupId: string
+    userId: string
+  
+}
 
 const resolvers = {
   Query: {
@@ -142,17 +143,20 @@ const resolvers = {
         console.error(err);
         throw new Error("Failed to add user to group");
       }
-    }
+    },
     // Users can leave a group
-    // leaveGroup: async (_parent: any, { userId, groupId }: LeaveGroupArgs) => {
-    //   try {
-    //     return await User.findOneAndDelete({ _id: userId });
-    //   } catch (err) {
-    //     console.error(err);
-    //     throw new Error("Failed to leave group");
-    //   }
-
-    // },
+    leaveGroup: async (_parent: any, { userId, groupId }: LeaveGroupArgs) => {
+      try {
+        return await Group.findOneAndUpdate(
+          { _id: groupId },
+          { $pull: { users: new ObjectId(userId) } },
+          { new: true }
+        );
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to leave group");
+      }
+    },
     
     
 
