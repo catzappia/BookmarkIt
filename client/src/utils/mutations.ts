@@ -65,6 +65,8 @@ export const CREATE_GROUP = gql`
     createGroup(input: $input) {
       _id
       name
+      
+
     }
   } 
 `

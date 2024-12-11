@@ -24,6 +24,13 @@ interface CreateGroupArgs {
         name: string,
         is_private: boolean,
         currentBook: IBook
+
+    }
+}
+
+interface UserJoinGroupInput {
+    input: {
+        groupId: string
     }
 }
 
@@ -87,20 +94,36 @@ const resolvers = {
         const token = signToken(user.username, user.email, user._id);
         return { token, user };
     },
-    createGroup: async ( _parent: any, { input }: CreateGroupArgs): Promise<IGroup> => { // context: any
-        // if (!context.user) {
-        //     throw new AuthenticationError("Not Logged In");
-        // }
-
+    createGroup: async (_parent: any, { input }: CreateGroupArgs) => {
         try {
-            const group = await Group.create({ ...input }); //, admin: context.user._id
-            return group;
+            return await Group.create({ ...input });
         } catch (err) {
             console.error(err);
             throw new Error("Failed to create group");
-        }
+      }
     },
+    // Users can join groups
+    joinGroup: async (_parent: any, { input }: UserJoinGroupInput, context :any) => {
+        if (!context.user) {
+            throw new AuthenticationError("Not Logged In");
+        }
+        try {
+            const group = await Group.findOne({ _id: input.groupId });
+            if (!group) {
+                throw new Error("No group found with this id");
+            }
+            if (!group.users) {
+                group.users = [];
+            }
+            group.users.push(context.user._id);
+            await group.save();
+            return group;
+        } catch (err) {
+            console.error(err);
+            throw new Error("Failed to join group");
+        }
   },
-}
+  },
+};
 
 export default resolvers;
