@@ -23,6 +23,7 @@ const typeDefs = gql`
     type Group {
         _id: ID!
         name: String
+        description: String
         is_private: Boolean
         users: [User]
         currentBook: Book
