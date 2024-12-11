@@ -13,7 +13,7 @@ const typeDefs = gql`
     }
 
     type Book {
-        bookId: ID!
+        bookId: String
         title: String
         authors: [String]
         description: String
@@ -23,10 +23,12 @@ const typeDefs = gql`
     type Group {
         _id: ID!
         name: String
+        description: String
         is_private: Boolean
         users: [User]
         currentBook: Book
         books: [Book]
+        posts: [Post]
     }
 
     type Post {
@@ -54,17 +56,16 @@ const typeDefs = gql`
     }
 
     input BookData {
-        bookId: ID!
-        authors: [String]
+        bookId: String
+        authors: [String]!
         description: String
-        title: String
+        title: String!
         image: String
     }
     
     input NewGroupInput {
         name: String!
-        is_private: Boolean!
-        currentBook: BookData
+        description: String
     }
 
     type Query {
@@ -74,9 +75,13 @@ const typeDefs = gql`
     }
     
     type Mutation {
+        ## User Mutations
         addUser(input: NewUserInput): Auth
         login(email: String!, password: String!): Auth
+
+        ## Group Mutations
         createGroup(input: NewGroupInput!): Group
+        editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
         # Join a group
         joinGroup(groupId: ID!, userId: ID!): Group
         # Leave a group

@@ -65,6 +65,23 @@ export const CREATE_GROUP = gql`
     createGroup(input: $input) {
       _id
       name
+      description
     }
-  } 
+  }
+`
+
+export const EDIT_GROUP_CURRENT_BOOK = gql`
+  mutation editGroupCurrentBook($groupId: ID!, $bookData: BookData) {
+    editGroupCurrentBook(groupId: $groupId, bookData: $bookData) {
+      _id
+      name
+      description
+      currentBook {
+        title
+        authors
+        description
+        image
+      }
+    }
+  }
 `

@@ -5,6 +5,7 @@ import { IUser } from './User.js';
 export interface IGroup extends Document {
     groupId: string,
     name: string,
+    description: string,
     is_private: boolean,
     admin: IUser,
     users?: IUser[],
@@ -19,6 +20,13 @@ export const groupSchema = new Schema<IGroup>({
         unique: true,
         maxlength: 40,
         minlength: 3
+    },
+    description: {
+        type: String,
+        required: true,
+        maxlength: 100,
+        minlength: 3,
+        default: ''
     },
     is_private: {
         type: Boolean,

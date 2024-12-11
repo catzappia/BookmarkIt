@@ -54,13 +54,13 @@ return (
                     </Link>
                 </li>
                 <li>
-                    <Link to="/book-clubs" onClick={closeMenu}>
-                        Book Clubs
+                    <Link to="/search" onClick={closeMenu}>
+                        Book Search
                     </Link>
                 </li>
                 <li>
                     <Link to="/discover" onClick={closeMenu}>
-                        Discover
+                        Book Clubs
                     </Link>
                 </li>
             </ul>

@@ -1,5 +1,5 @@
-import { Book } from '../models/Book';
-import { GoogleAPIBook } from '../models/GoogleApiBook';
+import { Book } from '../../models/Book';
+import { GoogleAPIBook } from '../../models/GoogleApiBook';
 import BookList from './bookList';
 
 import { type FormEvent, useState } from 'react';
