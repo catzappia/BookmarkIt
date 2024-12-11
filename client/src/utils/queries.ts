@@ -39,39 +39,23 @@ export const QUERY__SINGLE_USER = gql`
 export const QUERY_ALL_GROUPS = gql`
     query allGroups {
       allGroups {
+        _id
         name
       }
     }`;
 
-// export const QUERY_ALL_GROUPS = gql`
-// query allGroups {
-//   groups {
-//     _id
-//     name
-//     open
-//     admin {
-//       _id
-//       username
-//     }
-//     users {
-//       _id
-//       username
-//     }
-//     currentBook {
-//       _id
-//       title
-//       authors
-//       description
-//       image
-//       link
-//     }
-//     books {
-//       _id
-//       title
-//       authors
-//       description
-//       image
-//       link
-//     }
-//   }
-// }`;
+export const QUERY_GROUP_BY_NAME = gql`
+  query group($groupName: String) {
+    group(groupName: $groupName) {
+      _id
+      name
+      is_private
+      currentBook {
+        title
+        authors
+        description
+        image
+      }
+    }
+  }
+`
