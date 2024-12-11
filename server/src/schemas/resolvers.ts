@@ -49,6 +49,14 @@ interface LeaveGroupArgs {
   
 }
 
+interface AddPostToGroupArgs {
+    input: {
+        groupId: string,
+        text: string,
+        username: string
+    }
+}
+
 const resolvers = {
   Query: {
     me: async (_parent: any, _args: any, context: any) => {
@@ -157,7 +165,17 @@ const resolvers = {
         throw new Error("Failed to leave group");
       }
     },
-    
+
+    // add post to group
+    addPostToGroup: async (_parent: any, { input: { groupId, text, username } }: AddPostToGroupArgs) => {
+      try {
+        return await Group.create({ groupId, text, username });
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to add post to group");
+      }
+    }
+  
     
 
   

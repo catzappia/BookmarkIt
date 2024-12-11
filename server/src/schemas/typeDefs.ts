@@ -1,3 +1,4 @@
+
 import { gql } from "graphql-tag";
 const typeDefs = gql`
     type User {
@@ -33,7 +34,7 @@ const typeDefs = gql`
     type Post {
         _id: ID!
         text: String
-        username: User
+        username: String
         comments: [Comment]
     }
 
@@ -79,6 +80,11 @@ const typeDefs = gql`
         userId: ID!
     }
 
+    input AddPostToGroupInput {
+        groupId: ID!
+        username: String!
+        text: String!
+    }
   
     
 
@@ -89,6 +95,9 @@ const typeDefs = gql`
         me: User
         allGroups: [Group]
         group(groupName: String): Group
+        # Get all posts
+        allPosts: [Post]
+        allComments: [Comment]
     }
     
     type Mutation {
@@ -102,8 +111,10 @@ const typeDefs = gql`
         addUserToGroup(input: AddUserToGroupInput): Group
         # Leave a group (having issues with this)
         leaveGroup(groupId: ID!, userId: ID!): Group 
+
+        
         # Add post to group
-        addPost(groupId: ID!, userId: ID!, content: String!): Post
+        addPostToGroup(input: AddPostToGroupInput): Group
       
         
         # Add a book to a group
