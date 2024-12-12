@@ -34,7 +34,7 @@ const router = createBrowserRouter([
                 errorElement: <Login />,
             },
             {
-                path: '/profile',
+                path: '/Profile',
                 element: <Profile />,
                 errorElement: <Profile />,
             },
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
                 errorElement: <ErrorPage />,
             },
            {
-                path: '/:groupName',
+                path: '/groups/:groupName',
                 element: <Group />,
                 errorElement: <ErrorPage />,
         

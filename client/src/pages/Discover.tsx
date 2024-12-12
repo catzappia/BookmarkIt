@@ -1,5 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -14,6 +16,7 @@ const Discover = () => {
   const { data } = useQuery(QUERY_ALL_GROUPS);
   const groupData: [] = data?.allGroups;
   console.log(groupData);
+  const router = useNavigate();
 
   const [createGroup] = useMutation(CREATE_GROUP);
   const [newGroupData, setNewGroupData] = useState({
@@ -47,7 +50,7 @@ const Discover = () => {
   };
 
   const handleViewButton = (group: any) => {
-    window.location.replace("/" + group.name);
+    router(`/groups/${group.name}`);
   };
 
   return (

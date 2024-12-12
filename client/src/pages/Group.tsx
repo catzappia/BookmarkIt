@@ -1,6 +1,9 @@
 import { useQuery, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
+import DescriptionModal from "../components/Modal-desc";
+import "../styles/group.css";
+
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -10,10 +13,16 @@ import Modal from "react-bootstrap/Modal";
 import { QUERY_GROUP_BY_NAME } from "../utils/queries";
 import { EDIT_GROUP_CURRENT_BOOK } from "../utils/mutations";
 import { ADD_BOOK_TO_GROUP_LIST } from "../utils/mutations";
-import BookSearch from "../components/EditGroupModal/bookSearch";
 import { NewBookInput } from "../models/Book";
+import BookSearch from '../components/EditGroupModal/bookSearch';
 
 const Group = () => {
+  const [modalShow, setModalShow] = useState(false);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const params = useParams();
   const queryParam = params.groupName;
 
@@ -24,14 +33,11 @@ const Group = () => {
   const [editGroupCurrentBook] = useMutation(EDIT_GROUP_CURRENT_BOOK);
   const [addBookToGroupList] = useMutation(ADD_BOOK_TO_GROUP_LIST);
 
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   const groupData = data.group;
+  console.log('Group Data:', groupData);
 
   // const handleJoinButton = () => {
   //   console.log("Joining group:", groupData.name);
@@ -108,39 +114,28 @@ const Group = () => {
       </Modal>
       <Row>
         <Col>Group Name: {groupData.name}</Col>
-        <Col>{groupData.description}</Col>
         <Col>{groupData.admin ? `Created by: ${groupData.admin}` : null}</Col>
-        <Col>
-          <Button>Join Group</Button>
-        </Col>
+        <Col>Join Group</Col>
       </Row>
       <Row>
+        <Col>{groupData.currentBook?.title}</Col>
+        <Col>{groupData.currentBook?.authors}</Col>
         <Col>
-          <Row>
-            <Col>
-              <Row>
-                Currently Reading: {groupData.currentBook?.title}
-                <a onClick={handleShow}>Edit</a>
-              </Row>
-              <Row>Author: {groupData.currentBook?.authors}</Row>
-              <Row>
-                <img src={groupData.currentBook?.image}></img>
-                {groupData.currentBook?.description}
-              </Row>
-              <Row>
-                {groupData.books.map((book: NewBookInput, index: number) => {
-                  return (
-                    <Col key={index}>
-                      <h5>{book.title}</h5>
-                      <img src={book.image} alt={book.title} />
-                      <p>{book.authors}</p>
-                    </Col>
-                  );
-                })}
-              </Row>
-            </Col>
-          </Row>
+          Current Book:
+          <img src={groupData.currentBook?.image}></img>
+          <p onClick={handleShow}>Edit</p>
         </Col>
+        <Button className="primary" onClick={() => setModalShow(true)}>
+          Book Description
+        </Button>
+
+        <DescriptionModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          title={groupData.currentBook?.title || "No Title"}
+          description={groupData.currentBook?.description || "No Description"}
+          link={groupData.currentBook?.link || "No Link Available"}
+        />
       </Row>
     </Container>
   );
