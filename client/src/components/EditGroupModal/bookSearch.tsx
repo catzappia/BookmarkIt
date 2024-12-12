@@ -71,8 +71,7 @@ const BookSearch = (props: BookSearchProps) => {
         </Button>
         <BookList
           onDataChange={handleChildData}
-          bookList={searchedBooks}
-          text={'Set Book'}>
+          bookList={searchedBooks}>
           </BookList>
     </Form.Group>
   )
