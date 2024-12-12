@@ -94,6 +94,7 @@ input AddPostToGroupInput {
 
 type Query {
   me: User
+  # get single user by username
   allGroups: [Group]
   group(groupName: String): Group
   # Get all posts
@@ -104,6 +105,12 @@ type Query {
 type Mutation {
   addUser(input: NewUserInput): Auth
   login(email: String!, password: String!): Auth
+
+  #Users
+    # Add a book to a user's saved books
+    # remove a book from a user's saved books
+
+
   # Create a group
   createGroup(input: NewGroupInput!): Group
   # Delete a group
@@ -114,28 +121,23 @@ type Mutation {
   leaveGroup(groupId: ID!, userId: ID!): Group 
   # Update the current book for a group
   editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
-
-  
-  # Add post to group
+  # Add post to group (needs to be updated)
   addPostToGroup(input: AddPostToGroupInput): Group
-
+  #add comment to post (needs to be updated)
+  
   
   # Add a book to a group
-  addBook(
-      groupId: ID!
-      title: String!
-      author: String!
-      description: String
-    ): Book
+  addBook( input: BookData, groupId: ID!): Group
   
   # Remove a book from the group
-  removeBook(bookId: ID!, groupId: ID!): Boolean
   updateBook(
       bookId: ID!
       title: String
       author: String
       description: String
     ): Book
+
+    
 }
   `;
   export default typeDefs;

@@ -57,8 +57,9 @@ interface AddPostToGroupArgs {
 const resolvers = {
   Query: {
     me: async (_parent: any, _args: any, context: any) => {
-      if (!context.user) {
-        throw new AuthenticationError("Not Logged In");
+      if (context.user) {
+        console.log(context.user);
+        return User.findOne({ _id: context.user.email });
       }
 
       try {
