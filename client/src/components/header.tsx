@@ -1,8 +1,7 @@
 import  { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-
-// import stylesheet
+import '../styles/header.css';
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -21,9 +20,7 @@ return (
         <nav className={`navbar ${menuOpen ? "open" : ""}`}>
             {/* BookmarkIt Logo */}
             <div className={`title ${menuOpen ? "open" : ""}`}>
-                <Link to="/" onClick={closeMenu}>
                     <h1>BookmarkIt</h1>
-                </Link>
             </div>
             {/* Menu Icon (hidden by default) */}
 

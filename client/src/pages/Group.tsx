@@ -1,6 +1,9 @@
+import React from "react";
 import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { QUERY_GROUP_BY_NAME } from "../utils/queries";
+import DescriptionModal from "../components/Modal-desc";
+import "../styles/group.css";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -8,6 +11,8 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 
 const Group = () => {
+  const [modalShow, setModalShow] = React.useState(false);
+
     const params = useParams();
     const queryParam = params.groupName;
 
@@ -52,12 +57,20 @@ const Group = () => {
           {groupData.currentBook?.authors}
           </Col>
           <Col>
-          {groupData.currentBook?.description}
-          </Col>
-          <Col>
           Current Book:
           <img src={groupData.currentBook?.image}></img>
           </Col>
+          <Button className="primary" onClick={() => setModalShow(true)}>
+        Book Description
+      </Button>
+
+      <DescriptionModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        title={groupData.currentBook?.title || "No Title"}
+        description={groupData.currentBook?.description || "No Description"}
+        link={groupData.currentBook?.link || "No Link Available"}
+      />
         </Row>
       </Container>
     );

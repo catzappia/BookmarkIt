@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom';
 // import BookSearch from "../components/bookSearch";
+import '../styles/home.css';
 
 import React, { useState, useEffect } from 'react';
 import Poll from '../components/poll'; // component location
@@ -20,9 +21,8 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="main">
       <div>
-        <h1>Daily Poll</h1>
         <Poll title={pollData.title} options={pollData.options} duration={30} />
       </div>
       <div className="login-button">
