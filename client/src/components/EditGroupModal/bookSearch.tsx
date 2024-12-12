@@ -1,4 +1,4 @@
-import { Book } from '../../models/Book';
+import { NewBookInput } from '../../models/Book';
 import { GoogleAPIBook } from '../../models/GoogleApiBook';
 import BookList from './bookList';
 
@@ -7,13 +7,13 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 type BookSearchProps = {
-    onDataChange: (data: any) => Book | void;
+    onDataChange: (data: any) => NewBookInput | void;
 }
 
 const BookSearch = (props: BookSearchProps) => {
   const [query, setQuery] = useState("");
 
-  const [searchedBooks, setSearchedBooks] = useState<Book[]>([]);
+  const [searchedBooks, setSearchedBooks] = useState<NewBookInput[]>([]);
 
   const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -52,7 +52,7 @@ const BookSearch = (props: BookSearchProps) => {
     return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
   };
 
-  const handleChildData = (data: Book): void => {
+  const handleChildData = (data: NewBookInput): void => {
     console.log('Data:', data);
     props.onDataChange(data);
   }

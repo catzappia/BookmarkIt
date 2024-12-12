@@ -1,5 +1,5 @@
 import { signToken, AuthenticationError } from '../utils/auth.js';
-import { ObjectId } from 'mongodb';
+// import { ObjectId } from 'mongodb';
 import User  from '../models/User.js';
 import Group, { IGroup} from '../models/Group.js';
 import { IBook } from '../models/Book.js';
@@ -25,29 +25,29 @@ interface CreateGroupArgs {
     }
 }
 
-interface UserJoinGroupArgs {
-  input: {
-    groupId: string
-    userId: string
-  }  
-}
+// interface UserJoinGroupArgs {
+//   input: {
+//     groupId: string
+//     userId: string
+//   }  
+// }
 
-interface RemoveGroupArgs {
-    groupId: string
-}
+// interface RemoveGroupArgs {
+//     groupId: string
+// }
 
-interface LeaveGroupArgs {
-    groupId: string
-    userId: string
-}
+// interface LeaveGroupArgs {
+//     groupId: string
+//     userId: string
+// }
 
-interface AddPostToGroupArgs {
-    input: {
-        groupId: string,
-        text: string,
-        username: string
-    }
-}
+// interface AddPostToGroupArgs {
+//     input: {
+//         groupId: string,
+//         text: string,
+//         username: string
+//     }
+// }
 
 const resolvers = {
   Query: {
@@ -133,56 +133,6 @@ const resolvers = {
         throw new Error("Failed to add book to group list");
       }
     },
-    
-    //remove group
-    removeGroup: async (_parent: any, { groupId }: RemoveGroupArgs) => {
-      try {
-        return await Group.findOneAndDelete({ _id: groupId });
-          
-      } catch (err) {
-        console.error(err);
-        throw new Error("Failed to remove group");
-      }
-    },
-
-    // Users can join a group 
-    addUserToGroup: async (_parent: any, { input: { groupId, userId, } }: UserJoinGroupArgs) => {
-      try {
-        return await Group.findOneAndUpdate(
-          { _id: groupId },
-          {
-            $addToSet: { users: userId,  },
-          },
-          { new: true }
-        );
-      } catch (err) {
-        console.error(err);
-        throw new Error("Failed to add user to group");
-      }
-    },
-    // Users can leave a group
-    leaveGroup: async (_parent: any, { userId, groupId }: LeaveGroupArgs) => {
-      try {
-        return await Group.findOneAndUpdate(
-          { _id: groupId },
-          { $pull: { users: new ObjectId(userId) } },
-          { new: true }
-        );
-      } catch (err) {
-        console.error(err);
-        throw new Error("Failed to leave group");
-      }
-    },
-
-    // add post to group
-    addPostToGroup: async (_parent: any, { input: { groupId, text, username } }: AddPostToGroupArgs) => {
-      try {
-        return await Group.create({ groupId, text, username });
-      } catch (err) {
-        console.error(err);
-        throw new Error("Failed to add post to group");
-      }
-    }
   },
 };
 

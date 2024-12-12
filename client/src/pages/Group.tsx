@@ -13,7 +13,6 @@ import { ADD_BOOK_TO_GROUP_LIST } from "../utils/mutations";
 import BookSearch from "../components/EditGroupModal/bookSearch";
 import { NewBookInput } from "../models/Book";
 
-
 const Group = () => {
   const params = useParams();
   const queryParam = params.groupName;
@@ -33,7 +32,6 @@ const Group = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   const groupData = data.group;
-  console.log("GroupData:", groupData);
 
   // const handleJoinButton = () => {
   //   console.log("Joining group:", groupData.name);
@@ -50,31 +48,30 @@ const Group = () => {
 
   const handleEditFormSubmit = async (event: any) => {
     event.preventDefault();
-    if (groupData.currentBook) { 
+    if (groupData.currentBook) {
       let prevBook: NewBookInput = {
         bookId: groupData.currentBook.bookId,
         title: groupData.currentBook.title,
         authors: groupData.currentBook.authors,
         description: groupData.currentBook.description,
         image: groupData.currentBook.image,
-      }
+      };
       console.log("Previous Book:", prevBook);
       console.log("Group ID:", groupData._id);
       await addBookToGroupList({
         variables: { groupId: groupData._id, bookData: prevBook },
-      })
+      });
 
       console.log("Setter:", setter);
       await editGroupCurrentBook({
-      variables: { groupId: groupData._id, bookData: setter },
-    });
+        variables: { groupId: groupData._id, bookData: setter },
+      });
     } else {
       console.log("Setter:", setter);
       await editGroupCurrentBook({
-      variables: { groupId: groupData._id, bookData: setter },
-    });
+        variables: { groupId: groupData._id, bookData: setter },
+      });
     }
-
     console.log("Edit form submitted");
     handleClose();
     window.location.reload();
@@ -82,14 +79,13 @@ const Group = () => {
 
   const handleChildData = (data: NewBookInput): void => {
     const newCurrentBook = data;
-    console.log("Discover Child Data:", newCurrentBook);
     setter = {
       bookId: newCurrentBook.bookId,
       title: newCurrentBook.title,
       authors: newCurrentBook.authors,
       description: newCurrentBook.description,
       image: newCurrentBook.image,
-    }
+    };
   };
 
   return (
@@ -99,9 +95,7 @@ const Group = () => {
           <Modal.Title>Change Current Book</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <BookSearch
-            onDataChange={handleChildData}
-          />
+          <BookSearch onDataChange={handleChildData} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -116,7 +110,9 @@ const Group = () => {
         <Col>Group Name: {groupData.name}</Col>
         <Col>{groupData.description}</Col>
         <Col>{groupData.admin ? `Created by: ${groupData.admin}` : null}</Col>
-        <Col><Button>Join Group</Button></Col>
+        <Col>
+          <Button>Join Group</Button>
+        </Col>
       </Row>
       <Row>
         <Col>
@@ -130,7 +126,7 @@ const Group = () => {
               <Row>
                 <img src={groupData.currentBook?.image}></img>
                 {groupData.currentBook?.description}
-              </Row> 
+              </Row>
               <Row>
                 {groupData.books.map((book: NewBookInput, index: number) => {
                   return (
