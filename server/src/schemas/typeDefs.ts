@@ -57,74 +57,85 @@ const typeDefs = gql`
   }
 
   input BookData {
-    bookId: String
-    authors: [String]!
-    description: String
-    title: String!
-    image: String
-  }
+  bookId: String
+  authors: [String]
+  description: String
+  title: String
+  image: String
+}
 
-  input NewGroupInput {
-    name: String!
-    description: String
-  }
+input NewGroupInput {
+  name: String!
+  is_private: Boolean!
+  currentBook: BookData
+}
 
-  input UserJoinGroupInput {
-    groupId: String
-  }
+input AddUserToGroupInput {
+  groupId: ID!
+  userId: ID!
 
-  type Query {
-    me: User
-    allGroups: [Group]
-    group(groupName: String): Group
-  }
+}
 
-  type Mutation {
-    ## User Mutations
-    addUser(input: NewUserInput): Auth
-    login(email: String!, password: String!): Auth
+input leaveGroupInput {
+  groupId: ID!
+  userId: ID!
+}
 
-    ## Group Mutations
-    createGroup(input: NewGroupInput!): Group
-    editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
-    # Join a group
-    joinGroup(groupId: String): Group
-    # Leave a group
-    leaveGroup(groupId: ID!, userId: ID!): User
-    # Delete a group
-    deleteGroup(groupId: ID!): Boolean
+input AddPostToGroupInput {
+  groupId: ID!
+  username: String!
+  text: String!
+}
 
-    # Add a book to a group
-    addBook(
+
+
+
+
+
+type Query {
+  me: User
+  allGroups: [Group]
+  group(groupName: String): Group
+  # Get all posts
+  allPosts: [Post]
+  allComments: [Comment]
+}
+
+type Mutation {
+  addUser(input: NewUserInput): Auth
+  login(email: String!, password: String!): Auth
+  # Create a group
+  createGroup(input: NewGroupInput!): Group
+  # Delete a group
+  removeGroup(groupId: ID!): Group
+  # Join a group
+  addUserToGroup(input: AddUserToGroupInput): Group
+  # Leave a group (having issues with this)
+  leaveGroup(groupId: ID!, userId: ID!): Group 
+  # Update the current book for a group
+  editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
+
+  
+  # Add post to group
+  addPostToGroup(input: AddPostToGroupInput): Group
+
+  
+  # Add a book to a group
+  addBook(
       groupId: ID!
       title: String!
       author: String!
       description: String
     ): Book
-    # Update book details
-    updateBook(
+  
+  # Remove a book from the group
+  removeBook(bookId: ID!, groupId: ID!): Boolean
+  updateBook(
       bookId: ID!
       title: String
       author: String
       description: String
     ): Book
-    # Remove a book from the group
-    removeBook(bookId: ID!, groupId: ID!): Boolean
-
-    # Create a post within a group
-    createPost(groupId: ID!, userId: ID!, content: String!): Post
-    # Update an existing post
-    updatePost(postId: ID!, content: String): Post
-    # Delete a post
-    deletePost(postId: ID!): Boolean
-
-    # Add a comment to a post
-    addComment(postId: ID!, userId: ID!, content: String!): Comment
-    # Update a comment
-    updateComment(commentId: ID!, content: String): Comment
-    # Delete a comment
-    deleteComment(commentId: ID!): Boolean
-  }
-`;
-
-export default typeDefs;
+}
+  `;
+  export default typeDefs;

@@ -28,7 +28,7 @@ interface CreateGroupArgs {
 
 interface UserJoinGroupArgs {
   input: {
-    groupId: string
+    groupId: string,
     userId: string
     
   }
@@ -137,14 +137,23 @@ const resolvers = {
     // Users can join a group 
     addUserToGroup: async (_parent: any, { input: { groupId, userId, } }: UserJoinGroupArgs) => {
       try {
-        return await Group.findOneAndUpdate(
+       
+        const updatedGroup =  await Group.findOneAndUpdate(
           { _id: groupId },
           {
-            $addToSet: { users: userId,  },
+             $addToSet:  { users: userId },
+          },
+          { new: true } // new: true returns the updated document
+        );
+       await User.findOneAndUpdate(
+          { _id: userId },
+          {
+            $addToSet: { groups: groupId },
           },
           { new: true }
         );
-      } catch (err) {
+        return updatedGroup;
+      } catch (err) { 
         console.error(err);
         throw new Error("Failed to add user to group");
       }

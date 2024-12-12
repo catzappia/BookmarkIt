@@ -1,7 +1,7 @@
 import { Schema, model, type Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { IBook, bookSchema } from './Book.js';
-import { IGroup, groupSchema } from './Group.js';
+import { IGroup} from './Group.js';
 import { IPost, postSchema } from './Post.js';
 import { IComment, commentSchema } from './Comment.js';
 
@@ -44,10 +44,10 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
     currentlyReading: {
         type: bookSchema
     },
-    groups: {
-        type: [groupSchema],
-        default: []
-    },
+    groups: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Group'
+    }],
     posts: {
         type: [postSchema],
         default: []
@@ -56,7 +56,7 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
         type: [commentSchema],
         default: []
     },
-    },
+},
     {
         toJSON: {
             virtuals: true,
@@ -67,12 +67,12 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
 // hash user password
 userSchema.pre('save', async function (next) {
     if (this.isNew || this.isModified('password')) {
-      const saltRounds = 10;
-      this.password = await bcrypt.hash(this.password, saltRounds);
+        const saltRounds = 10;
+        this.password = await bcrypt.hash(this.password, saltRounds);
     }
-  
+
     next();
-  });
+});
 
 userSchema.methods.isCorrectPassword = async function (password: string) {
     return await bcrypt.compare(password, this.password);

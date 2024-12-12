@@ -69,6 +69,6 @@ export const groupSchema = new Schema<IGroup>({
     }
 )
 
-const Group = model('group', groupSchema);
+const Group = model('Group', groupSchema);
 
 export default Group

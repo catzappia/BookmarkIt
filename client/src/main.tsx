@@ -8,6 +8,9 @@ import Discover from './pages/Discover.js';
 import ErrorPage from './pages/Error';
 import Login from './pages/LoginPage/Login.js'
 import Group from './pages/Group.js'
+import Profile from './pages/Profile.js'
+import SignupForm from './pages/Signup.js'
+
 
 const router = createBrowserRouter([
     {
