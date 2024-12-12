@@ -13,6 +13,7 @@ const typeDefs = gql`
   }
 
   type Book {
+    _id: ID!
     bookId: String
     title: String
     authors: [String]
@@ -86,6 +87,7 @@ const typeDefs = gql`
     ## Group Mutations
     createGroup(input: NewGroupInput!): Group
     editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
+    addBookToGroupList(groupId: ID!, bookData: BookData!): Group
   }
 `;
 

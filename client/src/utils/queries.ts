@@ -52,11 +52,21 @@ export const QUERY_GROUP_BY_NAME = gql`
       description
       is_private
       currentBook {
+        _id
+        bookId
         title
         authors
         description
         image
       }
+      books {
+      _id
+      bookId
+      title
+      authors
+      description
+      image
+    }
     }
   }
 `
