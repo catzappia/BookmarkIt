@@ -1,6 +1,7 @@
 import { Schema, model, type Document } from 'mongoose';
 import { IBook, bookSchema } from './Book.js';
 import { IUser } from './User.js';
+import { IPost, postSchema } from './Post.js';
 
 export interface IGroup extends Document {
     groupId: string,
@@ -11,6 +12,7 @@ export interface IGroup extends Document {
     users?: IUser[],
     currentBook?: IBook,
     books?: IBook[],
+    posts?: IPost[]
 }
 
 export const groupSchema = new Schema<IGroup>({
@@ -52,6 +54,12 @@ export const groupSchema = new Schema<IGroup>({
         type: [bookSchema],
         default: []
     },
+    posts: [
+        {
+            type: [postSchema],
+            ref: 'Post',
+        }
+    ]
     },
     {
         toJSON: {
