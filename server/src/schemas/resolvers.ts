@@ -25,12 +25,6 @@ interface CreateGroupArgs {
     }
 }
 
-interface UserJoinGroupInput {
-    input: {
-        groupId: string
-    }
-}
-
 const resolvers = {
   Query: {
     me: async (_parent: any, _args: any, context: any) => {
@@ -99,27 +93,14 @@ const resolvers = {
             throw new Error("Failed to create group");
       }
     },
-    // Users can join groups
-    joinGroup: async (_parent: any, { input }: UserJoinGroupInput, context :any) => {
-        if (!context.user) {
-            throw new AuthenticationError("Not Logged In");
-        }
-        try {
-            const group = await Group.findOne({ _id: input.groupId });
-            if (!group) {
-                throw new Error("No group found with this id");
-            }
-            if (!group.users) {
-                group.users = [];
-            }
-            group.users.push(context.user._id);
-            await group.save();
-            return group;
-        } catch (err) {
-            console.error(err);
-            throw new Error("Failed to join group");
-        }
-  },
+    editGroupCurrentBook: async (_parent: any, { groupId, bookData }: any) => {
+      try {
+        return await Group.findOneAndUpdate( { _id: groupId }, { currentBook: bookData }, { new: true });
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to edit group current book");
+      }
+    },
   },
 };
 
