@@ -87,19 +87,25 @@ input AddPostToGroupInput {
   text: String!
 }
 
+input AddCommentToPostInput {
+  postId: ID!
+  text: String!
+  username: String!
+}
 
 
 
-
+type Query{
+  me: User
+}
 
 type Query {
-  me: User
   # get single user by username
   allGroups: [Group]
   group(groupName: String): Group
   # Get all posts
   allPosts: [Post]
-  allComments: [Comment]
+
 }
 
 type Mutation {
@@ -118,12 +124,13 @@ type Mutation {
   # Join a group
   addUserToGroup(input: AddUserToGroupInput): Group
   # Leave a group (having issues with this)
-  leaveGroup(groupId: ID!, userId: ID!): Group 
+  leaveGroup(input:leaveGroupInput): Group 
   # Update the current book for a group
   editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
   # Add post to group (needs to be updated)
   addPostToGroup(input: AddPostToGroupInput): Group
   #add comment to post (needs to be updated)
+  addCommentToPost(input: AddCommentToPostInput): Post
   
   
   # Add a book to a group

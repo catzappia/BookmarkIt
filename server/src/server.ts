@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 
 import { typeDefs, resolvers } from './schemas/index.js';
 import db from './config/connection.js';
-// import { authenticationToken } from './utils/auth.js';
+import { authenticationToken } from './utils/auth.js';
 
 
 const server = new ApolloServer({
@@ -28,11 +28,11 @@ const startApolloServer = async () => {
     const PORT = process.env.PORT || 3001;
     const app = express();
 
-    app.use(express.urlencoded({ extended: true}));
+    app.use(express.urlencoded({ extended: false})); // this is
     app.use(express.json());
 
     app.use('/graphql', expressMiddleware(server as any,
-        // { context: authenticationToken as any }
+        { context: authenticationToken as any }
     ));
 
     if (process.env.NODE_ENV === 'production') {
