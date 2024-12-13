@@ -46,22 +46,24 @@ function Profile() {
           Profile bio goes here.
         </Card.Text>
       </Card.Body>
-      <h3>Groups I Admin</h3>
-      <ListGroup className="list-group-flush">
+      {adminGroups?.length > 0 ? (
+        <ListGroup className="list-group-flush">
+        <h3>Groups I admin</h3>
         {adminGroups?.map((group: Group) => (
           <div key={group._id}>
             <ListGroup.Item>{group.name}<Button onClick={() => viewGroupPage(group)}>View</Button></ListGroup.Item>
           </div>
         ))}
-      </ListGroup>
-      <h3>Others</h3>
-      <ListGroup className="list-group-flush">
+      </ListGroup> ) : null };
+      {groups?.length > 0 ? (
+        <ListGroup className="list-group-flush">
+        <h3>Groups I'm in</h3>
         {groups?.map((group: Group) => (
           <div key={group._id}>
             <ListGroup.Item>{group.name}<Button onClick={() => viewGroupPage(group)}>View</Button></ListGroup.Item>
           </div>
         ))}
-      </ListGroup>
+      </ListGroup> ) : null };
       <Card.Body>
         <Card.Link href="#">Card Link</Card.Link>
         <Card.Link href="#">Another Link</Card.Link>

@@ -42,7 +42,6 @@ interface RemoveGroupArgs {
 interface LeaveGroupArgs {
   input: {
     groupId: string;
-    userId: string;
   };
 }
 
@@ -114,7 +113,11 @@ const resolvers = {
         throw new Error("Failed to get group");
       }
     },
-    groupsByIds: async (_parent: any, { groupIds }: any, context: IApolloContext) => {
+    groupsByIds: async (
+      _parent: any,
+      { groupIds }: any,
+      context: IApolloContext
+    ) => {
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
@@ -237,7 +240,10 @@ const resolvers = {
     },
 
     // Users can join a group
-    addUserToGroup: async (_parent: any, { input }: UserJoinGroupArgs, context: IApolloContext
+    addUserToGroup: async (
+      _parent: any,
+      { input }: UserJoinGroupArgs,
+      context: IApolloContext
     ) => {
       try {
         if (!context.user) {
@@ -266,17 +272,21 @@ const resolvers = {
     // Users can leave a group
     leaveGroup: async (
       _parent: any,
-      { input: { userId, groupId } }: LeaveGroupArgs
+      { input }: LeaveGroupArgs,
+      context: IApolloContext
     ) => {
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in!");
+      }
       try {
         const updatedGroup = await Group.findOneAndUpdate(
-          { _id: groupId },
-          { $pull: { users: userId } },
+          { _id: input.groupId },
+          { $pull: { users: context.user._id } },
           { new: true }
         );
         await User.findOneAndUpdate(
-          { _id: userId },
-          { $pull: { groups: groupId } },
+          { _id: context.user._id },
+          { $pull: { groups: input.groupId } },
           { new: true }
         );
         return updatedGroup;

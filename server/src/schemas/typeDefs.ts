@@ -77,7 +77,6 @@ const typeDefs = gql`
 
   input LeaveGroupInput {
     groupId: ID!
-    userId: ID!
   }
 
   input AddPostToGroupInput {
