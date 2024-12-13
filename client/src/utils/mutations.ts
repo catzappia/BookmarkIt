@@ -110,9 +110,29 @@ export const ADD_USER_TO_GROUP = gql`
   mutation addUserToGroup($input: AddUserToGroupInput!) {
     addUserToGroup(input: $input) {
       _id
+      name
+      description
+      admin {
+        _id
+        username
+      }
       users {
         _id
+        username
       }
     }
   }`
+  
+  export const LEAVE_GROUP = gql`
+    mutation leaveGroup($input: LeaveGroupInput!) {
+      leaveGroup(input: $input) {
+        _id
+        name
+        users {
+          _id
+          username
+        }
+      }
+    }
+  `
 ;

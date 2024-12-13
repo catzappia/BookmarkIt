@@ -4,7 +4,7 @@ import { IUser } from './User.js';
 import { IPost, postSchema } from './Post.js';
 
 export interface IGroup extends Document {
-    groupId: string,
+    id: string,
     name: string,
     description: string,
     is_private: boolean,
@@ -25,9 +25,6 @@ export const groupSchema = new Schema<IGroup>({
     },
     description: {
         type: String,
-        required: true,
-        maxlength: 100,
-        minlength: 3,
         default: ''
     },
     is_private: {
@@ -38,7 +35,6 @@ export const groupSchema = new Schema<IGroup>({
     admin: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        // required: true
     },
     users: [
         {
