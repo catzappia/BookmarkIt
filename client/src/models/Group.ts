@@ -3,6 +3,7 @@ import { IPost } from './../../../server/src/models/Post';
 export interface Group {
     groupId: string;
     name: string;
+    description: string;
     is_private: boolean;
     admin?: string;
     users?: string[];
@@ -13,5 +14,5 @@ export interface Group {
 
 export interface NewGroupInput {
     name: string;
-    is_private: boolean;
+    description: string;
 }

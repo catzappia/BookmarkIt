@@ -1,7 +1,7 @@
 import { Schema, model, type Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { IBook, bookSchema } from './Book.js';
-import { IGroup} from './Group.js';
+import { IGroup } from './Group.js';
 import { IPost, postSchema } from './Post.js';
 import { IComment, commentSchema } from './Comment.js';
 
@@ -44,10 +44,12 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
     currentlyReading: {
         type: bookSchema
     },
-    groups: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Group'
-    }],
+    groups: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Group',
+        }
+    ],
     posts: {
         type: [postSchema],
         default: []
