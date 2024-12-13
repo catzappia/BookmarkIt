@@ -41,6 +41,15 @@ export const QUERY_USERS = gql`
   }
 `;
 
+export const QUERY_USER_BY_ID = gql`
+  query userById($userId: ID!) {
+    userById(userId: $userId) {
+      _id
+      username
+    }
+  }
+`
+
 export const QUERY__SINGLE_USER = gql`
   query user($username: String!) {
     user(username: $username) {

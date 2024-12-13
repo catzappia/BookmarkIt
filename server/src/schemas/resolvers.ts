@@ -79,7 +79,14 @@ const resolvers = {
     // GetSingleUser: async (_parent: any, { username }: any) => {
     //   return User.findOne({ name: username });
     // },
-
+    userById: async (_parent: any, { userId }: any) => {
+      try {
+        return await User.findOne({ _id: userId });
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to get user");
+      }
+    },
     allGroups: async (_parent: any, _args: any): Promise<IGroup[]> => {
       try {
         return await Group.find({});

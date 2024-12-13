@@ -96,6 +96,7 @@ const typeDefs = gql`
     # User Queries
     me: User
     user(username: String!): User
+    userById(userId: ID!): User
 
     # Group Queries
     allGroups: [Group]

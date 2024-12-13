@@ -10,11 +10,8 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-import { QUERY_GROUP_BY_NAME } from "../utils/queries";
-import { EDIT_GROUP_CURRENT_BOOK } from "../utils/mutations";
-import { ADD_BOOK_TO_GROUP_LIST } from "../utils/mutations";
-import { ADD_USER_TO_GROUP } from "../utils/mutations";
-import { LEAVE_GROUP } from "../utils/mutations";
+import { QUERY_GROUP_BY_NAME, QUERY_USER_BY_ID } from "../utils/queries";
+import { EDIT_GROUP_CURRENT_BOOK, ADD_BOOK_TO_GROUP_LIST, ADD_USER_TO_GROUP, LEAVE_GROUP } from "../utils/mutations";
 import { NewBookInput } from "../models/Book";
 import BookSearch from '../components/EditGroupModal/bookSearch';
 import Auth from "../utils/auth";
@@ -24,12 +21,20 @@ const Group = () => {
   //Get User Data
   const token = Auth.loggedIn() ? Auth.getToken() : null;
   if (!token){
-    return false
+    return <p>Not Logged In</p>
   };
 
   let userData = Auth.getProfile() as { _id: string; [key: string]: any };
   userData = userData.data;
-  console.log("User Data:", userData);
+
+  const handleRefresh = () => {
+    refetch();
+  };
+
+  const [editGroupCurrentBook] = useMutation(EDIT_GROUP_CURRENT_BOOK);
+  const [addBookToGroupList] = useMutation(ADD_BOOK_TO_GROUP_LIST);
+  const [addUserToGroup] = useMutation(ADD_USER_TO_GROUP);
+  const [removeUserFromGroup] = useMutation(LEAVE_GROUP);
 
   const [modalShow, setModalShow] = useState(false);
 
@@ -44,20 +49,20 @@ const Group = () => {
     variables: { groupName: queryParam },
   });
 
-  const handleRefresh = () => {
-    refetch();
-  };
-
-  const [editGroupCurrentBook] = useMutation(EDIT_GROUP_CURRENT_BOOK);
-  const [addBookToGroupList] = useMutation(ADD_BOOK_TO_GROUP_LIST);
-  const [addUserToGroup] = useMutation(ADD_USER_TO_GROUP);
-  const [removeUserFromGroup] = useMutation(LEAVE_GROUP);
+  const groupData = data.group;
+  console.log("Group Data:", groupData);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const groupData = data.group;
-  console.log("Group Data:", groupData);
+  const { data: adminDataResult, loading: loadingAdminData, error: errorAdminData } = useQuery(QUERY_USER_BY_ID, 
+    { variables: { userId: data?.group.admin._id },
+    skip: !groupData?.admin?._id 
+  },);
+  
+  if (loadingAdminData) return <p>Loading...</p>;
+  if (errorAdminData) return <p>Error: {errorAdminData.message}</p>;
+  console.log("Admin Data:", adminDataResult);
 
   const handleJoinButton = async () => {
     await addUserToGroup({
@@ -154,7 +159,7 @@ const Group = () => {
       </Modal>
       <Row>
         <Col>Group Name: {groupData.name}</Col>
-        <Col>Created by: {groupData.admin.username}</Col>
+        <Col>Created by: {groupData?.admin.username}</Col>
         <Col>{Array.isArray(groupData.users) && checkUsers(groupData.users) ? <Button onClick={handleLeaveButton}>Leave Group</Button> : <Button onClick={handleJoinButton}>Join Group</Button>}</Col>
       </Row>
       <Row>
