@@ -68,7 +68,6 @@ const typeDefs = gql`
   input NewGroupInput {
     name: String!
     description: String
-    admin: String!
   }
 
   input AddUserToGroupInput {

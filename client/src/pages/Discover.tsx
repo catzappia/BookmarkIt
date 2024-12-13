@@ -20,12 +20,12 @@ const Discover = () => {
 
   const [createGroup] = useMutation(CREATE_GROUP);
 
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const [newGroupData, setNewGroupData] = useState({
     name: "",
     description: "",
-    admin: user?.username
   });
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [show, setShow] = useState(false);
 
@@ -48,8 +48,9 @@ const Discover = () => {
       console.log(data);
       handleClose();
       window.location.reload();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      setErrorMessage(err.message)
     }
   };
 
@@ -65,16 +66,16 @@ const Discover = () => {
 
       <Modal show={show} onHide={handleClose} size={"xl"}>
         <Modal.Header closeButton>
-          <Modal.Title>Create Your Own Group</Modal.Title>
+          <Modal.Title>Create Your Own Club</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Group Name</Form.Label>
+              <Form.Label>Club Name</Form.Label>
               <Form.Control
                 name="name"
                 type="text"
-                placeholder="My Group"
+                placeholder="My New Club"
                 autoFocus
                 onChange={handleInputChange}
               />
@@ -89,6 +90,7 @@ const Discover = () => {
               />
             </Form.Group>
           </Form>
+          <p>{errorMessage}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

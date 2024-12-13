@@ -25,9 +25,6 @@ export const groupSchema = new Schema<IGroup>({
     },
     description: {
         type: String,
-        required: true,
-        maxlength: 100,
-        minlength: 3,
         default: ''
     },
     is_private: {

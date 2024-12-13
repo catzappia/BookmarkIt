@@ -21,8 +21,7 @@ interface AddUserArgs {
 interface CreateGroupArgs {
     input: {
         name: string,
-        description: string,
-        admin: string,
+        description: string
     }
 }
 
@@ -130,9 +129,14 @@ const resolvers = {
   //     // if user is not authenticated return an error
   //     throw new AuthenticationError('You need to be logged in!');
   // },
-    createGroup: async (_parent: any, { input }: CreateGroupArgs)  => {
+    createGroup: async (_parent: any, { input }: CreateGroupArgs, context: IApolloContext)  => {
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in!");
+      }
+      console.log("Context.user: ", context.user, "Context.user._id: ", context.user.username);
+      console.log("Input.name: ", input.name, "Input.description: ", input.description);
       try {
-        return await Group.create({ ...input });
+        return await Group.create({ ...input, admin: context.user.username });
       } catch (err) {
         console.error(err);
         throw new Error("Failed to create group");
