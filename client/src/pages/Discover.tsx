@@ -15,13 +15,16 @@ import { CREATE_GROUP } from "../utils/mutations";
 const Discover = () => {
   const { data } = useQuery(QUERY_ALL_GROUPS);
   const groupData: [] = data?.allGroups;
-  console.log(groupData);
+
   const router = useNavigate();
 
   const [createGroup] = useMutation(CREATE_GROUP);
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const [newGroupData, setNewGroupData] = useState({
     name: "",
     description: "",
+    admin: user?.username
   });
 
   const [show, setShow] = useState(false);
@@ -32,6 +35,7 @@ const Discover = () => {
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setNewGroupData({ ...newGroupData, [name]: value });
+    console.log(newGroupData);
   };
 
   const handleFormSubmit = async (event: any) => {

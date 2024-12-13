@@ -13,6 +13,8 @@ import Modal from "react-bootstrap/Modal";
 import { QUERY_GROUP_BY_NAME } from "../utils/queries";
 import { EDIT_GROUP_CURRENT_BOOK } from "../utils/mutations";
 import { ADD_BOOK_TO_GROUP_LIST } from "../utils/mutations";
+import { ADD_USER_TO_GROUP } from "../utils/mutations";
+import { LEAVE_GROUP } from "../utils/mutations";
 import { NewBookInput } from "../models/Book";
 import BookSearch from '../components/EditGroupModal/bookSearch';
 
@@ -26,23 +28,42 @@ const Group = () => {
   const params = useParams();
   const queryParam = params.groupName;
 
-  const { data, loading, error } = useQuery(QUERY_GROUP_BY_NAME, {
+  const { data, loading, error, refetch } = useQuery(QUERY_GROUP_BY_NAME, {
     variables: { groupName: queryParam },
   });
 
+  const handleRefresh = () => {
+    refetch();
+  }
+
+  const user = JSON.parse(localStorage.getItem("user") || '{}');
+
   const [editGroupCurrentBook] = useMutation(EDIT_GROUP_CURRENT_BOOK);
   const [addBookToGroupList] = useMutation(ADD_BOOK_TO_GROUP_LIST);
+  const [addUserToGroup] = useMutation(ADD_USER_TO_GROUP);
+  const [removeUserFromGroup] = useMutation(LEAVE_GROUP);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   const groupData = data.group;
-  console.log('Group Data:', groupData);
+  console.log("Group Data:", groupData);
 
-  // const handleJoinButton = () => {
-  //   console.log("Joining group:", groupData.name);
-  //   window.location.reload();
-  // };
+  const handleJoinButton = async () => {
+    await addUserToGroup({
+      variables: { input: { groupId: groupData._id, userId: user._id } },
+    });
+    console.log("User joined group");
+    handleRefresh();
+  };
+
+  const handleLeaveButton = async () => {
+    await removeUserFromGroup({
+      variables: { input: { groupId: groupData._id, userId: user._id } },
+    });
+    console.log("User left group");
+    handleRefresh()
+  }
 
   let setter: NewBookInput = {
     bookId: "",
@@ -80,7 +101,7 @@ const Group = () => {
     }
     console.log("Edit form submitted");
     handleClose();
-    window.location.reload();
+    handleRefresh();
   };
 
   const handleChildData = (data: NewBookInput): void => {
@@ -93,6 +114,15 @@ const Group = () => {
       image: newCurrentBook.image,
     };
   };
+
+  const checkUsers = (array: any) => {
+    for (let i = 0; i < array.length; i++) {
+      if (array[i]._id === user._id) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   return (
     <Container>
@@ -114,8 +144,8 @@ const Group = () => {
       </Modal>
       <Row>
         <Col>Group Name: {groupData.name}</Col>
-        <Col>{groupData.admin ? `Created by: ${groupData.admin}` : null}</Col>
-        <Col>Join Group</Col>
+        <Col>Created by: {groupData.admin}</Col>
+        <Col>{Array.isArray(groupData.users) && checkUsers(groupData.users) ? <Button onClick={handleLeaveButton}>Leave Group</Button> : <Button onClick={handleJoinButton}>Join Group</Button>}</Col>
       </Row>
       <Row>
         <Col>{groupData.currentBook?.title}</Col>
@@ -123,7 +153,9 @@ const Group = () => {
         <Col>
           Current Book:
           <img src={groupData.currentBook?.image}></img>
-          <p onClick={handleShow}>Edit</p>
+        </Col>
+        <Col>
+        {user.username === groupData.admin ? <p onClick={handleShow}>Edit</p> : null}
         </Col>
         <Button className="primary" onClick={() => setModalShow(true)}>
           Book Description

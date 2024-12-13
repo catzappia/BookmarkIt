@@ -1,22 +1,23 @@
-import { gql} from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const QUERY_USERS = gql`
-    query users {
-        users {
-        _id
-        username
-        email
-        bookCount
-        savedBooks {
-            bookId
-            authors
-            description
-            title
-            image
-            link
-            }
-        }
-    }`;
+  query users {
+    users {
+      _id
+      username
+      email
+      bookCount
+      savedBooks {
+        bookId
+        authors
+        description
+        title
+        image
+        link
+      }
+    }
+  }
+`;
 
 export const QUERY__SINGLE_USER = gql`
   query user($username: String!) {
@@ -32,17 +33,19 @@ export const QUERY__SINGLE_USER = gql`
         title
         image
         link
-        }
+      }
     }
-}`;
+  }
+`;
 
 export const QUERY_ALL_GROUPS = gql`
-    query allGroups {
-      allGroups {
-        _id
-        name
-      }
-    }`;
+  query allGroups {
+    allGroups {
+      _id
+      name
+    }
+  }
+`;
 
 export const QUERY_GROUP_BY_NAME = gql`
   query group($groupName: String) {
@@ -50,6 +53,7 @@ export const QUERY_GROUP_BY_NAME = gql`
       _id
       name
       description
+      admin
       is_private
       currentBook {
         _id
@@ -60,13 +64,17 @@ export const QUERY_GROUP_BY_NAME = gql`
         image
       }
       books {
-      _id
-      bookId
-      title
-      authors
-      description
-      image
-    }
+        _id
+        bookId
+        title
+        authors
+        description
+        image
+      }
+      users {
+        _id
+        username
+      }
     }
   }
-`
+`;

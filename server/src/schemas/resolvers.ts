@@ -2,7 +2,7 @@
 import { signToken, AuthenticationError } from '../utils/auth.js';
 import User from '../models/User.js';
 import Group, { IGroup } from '../models/Group.js';
-import { IBook } from '../models/Book.js';
+// import { IBook } from '../models/Book.js';
 import Post from '../models/Post.js';
 import Comment from '../models/Comment.js';
 
@@ -22,8 +22,8 @@ interface AddUserArgs {
 interface CreateGroupArgs {
     input: {
         name: string,
-        is_private: boolean,
-        currentBook: IBook
+        description: string,
+        admin: string,
     }
 }
 
@@ -31,9 +31,7 @@ interface UserJoinGroupArgs {
   input: {
     groupId: string,
     userId: string
-
   }
-
 }
 
 interface RemoveGroupArgs {
@@ -41,12 +39,10 @@ interface RemoveGroupArgs {
 }
 
 interface LeaveGroupArgs {
-
   input: {
     groupId: string
     userId: string
   }
-
 }
 
 interface AddPostToGroupArgs {

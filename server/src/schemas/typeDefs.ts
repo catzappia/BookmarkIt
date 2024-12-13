@@ -24,6 +24,7 @@ const typeDefs = gql`
   type Group {
     _id: ID!
     name: String
+    admin: String
     description: String
     is_private: Boolean
     users: [User]
@@ -66,8 +67,8 @@ const typeDefs = gql`
 
   input NewGroupInput {
     name: String!
-    is_private: Boolean!
-    currentBook: BookData
+    description: String
+    admin: String!
   }
 
   input AddUserToGroupInput {
@@ -75,7 +76,7 @@ const typeDefs = gql`
     userId: ID!
   }
 
-  input leaveGroupInput {
+  input LeaveGroupInput {
     groupId: ID!
     userId: ID!
   }
@@ -120,7 +121,7 @@ const typeDefs = gql`
     # Join a group
     addUserToGroup(input: AddUserToGroupInput): Group
     # Leave a group (having issues with this)
-    leaveGroup(input: leaveGroupInput): Group
+    leaveGroup(input: LeaveGroupInput!): Group
     # Update the current book for a group
     editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
     # Add post to group (needs to be updated)

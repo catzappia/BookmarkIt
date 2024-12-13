@@ -8,7 +8,7 @@ export interface IGroup extends Document {
     name: string,
     description: string,
     is_private: boolean,
-    admin: IUser,
+    admin: string,
     users?: IUser[],
     currentBook?: IBook,
     books?: IBook[],
@@ -36,8 +36,7 @@ export const groupSchema = new Schema<IGroup>({
         default: false
     },
     admin: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         // required: true
     },
     users: [
