@@ -4,7 +4,6 @@ interface Club {
   id: string;
   name: string;
   link: string;
-  addClub: (club: Club) => void;
 }
 
 interface Profile {
@@ -28,9 +27,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     profilePicture: null,
     clubs: [],
   });
-  const addClub = (club: Club) => {
-    updateProfile({ clubs: [...profile.clubs, club] });
-  };
 
   const updateProfile = (updatedProfile: Partial<Profile>) => {
     setProfile((prevProfile) => ({
@@ -41,7 +37,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 
   return (
-    <UserContext.Provider value={{ profile, updateProfile, addClub }}>
+    <UserContext.Provider value={{ profile, updateProfile }}>
       {children}
     </UserContext.Provider>
   );
