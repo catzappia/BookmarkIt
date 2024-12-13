@@ -12,6 +12,7 @@ import { authenticationToken } from "./utils/auth.js";
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  introspection: true,
 });
 
 const startApolloServer = async () => {

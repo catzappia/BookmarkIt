@@ -102,6 +102,8 @@ const typeDefs = gql`
     group(groupName: String): Group
     # Get all posts
     allPosts: [Post]
+    # Get single user
+    user(username: String!): User
   }
 
   type Mutation {
@@ -128,8 +130,8 @@ const typeDefs = gql`
     #add comment to post (needs to be updated)
     addCommentToPost(input: AddCommentToPostInput): Post
 
-    # Add a book to a group
-    addBook(input: BookData, groupId: ID!): Group
+    # Add a book to user's saved books
+    addBook(input: BookData, groupId: ID!): User
 
     # Remove a book from the group
     updateBook(

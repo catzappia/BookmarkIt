@@ -1,5 +1,5 @@
 
-import { signToken, AuthenticationError } from '../utils/auth.js';
+import { signToken, AuthenticationError, IApolloContext,  } from '../utils/auth.js';
 import User from '../models/User.js';
 import Group, { IGroup } from '../models/Group.js';
 import { IBook } from '../models/Book.js';
@@ -65,15 +65,21 @@ interface AddCommentToPostArgs {
   }
 }
 
+
 const resolvers = {
   Query: {
-    me: async (_parent: any, _args: any, context: any) => {
+    me: async (_parent: any, _args: any, context: IApolloContext) => {
       if (context.user) {
         console.log(context.user);
-        return User.findOne({ _id: context.user.email });
+        return User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+    // get single user by username
+    // GetSingleUser: async (_parent: any, { username }: any) => {
+    //   return User.findOne({ name: username });
+    // },
+    
     allGroups: async (_parent: any, _args: any): Promise<IGroup[]> => {
       try {
         return await Group.find({});
@@ -115,7 +121,21 @@ const resolvers = {
       const token = signToken(user.username, user.email, user._id);
       return { token, user };
     },
-    createGroup: async (_parent: any, { input }: CreateGroupArgs) => {
+    // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
+  //   saveBook: async (_parent: any, { input }: {input: SaveBookArgs}, context: any) => {
+  //     // if user is authenticated
+  //     if (context.user) {
+  //         const updatedUser = await User.findOneAndUpdate(
+  //             { _id: context.user.email },
+  //             { $addToSet: { savedBooks: input } },
+  //             { new: true, runValidators: true }
+  //         );
+  //         return updatedUser;
+  //     }
+  //     // if user is not authenticated return an error
+  //     throw new AuthenticationError('You need to be logged in!');
+  // },
+    createGroup: async (_parent: any, { input }: CreateGroupArgs)  => {
       try {
         return await Group.create({ ...input });
       } catch (err) {
@@ -152,13 +172,15 @@ const resolvers = {
     },
 
     // Users can join a group 
-    addUserToGroup: async (_parent: any, { input: { groupId, userId } }: UserJoinGroupArgs,) => {
+    addUserToGroup: async (_parent: any, { input: { groupId, userId } }: UserJoinGroupArgs, context:IApolloContext ) => {
       try {
-
+        if (!context.user) {
+          throw new AuthenticationError("You need to be logged in!");
+        }
         const updatedGroup = await Group.findOneAndUpdate(
           { _id: groupId },
           {
-            $addToSet: { users: userId },
+            $addToSet: { users: context.user._id },
           },
           { new: true } // new: true returns the updated document
         );
@@ -250,6 +272,9 @@ const resolvers = {
         throw new Error("Failed to add comment to post");
       }
     }
+
+   
+    
 
   },
   };
