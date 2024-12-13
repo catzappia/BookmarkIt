@@ -1,27 +1,93 @@
-import Card from 'react-bootstrap/Card';
-import ListGroup from 'react-bootstrap/ListGroup';
+import React, { useState } from 'react';
+import { useUserContext } from '../components/context/UserContext';
 
-function Profile() {
+const ProfilePage: React.FC = () => {
+  const { profile, updateProfile } = useUserContext();
+
+  const [bioInput, setBioInput] = useState(profile.bio);
+  const [isEditingBio, setIsEditingBio] = useState(false);
+
+
+  const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          updateProfile({ profilePicture: reader.result as string });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleBioSave = () => {
+    updateProfile({ bio: bioInput });
+    setIsEditingBio(false);
+  };
+
   return (
-    <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
-      <Card.Body>
-        <Card.Title>Username</Card.Title>
-        <Card.Text>
-          Profile bio goes here.
-        </Card.Text>
-      </Card.Body>
-      <ListGroup className="list-group-flush">
-        <ListGroup.Item>Cras justo odio</ListGroup.Item>
-        <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-        <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-      </ListGroup>
-      <Card.Body>
-        <Card.Link href="#">Card Link</Card.Link>
-        <Card.Link href="#">Another Link</Card.Link>
-      </Card.Body>
-    </Card>
-  );
-}
+    <div>
+      <h1>My Profile</h1>
+      {/* Profile Picture */}
+      <div>
+        <label htmlFor="profilePicture">
+          <img
+            src={profile.profilePicture || 'https://via.placeholder.com/150'}
+            alt="Profile"
+            style={{ width: '150px', height: '150px', borderRadius: '50%' }}
+          />
+        </label>
+        <input
+          id="profilePicture"
+          type="file"
+          accept="image/*"
+          onChange={handleProfilePictureChange}
+          style={{ display: 'none' }}
+        />
+      </div>
 
-export default Profile;
+      {/* Name */}
+      <h2>{profile.name}</h2>
+
+      {/* Bio */}
+      <div>
+        {isEditingBio ? (
+          <>
+            <textarea
+              value={bioInput}
+              onChange={(e) => setBioInput(e.target.value)}
+              rows={3}
+              style={{ width: '100%' }}
+            />
+            <button onClick={handleBioSave}>Save</button>
+            <button onClick={() => setIsEditingBio(false)}>Cancel</button>
+          </>
+        ) : (
+          <>
+            <p>{profile.bio}</p>
+            <button onClick={() => setIsEditingBio(true)}>Edit Bio</button>
+          </>
+        )}
+      </div>
+
+      {/* Clubs */}
+      <div>
+        <h3>Clubs</h3>
+        {profile.clubs.length > 0 ? (
+          <ul>
+            {profile.clubs.map((club) => (
+              <li key={club.id}>
+                <a href={club.link}>{club.name}</a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No clubs joined yet.</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;
