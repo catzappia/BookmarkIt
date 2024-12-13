@@ -17,8 +17,20 @@ import { ADD_USER_TO_GROUP } from "../utils/mutations";
 import { LEAVE_GROUP } from "../utils/mutations";
 import { NewBookInput } from "../models/Book";
 import BookSearch from '../components/EditGroupModal/bookSearch';
+import Auth from "../utils/auth";
 
 const Group = () => {
+
+  //Get User Data
+  const token = Auth.loggedIn() ? Auth.getToken() : null;
+  if (!token){
+    return false
+  };
+
+  let userData = Auth.getProfile() as { _id: string; [key: string]: any };
+  userData = userData.data;
+  console.log("User Data:", userData);
+
   const [modalShow, setModalShow] = useState(false);
 
   const [show, setShow] = useState(false);
@@ -34,9 +46,7 @@ const Group = () => {
 
   const handleRefresh = () => {
     refetch();
-  }
-
-  const user = JSON.parse(localStorage.getItem("user") || '{}');
+  };
 
   const [editGroupCurrentBook] = useMutation(EDIT_GROUP_CURRENT_BOOK);
   const [addBookToGroupList] = useMutation(ADD_BOOK_TO_GROUP_LIST);
@@ -51,7 +61,7 @@ const Group = () => {
 
   const handleJoinButton = async () => {
     await addUserToGroup({
-      variables: { input: { groupId: groupData._id, userId: user._id } },
+      variables: { input: { groupId: groupData._id, userId: userData._id } },
     });
     console.log("User joined group");
     handleRefresh();
@@ -59,7 +69,7 @@ const Group = () => {
 
   const handleLeaveButton = async () => {
     await removeUserFromGroup({
-      variables: { input: { groupId: groupData._id, userId: user._id } },
+      variables: { input: { groupId: groupData._id, userId: userData._id } },
     });
     console.log("User left group");
     handleRefresh()
@@ -117,7 +127,7 @@ const Group = () => {
 
   const checkUsers = (array: any) => {
     for (let i = 0; i < array.length; i++) {
-      if (array[i]._id === user._id) {
+      if (array[i]._id === userData._id) {
         return true;
       }
     }
@@ -155,7 +165,7 @@ const Group = () => {
           <img src={groupData.currentBook?.image}></img>
         </Col>
         <Col>
-        {user.username === groupData.admin ? <p onClick={handleShow}>Edit</p> : null}
+        {userData.username === groupData.admin ? <p onClick={handleShow}>Edit</p> : null}
         </Col>
         <Button className="primary" onClick={() => setModalShow(true)}>
           Book Description
