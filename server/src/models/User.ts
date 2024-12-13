@@ -58,7 +58,7 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
         type: [commentSchema],
         default: []
     },
-    },
+},
     {
         toJSON: {
             virtuals: true,
@@ -69,12 +69,12 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
 // hash user password
 userSchema.pre('save', async function (next) {
     if (this.isNew || this.isModified('password')) {
-      const saltRounds = 10;
-      this.password = await bcrypt.hash(this.password, saltRounds);
+        const saltRounds = 10;
+        this.password = await bcrypt.hash(this.password, saltRounds);
     }
-  
+
     next();
-  });
+});
 
 userSchema.methods.isCorrectPassword = async function (password: string) {
     return await bcrypt.compare(password, this.password);

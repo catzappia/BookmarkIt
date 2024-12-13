@@ -1,4 +1,3 @@
-
 import { gql } from "graphql-tag";
 const typeDefs = gql`
   type User {
@@ -23,16 +22,16 @@ const typeDefs = gql`
   }
 
   type Group {
-      _id: ID!
-      name: String
-      description: String
-      is_private: Boolean
-      users: [User]
-      currentBook: Book
-      books: [Book]
-      posts: [Post]
+    _id: ID!
+    name: String
+    description: String
+    is_private: Boolean
+    users: [User]
+    currentBook: Book
+    books: [Book]
+    posts: [Post]
   }
-    
+
   type Post {
     _id: ID!
     text: String
@@ -59,37 +58,86 @@ const typeDefs = gql`
 
   input BookData {
     bookId: String
-    authors: [String]!
+    authors: [String]
     description: String
-    title: String!
+    title: String
     image: String
   }
 
   input NewGroupInput {
     name: String!
-    description: String
+    is_private: Boolean!
+    currentBook: BookData
   }
 
-  input UserJoinGroupInput {
-    groupId: String
+  input AddUserToGroupInput {
+    groupId: ID!
+    userId: ID!
+  }
+
+  input leaveGroupInput {
+    groupId: ID!
+    userId: ID!
+  }
+
+  input AddPostToGroupInput {
+    groupId: ID!
+    username: String!
+    text: String!
+  }
+
+  input AddCommentToPostInput {
+    postId: ID!
+    text: String!
+    username: String!
   }
 
   type Query {
     me: User
+  }
+
+  type Query {
+    # get single user by username
     allGroups: [Group]
     group(groupName: String): Group
+    # Get all posts
+    allPosts: [Post]
   }
 
   type Mutation {
-    ## User Mutations
     addUser(input: NewUserInput): Auth
     login(email: String!, password: String!): Auth
 
-    ## Group Mutations
-    createGroup(input: NewGroupInput!): Group
-    editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
+    #Users
+    # Add a book to a user's saved books
+    # remove a book from a user's saved books
     addBookToGroupList(groupId: ID!, bookData: BookData!): Group
+
+    # Create a group
+    createGroup(input: NewGroupInput!): Group
+    # Delete a group
+    removeGroup(groupId: ID!): Group
+    # Join a group
+    addUserToGroup(input: AddUserToGroupInput): Group
+    # Leave a group (having issues with this)
+    leaveGroup(input: leaveGroupInput): Group
+    # Update the current book for a group
+    editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
+    # Add post to group (needs to be updated)
+    addPostToGroup(input: AddPostToGroupInput): Group
+    #add comment to post (needs to be updated)
+    addCommentToPost(input: AddCommentToPostInput): Post
+
+    # Add a book to a group
+    addBook(input: BookData, groupId: ID!): Group
+
+    # Remove a book from the group
+    updateBook(
+      bookId: ID!
+      title: String
+      author: String
+      description: String
+    ): Book
   }
 `;
-
 export default typeDefs;

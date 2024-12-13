@@ -1,3 +1,5 @@
+import { IPost } from './../../../server/src/models/Post';
+
 export interface Group {
     groupId: string;
     name: string;
@@ -7,7 +9,7 @@ export interface Group {
     users?: string[];
     currentBook?: string;
     books?: string[];
-    posts?: string[];
+    posts?: IPost[];
 }
 
 export interface NewGroupInput {
