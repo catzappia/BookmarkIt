@@ -1,5 +1,27 @@
 import { gql } from "@apollo/client";
 
+export const QUERY_ME = gql`
+  query me {
+    me {
+      _id
+      username
+      email
+      adminGroups {
+        _id
+        name
+      }
+      savedBooks {
+        _id
+        title
+      }
+      groups {
+        _id
+        name
+      }
+    }
+  }
+`;
+
 export const QUERY_USERS = gql`
   query users {
     users {
@@ -43,6 +65,11 @@ export const QUERY_ALL_GROUPS = gql`
     allGroups {
       _id
       name
+      description
+      admin {
+        _id
+        username
+      }
     }
   }
 `;
@@ -53,7 +80,10 @@ export const QUERY_GROUP_BY_NAME = gql`
       _id
       name
       description
-      admin
+      admin {
+        _id
+        username
+      }
       is_private
       currentBook {
         _id
@@ -78,3 +108,73 @@ export const QUERY_GROUP_BY_NAME = gql`
     }
   }
 `;
+
+export const QUERY_GROUP_BY_ID = gql`
+  query groupById($groupId: ID!) {
+    groupById(groupId: $groupId) {
+      _id
+      name
+      description
+      admin {
+        _id
+        username
+      }
+      is_private
+      currentBook {
+        _id
+        bookId
+        title
+        authors
+        description
+        image
+      }
+      books {
+        _id
+        bookId
+        title
+        authors
+        description
+        image
+      }
+      users {
+        _id
+        username
+      }
+    }
+  }
+`
+
+export const QUERY_GROUPS_BY_IDS = gql`
+  query groupsByIds($groupIds: [ID]!) {
+    groupsByIds(groupIds: $groupIds) {
+      _id
+      name
+      description
+      admin {
+        _id
+        username
+      }
+      is_private
+      currentBook {
+        _id
+        bookId
+        title
+        authors
+        description
+        image
+      }
+      books {
+        _id
+        bookId
+        title
+        authors
+        description
+        image
+      }
+      users {
+        _id
+        username
+      }
+    }
+  }
+`

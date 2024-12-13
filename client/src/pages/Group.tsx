@@ -61,7 +61,7 @@ const Group = () => {
 
   const handleJoinButton = async () => {
     await addUserToGroup({
-      variables: { input: { groupId: groupData._id, userId: userData._id } },
+      variables: { input: { groupId: groupData._id } },
     });
     console.log("User joined group");
     handleRefresh();
@@ -69,7 +69,7 @@ const Group = () => {
 
   const handleLeaveButton = async () => {
     await removeUserFromGroup({
-      variables: { input: { groupId: groupData._id, userId: userData._id } },
+      variables: { input: { groupId: groupData._id } },
     });
     console.log("User left group");
     handleRefresh()
@@ -154,7 +154,7 @@ const Group = () => {
       </Modal>
       <Row>
         <Col>Group Name: {groupData.name}</Col>
-        <Col>Created by: {groupData.admin}</Col>
+        <Col>Created by: {groupData.admin.username}</Col>
         <Col>{Array.isArray(groupData.users) && checkUsers(groupData.users) ? <Button onClick={handleLeaveButton}>Leave Group</Button> : <Button onClick={handleJoinButton}>Join Group</Button>}</Col>
       </Row>
       <Row>
@@ -165,7 +165,7 @@ const Group = () => {
           <img src={groupData.currentBook?.image}></img>
         </Col>
         <Col>
-        {userData.username === groupData.admin ? <p onClick={handleShow}>Edit</p> : null}
+        {userData._id === groupData.admin._id ? <p onClick={handleShow}>Edit</p> : null}
         </Col>
         <Button className="primary" onClick={() => setModalShow(true)}>
           Book Description

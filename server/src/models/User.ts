@@ -14,6 +14,7 @@ export interface IUser extends Document {
     isCorrectPassword(password: string): Promise<boolean>,
     savedBooks?: IBook[],
     currentlyReading?: IBook,
+    adminGroups?: IGroup[],
     groups?: IGroup[],
     posts?: IPost[],
     comments?: IComment[],
@@ -44,6 +45,12 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
     currentlyReading: {
         type: bookSchema
     },
+    adminGroups: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Group',
+        }
+    ],
     groups: [
         {
             type: Schema.Types.ObjectId,

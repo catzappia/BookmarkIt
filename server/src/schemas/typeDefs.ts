@@ -7,6 +7,7 @@ const typeDefs = gql`
     password: String
     savedBooks: [Book]
     currentlyReading: Book
+    adminGroups: [Group]
     groups: [Group]
     posts: [Post]
     comments: [Comment]
@@ -24,7 +25,7 @@ const typeDefs = gql`
   type Group {
     _id: ID!
     name: String
-    admin: String
+    admin: User
     description: String
     is_private: Boolean
     users: [User]
@@ -72,7 +73,6 @@ const typeDefs = gql`
 
   input AddUserToGroupInput {
     groupId: ID!
-    userId: ID!
   }
 
   input LeaveGroupInput {
@@ -93,45 +93,35 @@ const typeDefs = gql`
   }
 
   type Query {
+    # User Queries
     me: User
-  }
+    user(username: String!): User
 
-  type Query {
-    # get single user by username
+    # Group Queries
     allGroups: [Group]
     group(groupName: String): Group
-    # Get all posts
+    groupById(groupId: ID!): Group
+    groupsByIds(groupIds: [ID]!): [Group]
+    
+    # Post Queries
     allPosts: [Post]
-    # Get single user
-    user(username: String!): User
   }
 
   type Mutation {
+    # Auth Mutations
     addUser(input: NewUserInput): Auth
     login(email: String!, password: String!): Auth
 
-    #Users
-    # Add a book to a user's saved books
-    # remove a book from a user's saved books
+    #Users Mutations
     addBookToGroupList(groupId: ID!, bookData: BookData!): Group
-
-    # Create a group
-    createGroup(input: NewGroupInput!): Group
-    # Delete a group
-    removeGroup(groupId: ID!): Group
-    # Join a group
     addUserToGroup(input: AddUserToGroupInput): Group
-    # Leave a group (having issues with this)
     leaveGroup(input: LeaveGroupInput!): Group
-    # Update the current book for a group
-    editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
-    # Add post to group (needs to be updated)
-    addPostToGroup(input: AddPostToGroupInput): Group
-    #add comment to post (needs to be updated)
-    addCommentToPost(input: AddCommentToPostInput): Post
-
-    # Add a book to user's saved books
     addBook(input: BookData, groupId: ID!): User
+
+    # Group Mutations
+    createGroup(input: NewGroupInput!): Group
+    removeGroup(groupId: ID!): Group
+    editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
 
     # Remove a book from the group
     updateBook(
@@ -140,6 +130,10 @@ const typeDefs = gql`
       author: String
       description: String
     ): Book
+
+    # Post & Comment Mutations
+    addPostToGroup(input: AddPostToGroupInput): Group
+    addCommentToPost(input: AddCommentToPostInput): Post
   }
 `;
 export default typeDefs;

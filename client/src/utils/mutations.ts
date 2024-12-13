@@ -68,7 +68,6 @@ export const CREATE_GROUP = gql`
     createGroup(input: $input) {
       _id
       name
-      admin
       description
     }
   }
@@ -112,6 +111,11 @@ export const ADD_USER_TO_GROUP = gql`
     addUserToGroup(input: $input) {
       _id
       name
+      description
+      admin {
+        _id
+        username
+      }
       users {
         _id
         username

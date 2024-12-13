@@ -45,7 +45,7 @@ const Discover = () => {
       const { data } = await createGroup({
         variables: { input: newGroupData },
       });
-      console.log(data);
+      console.log("Submit create group Data", data);
       handleClose();
       window.location.reload();
     } catch (err: any) {

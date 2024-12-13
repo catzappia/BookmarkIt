@@ -4,11 +4,11 @@ import { IUser } from './User.js';
 import { IPost, postSchema } from './Post.js';
 
 export interface IGroup extends Document {
-    groupId: string,
+    id: string,
     name: string,
     description: string,
     is_private: boolean,
-    admin: string,
+    admin: IUser,
     users?: IUser[],
     currentBook?: IBook,
     books?: IBook[],
@@ -33,8 +33,8 @@ export const groupSchema = new Schema<IGroup>({
         default: false
     },
     admin: {
-        type: String,
-        // required: true
+        type: Schema.Types.ObjectId,
+        ref: 'User',
     },
     users: [
         {
