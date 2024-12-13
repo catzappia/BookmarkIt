@@ -49,7 +49,7 @@ const Group = () => {
     variables: { groupName: queryParam },
   });
 
-  const groupData = data.group;
+  const groupData = data?.group;
   console.log("Group Data:", groupData);
 
   if (loading) return <p>Loading...</p>;
@@ -63,6 +63,7 @@ const Group = () => {
   if (loadingAdminData) return <p>Loading...</p>;
   if (errorAdminData) return <p>Error: {errorAdminData.message}</p>;
   console.log("Admin Data:", adminDataResult);
+  const adminData = adminDataResult?.userById?.username;
 
   const handleJoinButton = async () => {
     await addUserToGroup({
@@ -159,7 +160,7 @@ const Group = () => {
       </Modal>
       <Row>
         <Col>Group Name: {groupData.name}</Col>
-        <Col>Created by: {groupData?.admin.username}</Col>
+        <Col>Created by: {adminData}</Col>
         <Col>{Array.isArray(groupData.users) && checkUsers(groupData.users) ? <Button onClick={handleLeaveButton}>Leave Group</Button> : <Button onClick={handleJoinButton}>Join Group</Button>}</Col>
       </Row>
       <Row>
