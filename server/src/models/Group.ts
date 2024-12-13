@@ -1,15 +1,18 @@
 import { Schema, model, type Document } from 'mongoose';
 import { IBook, bookSchema } from './Book.js';
 import { IUser } from './User.js';
+import { IPost, postSchema } from './Post.js';
 
 export interface IGroup extends Document {
     groupId: string,
     name: string,
+    description: string,
     is_private: boolean,
     admin: IUser,
     users?: IUser[],
     currentBook?: IBook,
     books?: IBook[],
+    posts?: IPost[]
 }
 
 export const groupSchema = new Schema<IGroup>({
@@ -19,6 +22,13 @@ export const groupSchema = new Schema<IGroup>({
         unique: true,
         maxlength: 40,
         minlength: 3
+    },
+    description: {
+        type: String,
+        required: true,
+        maxlength: 100,
+        minlength: 3,
+        default: ''
     },
     is_private: {
         type: Boolean,
@@ -44,6 +54,12 @@ export const groupSchema = new Schema<IGroup>({
         type: [bookSchema],
         default: []
     },
+    posts: [
+        {
+            type: [postSchema],
+            ref: 'Post',
+        }
+    ]
     },
     {
         toJSON: {
@@ -53,6 +69,6 @@ export const groupSchema = new Schema<IGroup>({
     }
 )
 
-const Group = model('group', groupSchema);
+const Group = model('Group', groupSchema);
 
 export default Group

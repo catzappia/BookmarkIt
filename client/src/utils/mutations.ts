@@ -68,8 +68,51 @@ export const CREATE_GROUP = gql`
     createGroup(input: $input) {
       _id
       name
-      
-
+      description
     }
-  } 
+  }
 `
+
+export const EDIT_GROUP_CURRENT_BOOK = gql`
+  mutation editGroupCurrentBook($groupId: ID!, $bookData: BookData) {
+    editGroupCurrentBook(groupId: $groupId, bookData: $bookData) {
+      _id
+      name
+      description
+      currentBook {
+        _id
+        bookId
+        title
+        authors
+        description
+        image
+      }
+    }
+  }
+`
+
+export const ADD_BOOK_TO_GROUP_LIST = gql`
+  mutation addBookToGroupList($groupId: ID!, $bookData: BookData!) {
+    addBookToGroupList(groupId: $groupId, bookData: $bookData) {
+      _id
+      name
+      description
+      books {
+        _id
+        bookId
+        title
+        image
+      }
+    }
+  }`
+
+export const ADD_USER_TO_GROUP = gql`
+  mutation addUserToGroup($input: AddUserToGroupInput!) {
+    addUserToGroup(input: $input) {
+      _id
+      users {
+        _id
+      }
+    }
+  }`
+;
