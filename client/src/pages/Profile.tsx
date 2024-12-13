@@ -28,7 +28,8 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div>
-      <h1>My Profile</h1>
+      {/* Name */}
+      <h1>{profile.name}</h1>
       {/* Profile Picture */}
       <div>
         <label htmlFor="profilePicture">
@@ -46,9 +47,6 @@ const ProfilePage: React.FC = () => {
           style={{ display: 'none' }}
         />
       </div>
-
-      {/* Name */}
-      <h2>{profile.name}</h2>
 
       {/* Bio */}
       <div>
