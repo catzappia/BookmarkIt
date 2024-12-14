@@ -81,14 +81,12 @@ const typeDefs = gql`
 
   input AddPostToGroupInput {
     groupId: ID!
-    username: String!
     text: String!
   }
 
   input AddCommentToPostInput {
     postId: ID!
     text: String!
-    username: String!
   }
 
   type Query {

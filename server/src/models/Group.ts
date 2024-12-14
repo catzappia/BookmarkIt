@@ -1,7 +1,7 @@
 import { Schema, model, type Document } from 'mongoose';
 import { IBook, bookSchema } from './Book.js';
 import { IUser } from './User.js';
-import { IPost, postSchema } from './Post.js';
+import { IPost,  } from './Post.js';
 
 export interface IGroup extends Document {
     id: string,
@@ -52,7 +52,7 @@ export const groupSchema = new Schema<IGroup>({
     },
     posts: [
         {
-            type: [postSchema],
+            type: Schema.Types.ObjectId,
             ref: 'Post',
         }
     ]

@@ -7,7 +7,7 @@ import User from "../models/User.js";
 import Group, { IGroup } from "../models/Group.js";
 // import { IBook } from '../models/Book.js';
 import Post from "../models/Post.js";
-import Comment from "../models/Comment.js";
+
 
 interface LoginArgs {
   email: string;
@@ -49,7 +49,6 @@ interface AddPostToGroupArgs {
   input: {
     groupId: string;
     text: string;
-    username: string;
   };
 }
 
@@ -57,7 +56,6 @@ interface AddCommentToPostArgs {
   input: {
     postId: string;
     text: string;
-    username: string;
   };
 }
 
@@ -74,10 +72,7 @@ const resolvers = {
         throw new Error("Failed to get user");
       }
     },
-    // get single user by username
-    // GetSingleUser: async (_parent: any, { username }: any) => {
-    //   return User.findOne({ name: username });
-    // },
+    
     userById: async (_parent: any, { userId }: any) => {
       try {
         return await User.findOne({ _id: userId });
@@ -240,11 +235,7 @@ const resolvers = {
     },
 
     // Users can join a group
-    addUserToGroup: async (
-      _parent: any,
-      { input }: UserJoinGroupArgs,
-      context: IApolloContext
-    ) => {
+    addUserToGroup: async (_parent: any,{ input }: UserJoinGroupArgs,context: IApolloContext) => {
       try {
         if (!context.user) {
           throw new AuthenticationError("You need to be logged in!");
@@ -270,11 +261,7 @@ const resolvers = {
       }
     },
     // Users can leave a group
-    leaveGroup: async (
-      _parent: any,
-      { input }: LeaveGroupArgs,
-      context: IApolloContext
-    ) => {
+    leaveGroup: async (_parent: any,{ input }: LeaveGroupArgs,context: IApolloContext) => {
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
@@ -297,21 +284,21 @@ const resolvers = {
     },
 
     // add post to group
-    addPostToGroup: async (
-      _parent: any,
-      { input: { groupId, text, username } }: AddPostToGroupArgs
-    ) => {
+    addPostToGroup: async (_parent: any,{ input: { groupId, text, } }: AddPostToGroupArgs, context:IApolloContext) => {
       try {
+        if (!context.user) {
+          throw new AuthenticationError("You need to be logged in!");
+        }
+        const post = await Post.create({ text, user: context.user._id });
         const updatedGroup = await Group.findOneAndUpdate(
           { _id: groupId },
           {
-            $push: { posts: { text, username } },
+            $push: { posts: post._id },
           },
           { new: true }
         );
-        const post = await Post.create({ text, username });
         await User.findOneAndUpdate(
-          { username },
+          { _id: context.user._id },
           {
             $push: { posts: post._id },
           },
@@ -327,24 +314,21 @@ const resolvers = {
     // add comment to post
     addCommentToPost: async (
       _parent: any,
-      { input: { postId, text, username } }: AddCommentToPostArgs
-    ) => {
+      { input: { postId, text, } }: AddCommentToPostArgs, context: IApolloContext) => {
       try {
+        if (!context.user) {
+          throw new AuthenticationError("You need to be logged in!");
+        }
         const updatedPost = await Post.findOneAndUpdate(
           { _id: postId },
           {
-            $push: { comments: { text, username } },
+            $push: { comments: { text, user:context.user._id } },
           },
           { new: true }
         );
-        const comment = await Comment.create({ text, username });
-        await User.findOneAndUpdate(
-          { username },
-          {
-            $push: { posts: comment._id, text },
-          },
-          { new: true }
-        );
+        
+
+        
 
         return updatedPost;
       } catch (err) {

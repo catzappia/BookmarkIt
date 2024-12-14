@@ -10,7 +10,7 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-import { QUERY_GROUP_BY_NAME, QUERY_USER_BY_ID } from "../utils/queries";
+import { QUERY_GROUP_BY_NAME, } from "../utils/queries";
 import { EDIT_GROUP_CURRENT_BOOK, ADD_BOOK_TO_GROUP_LIST, ADD_USER_TO_GROUP, LEAVE_GROUP } from "../utils/mutations";
 import { NewBookInput } from "../models/Book";
 import BookSearch from '../components/EditGroupModal/bookSearch';
