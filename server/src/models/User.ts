@@ -2,7 +2,7 @@ import { Schema, model, type Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { IBook, bookSchema } from './Book.js';
 import { IGroup } from './Group.js';
-import { IPost, postSchema } from './Post.js';
+import { IPost} from './Post.js';
 import { IComment, commentSchema } from './Comment.js';
 
 export interface IUser extends Document {
@@ -14,6 +14,7 @@ export interface IUser extends Document {
     isCorrectPassword(password: string): Promise<boolean>,
     savedBooks?: IBook[],
     currentlyReading?: IBook,
+    adminGroups?: IGroup[],
     groups?: IGroup[],
     posts?: IPost[],
     comments?: IComment[],
@@ -44,6 +45,12 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
     currentlyReading: {
         type: bookSchema
     },
+    adminGroups: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Group',
+        }
+    ],
     groups: [
         {
             type: Schema.Types.ObjectId,
@@ -51,8 +58,8 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
         }
     ],
     posts: {
-        type: [postSchema],
-        default: []
+        type: Schema.Types.ObjectId,
+        ref: 'Post',
     },
     comments: {
         type: [commentSchema],
