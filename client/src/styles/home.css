@@ -1,0 +1,31 @@
+/* Reset the margin and padding */
+.main {
+  margin: 0;
+  padding: 0;
+  background-image: url('../assets/2.png'); /* Background image */
+  background-size: cover; /* Ensure background image covers the entire screen */
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #6a8eb3;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+    width: 80%; /* Set a responsive width */
+    max-width: 600px; /* Ensure it doesn't exceed 600px */
+}
+  
+  
