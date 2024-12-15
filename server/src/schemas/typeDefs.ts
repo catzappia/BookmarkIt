@@ -103,6 +103,7 @@ const typeDefs = gql`
     
     # Post Queries
     allPosts: [Post]
+    postsByGroupId(groupId: ID!): [Post]
   }
 
   type Mutation {

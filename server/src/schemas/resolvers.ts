@@ -101,10 +101,19 @@ const resolvers = {
     },
     group: async (_parent: any, { groupName }: any): Promise<IGroup | null> => {
       try {
-        return await Group.findOne({ name: groupName }).populate({
-          path: "posts",
-          populate: [{ path: "user", select: "username" }, { path: "comments" }],
-        });
+        const result = await Group.findOne({ name: groupName }).populate([
+          {
+            path: "posts",
+            select: "text",
+            populate: { path: "user", select: "username" }
+          },
+          {
+            path: "admin",
+            select: "username"
+          }
+        ])
+        console.log("Group Result: ", result);
+        return result;
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get group");
@@ -148,8 +157,15 @@ const resolvers = {
         throw new Error("Failed to get posts");
       }
       },
+      postsByGroupId: async (_parent: any, { groupId }: any): Promise<IPost[]> => {
+        try {
+          return await Post.find({ group: groupId }).populate('user', 'username');
+        } catch (err) {
+          console.error(err);
+          throw new Error("Failed to get posts");
+        }
+      }
   },
-
 
   Mutation: {
     login: async (_parent: any, { email, password }: LoginArgs) => {

@@ -9,6 +9,7 @@ import Button from "react-bootstrap/Button";
 
 import { Post, Comment } from "../models/Post";
 import { ADD_POST_TO_GROUP, ADD_COMMENT_TO_POST } from "../utils/mutations";
+// import { QUERY_POSTS_BY_GROUP_ID } from "../utils/queries";
 
 interface PostFormProps {
   groupId: string;
@@ -18,10 +19,16 @@ interface PostFormProps {
 }
 
 const PostForm = (props: PostFormProps) => {
+
   console.log("Post Props: ", props);
   const [postText, setPostText] = useState("");
   const [commentText, setCommentText] = useState("");
 
+  // const { data, loading, error, refetch } = useQuery(QUERY_POSTS_BY_GROUP_ID, { variables: { groupId: props.groupId } });
+  // console.log("Post Data:", data);
+
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
   const [addPost] = useMutation(ADD_POST_TO_GROUP);
   const [addComment] = useMutation(ADD_COMMENT_TO_POST);
 

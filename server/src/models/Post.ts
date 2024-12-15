@@ -6,7 +6,7 @@ import { IUser } from './User.js';
 export interface IPost extends Document {
     id: string,
     text: string,
-    user: IUser[],
+    user: IUser,
     comments?: IComment
 }
 
@@ -17,11 +17,11 @@ export const postSchema = new Schema<IPost>({
         maxlength: 120,
         minlength: 1
     },
-    user: [{
+    user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    }],
+    },
     comments: {
         type: [commentSchema],
         default: []

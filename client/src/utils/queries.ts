@@ -218,4 +218,25 @@ export const QUERY_GROUPS_BY_IDS = gql`
       }
     }
   }
-`;
+`
+  export const QUERY_POSTS_BY_GROUP_ID = gql`
+    query postsByGroupId($groupId: ID!) {
+      postsByGroupId(groupId: $groupId) {
+        _id
+        text
+        user {
+          _id
+          username
+        }
+        comments {
+          _id
+          text
+          user {
+            _id
+            username
+          }
+        }
+      }
+    } 
+  `
+;

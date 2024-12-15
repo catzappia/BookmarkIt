@@ -30,6 +30,7 @@ const Group = () => {
 
   let userData = Auth.getProfile() as { _id: string; [key: string]: any };
   userData = userData.data;
+  console.log("User Data:", userData);
 
   const handleRefresh = () => {
     refetch();
@@ -199,7 +200,7 @@ const Group = () => {
           link={groupData.currentBook?.link || "No Link Available"}
         />
       </Row>
-      <PostForm groupId={groupData._id} posts={groupData.posts || []} handleRefresh={handleRefresh} />
+      <PostForm groupId={groupData._id} posts={groupData.posts} handleRefresh={handleRefresh}/>
     </Container>
   );
 };
