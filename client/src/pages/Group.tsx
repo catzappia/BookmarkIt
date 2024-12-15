@@ -17,7 +17,6 @@ import { NewBookInput } from "../models/Book";
 import BookSearch from '../components/EditGroupModal/bookSearch';
 import PostForm from '../components/postForm';
 import Auth from "../utils/auth";
-import Post from "../../../server/src/models/Post";
 
 const Group = () => {
 
