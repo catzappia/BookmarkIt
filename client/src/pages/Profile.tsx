@@ -34,7 +34,7 @@ function Profile() {
   if (error) return <p>Error : {error.message}</p>;
 
   const viewGroupPage = (group: any) => {
-    router(`/groups/${group.name}`);
+    router(`/clubs/${group.name}`);
   }
 
   return (

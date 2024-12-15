@@ -73,6 +73,15 @@ export const CREATE_GROUP = gql`
   }
 `
 
+export const DELETE_GROUP = gql`
+  mutation deleteGroup($groupId: ID!) {
+    deleteGroup(groupId: $groupId) {
+      _id
+      name
+    }
+  }
+`
+
 export const EDIT_GROUP_CURRENT_BOOK = gql`
   mutation editGroupCurrentBook($groupId: ID!, $bookData: BookData) {
     editGroupCurrentBook(groupId: $groupId, bookData: $bookData) {
@@ -131,6 +140,52 @@ export const ADD_USER_TO_GROUP = gql`
         users {
           _id
           username
+        }
+      }
+    }
+  `
+
+  export const ADD_POST_TO_GROUP = gql`
+    mutation addPostToGroup($input: AddPostToGroupInput) {
+      addPostToGroup(input: $input) {
+        _id
+        name
+        posts {
+          _id
+          text
+          user {
+            _id
+            username
+          }
+          comments {
+            _id
+            text
+            user {
+              _id
+              username
+            }
+          }
+        }
+      }
+    }
+  `
+
+  export const ADD_COMMENT_TO_POST = gql`
+    mutation addCommentToPost($input: AddCommentToPostInput) {
+      addCommentToPost(input: $input) {
+        _id
+        text
+        user {
+          _id
+          username
+        }
+        comments {
+          _id
+          text
+          user {
+            _id
+            username
+          }
         }
       }
     }
