@@ -1,5 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -13,13 +15,17 @@ import { CREATE_GROUP } from "../utils/mutations";
 const Discover = () => {
   const { data } = useQuery(QUERY_ALL_GROUPS);
   const groupData: [] = data?.allGroups;
-  console.log(groupData);
+
+  const router = useNavigate();
 
   const [createGroup] = useMutation(CREATE_GROUP);
+
   const [newGroupData, setNewGroupData] = useState({
     name: "",
     description: "",
   });
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [show, setShow] = useState(false);
 
@@ -29,6 +35,7 @@ const Discover = () => {
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setNewGroupData({ ...newGroupData, [name]: value });
+    console.log(newGroupData);
   };
 
   const handleFormSubmit = async (event: any) => {
@@ -38,36 +45,37 @@ const Discover = () => {
       const { data } = await createGroup({
         variables: { input: newGroupData },
       });
-      console.log(data);
+      console.log("Submit create group Data", data);
       handleClose();
       window.location.reload();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      setErrorMessage(err.message)
     }
   };
 
   const handleViewButton = (group: any) => {
-    window.location.replace("/" + group.name);
+    router(`/clubs/${group.name}`);
   };
 
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Create Group
+        Create Club
       </Button>
 
       <Modal show={show} onHide={handleClose} size={"xl"}>
         <Modal.Header closeButton>
-          <Modal.Title>Create Your Own Group</Modal.Title>
+          <Modal.Title>Create Your Own Club</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Group Name</Form.Label>
+              <Form.Label>Club Name</Form.Label>
               <Form.Control
                 name="name"
                 type="text"
-                placeholder="My Group"
+                placeholder="My New Club"
                 autoFocus
                 onChange={handleInputChange}
               />
@@ -82,6 +90,7 @@ const Discover = () => {
               />
             </Form.Group>
           </Form>
+          <p>{errorMessage}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -94,7 +103,7 @@ const Discover = () => {
       </Modal>
 
       <Container>
-        <h1>Groups</h1>
+        <h1>Clubs</h1>
         <Row>
           {!groupData && <h2>No groups yet</h2>}
           {groupData?.map((group: any) => (

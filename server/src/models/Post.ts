@@ -1,11 +1,12 @@
 import { Schema, model, type Document } from 'mongoose';
 import { IComment, commentSchema } from './Comment.js';
+import { IUser } from './User.js';
 
 
 export interface IPost extends Document {
-    postId: string,
+    id: string,
     text: string,
-    username: string,
+    user: IUser[],
     comments?: IComment
 }
 
@@ -16,10 +17,10 @@ export const postSchema = new Schema<IPost>({
         maxlength: 120,
         minlength: 1
     },
-    username: {
-        type: String,
+    user: [{
+        type: Schema.Types.ObjectId,
         required: true
-    },
+    }],
     comments: {
         type: [commentSchema],
         default: []
@@ -33,6 +34,6 @@ export const postSchema = new Schema<IPost>({
     }
 )
 
-const Post = model<IPost>('post', postSchema);
+const Post = model<IPost>('Post', postSchema);
 
 export default Post

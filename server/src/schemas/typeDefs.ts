@@ -1,4 +1,3 @@
-
 import { gql } from "graphql-tag";
 const typeDefs = gql`
   type User {
@@ -8,6 +7,7 @@ const typeDefs = gql`
     password: String
     savedBooks: [Book]
     currentlyReading: Book
+    adminGroups: [Group]
     groups: [Group]
     posts: [Post]
     comments: [Comment]
@@ -23,27 +23,28 @@ const typeDefs = gql`
   }
 
   type Group {
-      _id: ID!
-      name: String
-      description: String
-      is_private: Boolean
-      users: [User]
-      currentBook: Book
-      books: [Book]
-      posts: [Post]
+    _id: ID!
+    name: String
+    admin: User
+    description: String
+    is_private: Boolean
+    users: [User]
+    currentBook: Book
+    books: [Book]
+    posts: [Post]
   }
-    
+
   type Post {
     _id: ID!
     text: String
-    username: User
+    user: User
     comments: [Comment]
   }
 
   type Comment {
-    commentId: String
+    _id: String
     text: String
-    username: User
+    user: User
   }
 
   type Auth {
@@ -59,9 +60,9 @@ const typeDefs = gql`
 
   input BookData {
     bookId: String
-    authors: [String]!
+    authors: [String]
     description: String
-    title: String!
+    title: String
     image: String
   }
 
@@ -70,26 +71,67 @@ const typeDefs = gql`
     description: String
   }
 
-  input UserJoinGroupInput {
-    groupId: String
+  input AddUserToGroupInput {
+    groupId: ID!
+  }
+
+  input LeaveGroupInput {
+    groupId: ID!
+  }
+
+  input AddPostToGroupInput {
+    groupId: ID!
+    text: String!
+  }
+
+  input AddCommentToPostInput {
+    postId: ID!
+    text: String!
   }
 
   type Query {
+    # User Queries
     me: User
+    user(username: String!): User
+    userById(userId: ID!): User
+
+    # Group Queries
     allGroups: [Group]
     group(groupName: String): Group
+    groupById(groupId: ID!): Group
+    groupsByIds(groupIds: [ID]!): [Group]
+    
+    # Post Queries
+    allPosts: [Post]
   }
 
   type Mutation {
-    ## User Mutations
+    # Auth Mutations
     addUser(input: NewUserInput): Auth
     login(email: String!, password: String!): Auth
 
-    ## Group Mutations
-    createGroup(input: NewGroupInput!): Group
-    editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
+    #Users Mutations
     addBookToGroupList(groupId: ID!, bookData: BookData!): Group
+    addUserToGroup(input: AddUserToGroupInput): Group
+    leaveGroup(input: LeaveGroupInput!): Group
+    addBook(input: BookData, groupId: ID!): User
+
+    # Group Mutations
+    createGroup(input: NewGroupInput!): Group
+    deleteGroup(groupId: ID!): Group
+    editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
+
+    # Remove a book from the group
+    updateBook(
+      bookId: ID!
+      title: String
+      author: String
+      description: String
+    ): Book
+
+    # Post & Comment Mutations
+    addPostToGroup(input: AddPostToGroupInput): Group
+    addCommentToPost(input: AddCommentToPostInput): Post
   }
 `;
-
 export default typeDefs;

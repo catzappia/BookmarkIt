@@ -1,10 +1,10 @@
 import { Schema, model, type Document } from 'mongoose';
 import { IBook, bookSchema } from './Book.js';
 import { IUser } from './User.js';
-import { IPost, postSchema } from './Post.js';
+import { IPost,  } from './Post.js';
 
 export interface IGroup extends Document {
-    groupId: string,
+    id: string,
     name: string,
     description: string,
     is_private: boolean,
@@ -25,9 +25,6 @@ export const groupSchema = new Schema<IGroup>({
     },
     description: {
         type: String,
-        required: true,
-        maxlength: 100,
-        minlength: 3,
         default: ''
     },
     is_private: {
@@ -38,7 +35,6 @@ export const groupSchema = new Schema<IGroup>({
     admin: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        // required: true
     },
     users: [
         {
@@ -56,7 +52,7 @@ export const groupSchema = new Schema<IGroup>({
     },
     posts: [
         {
-            type: [postSchema],
+            type: Schema.Types.ObjectId,
             ref: 'Post',
         }
     ]
@@ -69,6 +65,6 @@ export const groupSchema = new Schema<IGroup>({
     }
 )
 
-const Group = model('group', groupSchema);
+const Group = model('Group', groupSchema);
 
 export default Group
