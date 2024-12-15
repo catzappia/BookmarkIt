@@ -3,10 +3,9 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 
 import { useQuery } from '@apollo/client';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { QUERY_ME } from '../utils/queries';
-import { QUERY_GROUPS_BY_IDS } from '../utils/queries';
+// import { QUERY_GROUPS_BY_IDS } from '../utils/queries';
 import { Group } from '../models/Group';
 
 
@@ -16,21 +15,6 @@ function Profile() {
   const {loading, data} = useQuery(QUERY_ME);
   const userData = data?.me;
   console.log("UserData From Profile", data?.me);
-
-  const { data: adminGroupsData } = useQuery(QUERY_GROUPS_BY_IDS, { variables: { groupIds: userData?.adminGroups.map((group: any) => group._id) } });
-  const adminGroups = adminGroupsData?.groupsByIds;
-
-  
-
-  const { data: groupsData } = useQuery(QUERY_GROUPS_BY_IDS, { variables: { groupIds: userData?.groups.map((group: any) => group._id) } });
-  const groups = groupsData?.groupsByIds;
-
-  useEffect(() => {
-    if (adminGroupsData || groupsData) {
-      console.log("Admin Group Data: ", adminGroupsData);
-      console.log("By Ids: ", adminGroupsData.groupsByIds);
-    }
-  });
 
   if (loading) return <p>Loading...</p>;
   
@@ -47,19 +31,19 @@ function Profile() {
           Profile bio goes here.
         </Card.Text>
       </Card.Body>
-      {adminGroups?.length > 0 ? (
+      {data.me.adminGroups?.length > 0 ? (
         <ListGroup className="list-group-flush">
-        <h3>Groups I admin</h3>
-        {adminGroups?.map((group: Group) => (
+        <h3>Clubs I admin</h3>
+        {data.me.adminGroups?.map((group: Group) => (
           <div key={group._id}>
             <ListGroup.Item>{group.name}<Button onClick={() => viewGroupPage(group)}>View</Button></ListGroup.Item>
           </div>
         ))}
       </ListGroup> ) : null };
-      {groups?.length > 0 ? (
+      {data.me.groups?.length > 0 ? (
         <ListGroup className="list-group-flush">
-        <h3>Groups I'm in</h3>
-        {groups?.map((group: Group) => (
+        <h3>Clubs I'm in</h3>
+        {data.me.groups?.map((group: Group) => (
           <div key={group._id}>
             <ListGroup.Item>{group.name}<Button onClick={() => viewGroupPage(group)}>View</Button></ListGroup.Item>
           </div>

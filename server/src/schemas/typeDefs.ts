@@ -103,6 +103,7 @@ const typeDefs = gql`
     
     # Post Queries
     allPosts: [Post]
+    postsByGroupId(groupId: ID!): [Post]
   }
 
   type Mutation {
@@ -130,7 +131,7 @@ const typeDefs = gql`
     ): Book
 
     # Post & Comment Mutations
-    addPostToGroup(input: AddPostToGroupInput): Group
+    addPostToGroup(input: AddPostToGroupInput): Post
     addCommentToPost(input: AddCommentToPostInput): Post
   }
 `;
