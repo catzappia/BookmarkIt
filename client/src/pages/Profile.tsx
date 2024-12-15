@@ -13,12 +13,14 @@ import { Group } from '../models/Group';
 function Profile() {
   const router = useNavigate();
 
-  const {loading, error, data} = useQuery(QUERY_ME);
+  const {loading, data} = useQuery(QUERY_ME);
   const userData = data?.me;
   console.log("UserData From Profile", data?.me);
 
   const { data: adminGroupsData } = useQuery(QUERY_GROUPS_BY_IDS, { variables: { groupIds: userData?.adminGroups.map((group: any) => group._id) } });
   const adminGroups = adminGroupsData?.groupsByIds;
+
+  
 
   const { data: groupsData } = useQuery(QUERY_GROUPS_BY_IDS, { variables: { groupIds: userData?.groups.map((group: any) => group._id) } });
   const groups = groupsData?.groupsByIds;
@@ -31,7 +33,7 @@ function Profile() {
   });
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
+  
 
   const viewGroupPage = (group: any) => {
     router(`/clubs/${group.name}`);
@@ -39,7 +41,6 @@ function Profile() {
 
   return (
     <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
       <Card.Body>
         <Card.Title>{userData.username}</Card.Title>
         <Card.Text>
