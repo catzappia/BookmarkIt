@@ -44,7 +44,7 @@ const router = createBrowserRouter([
                 errorElement: <ErrorPage />,
             },
            {
-                path: '/groups/:groupName',
+                path: '/clubs/:groupName',
                 element: <Group />,
                 errorElement: <ErrorPage />,
         

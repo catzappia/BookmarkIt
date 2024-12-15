@@ -48,7 +48,7 @@ export const QUERY_USER_BY_ID = gql`
       username
     }
   }
-`
+`;
 
 export const QUERY__SINGLE_USER = gql`
   query user($username: String!) {
@@ -114,6 +114,22 @@ export const QUERY_GROUP_BY_NAME = gql`
         _id
         username
       }
+      posts {
+        _id
+        text
+        user {
+          _id
+          username
+        }
+        comments {
+          _id
+          text
+          user {
+            _id
+            username
+          }
+        }
+      }
     }
   }
 `;
@@ -149,9 +165,25 @@ export const QUERY_GROUP_BY_ID = gql`
         _id
         username
       }
+      posts {
+        _id
+        text
+        user {
+          _id
+          username
+        }
+        comments {
+          _id
+          text
+          user {
+            _id
+            username
+          }
+        }
+      }
     }
   }
-`
+`;
 
 export const QUERY_GROUPS_BY_IDS = gql`
   query groupsByIds($groupIds: [ID]!) {
@@ -187,3 +219,24 @@ export const QUERY_GROUPS_BY_IDS = gql`
     }
   }
 `
+  export const QUERY_POSTS_BY_GROUP_ID = gql`
+    query postsByGroupId($groupId: ID!) {
+      postsByGroupId(groupId: $groupId) {
+        _id
+        text
+        user {
+          _id
+          username
+        }
+        comments {
+          _id
+          text
+          user {
+            _id
+            username
+          }
+        }
+      }
+    } 
+  `
+;

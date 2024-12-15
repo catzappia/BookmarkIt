@@ -1,55 +1,114 @@
-// import { type FormEvent, useState } from 'react';
-// import { useMutation } from '@apollo/client';
-// // import { our post mutation } from '';
-// // import Post './models/Post';
 
-// const PostForm: React.FC = ({ groupId }: any, { profileId }: any) => { // groupId to post in group or bookId to post for a book within x group? still have to figure out what we want to pass.
-    
-//     const [text, setText] = useState('');
+import { type FormEvent, useState } from "react";
+import { useMutation } from "@apollo/client";
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+// import Col from "react-bootstrap/Col";
+// import Row from "react-bootstrap/Row";
 
-//     const [addPost, { error }] = useMutation(ADD_POST); // mutation that needs to be implemented
+import { Post, Comment } from "../models/Post";
+import { ADD_POST_TO_GROUP, ADD_COMMENT_TO_POST } from "../utils/mutations";
+// import { QUERY_POSTS_BY_GROUP_ID } from "../utils/queries";
 
-//     const handleFormSubmit = async (event: FormEvent) => {
-//         event.preventDefault();
+interface PostFormProps {
+  groupId: string;
+  posts: Post[];
 
-//         try {
-//             await addPost({
-//                 variables: { groupId, profileId, text },
-//             });
+  handleRefresh: () => void;
+}
 
-//             setText('');
-//         } catch (err) {
-//             console.error(err)
-//         }
-//     };
+const PostForm = (props: PostFormProps) => {
 
-//     return (
-//         <div>
-//             <h4>Make A Post</h4>
-//             <form
-//                 className=''
-//                 onSubmit={(handleFormSubmit)}>
-//                     <div className="mb-3">
-//                         <input
-//                         type="text"
-//                         className="form-control"
-//                         placeholder='Your Text Here'
-//                         value={text}
-//                         onChange={(event) => setText(event.target.value)} />
-//                     </div>
-//                     <div>
-//                         <button>
-//                             Create Post
-//                         </button>
-//                     </div>
-//                     {error && (
-//                         <div>
-//                             Something went wrong...
-//                         </div>
-//                     )}
-//             </form>
-//         </div>
-//     );
-// };
+  console.log("Post Props: ", props);
+  const [postText, setPostText] = useState("");
+  const [commentText, setCommentText] = useState("");
 
-// export default PostForm;
+  // const { data, loading, error, refetch } = useQuery(QUERY_POSTS_BY_GROUP_ID, { variables: { groupId: props.groupId } });
+  // console.log("Post Data:", data);
+
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+  const [addPost] = useMutation(ADD_POST_TO_GROUP);
+  const [addComment] = useMutation(ADD_COMMENT_TO_POST);
+
+  const handlePostFormSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+
+    try {
+      await addPost({
+        variables: { input: { groupId: props.groupId, text: postText } },
+      });
+
+      setPostText("");
+      props.handleRefresh();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleCommentFormSubmit = async (event: FormEvent, postId: string) => {
+    event.preventDefault();
+
+    try {
+      await addComment({
+        variables: { input: postId, commentText },
+      });
+
+      setCommentText("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
+    <Container>
+      <Form onSubmit={handlePostFormSubmit}>
+        <Form.Group>
+          <Form.Label htmlFor="text">Add a Post</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="postText"
+            rows={3}
+            value={postText}
+            onChange={(e) => setPostText(e.target.value)}
+          />
+        </Form.Group>
+        <Button type="submit">Submit</Button>
+      </Form>
+      {props.posts?.length !== 0
+        ? props.posts?.map((post: Post, index: number) => {
+            return (
+              <Container key={index}>
+                <h5>{post?.user?.username}</h5>
+                <p>{post.text}</p>
+                <Form onSubmit={(e) => handleCommentFormSubmit(e, post.id)}>
+                  <Form.Group>
+                    <Form.Label htmlFor="text">Add a Comment</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      name={post.id}
+                      rows={3}
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Button type="submit">Submit</Button>
+                </Form>
+                {post.comments?.map((comment: Comment, index: number) => {
+                  return (
+                    <Container key={index}>
+                      <h6>{comment.user.username}</h6>
+                      <p>{comment.text}</p>
+                    </Container>
+                  );
+                }) ?? null}
+              </Container>
+            );
+          })
+        : null}
+    </Container>
+  );
+};
+
+export default PostForm;
