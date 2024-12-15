@@ -1,0 +1,28 @@
+
+h1{
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.container{
+    
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    box-shadow: 0 0 10px #6a8eb3;
+}
+.groups{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    border-radius: 10px;
+    padding: 1rem;
+   
+}

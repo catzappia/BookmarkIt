@@ -15,6 +15,7 @@ import { EDIT_GROUP_CURRENT_BOOK, ADD_BOOK_TO_GROUP_LIST, ADD_USER_TO_GROUP, LEA
 import { NewBookInput } from "../models/Book";
 import BookSearch from '../components/EditGroupModal/bookSearch';
 import Auth from "../utils/auth";
+import PostForm from "../components/postForm";
 
 const Group = () => {
 
@@ -184,6 +185,14 @@ const Group = () => {
           description={groupData.currentBook?.description || "No Description"}
           link={groupData.currentBook?.link || "No Link Available"}
         />
+      </Row>
+      {/* add post */}
+      <Row>
+        <Col>
+          
+            <PostForm groupId={groupData._id} text="Default text" />
+          
+        </Col>
       </Row>
     </Container>
   );

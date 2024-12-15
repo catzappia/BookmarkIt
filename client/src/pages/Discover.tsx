@@ -8,6 +8,7 @@ import Modal from "react-bootstrap/Modal";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import "../styles/discovery.css";
 
 import { QUERY_ALL_GROUPS } from "../utils/queries";
 import { CREATE_GROUP } from "../utils/mutations";
@@ -104,7 +105,7 @@ const Discover = () => {
 
       <Container>
         <h1>Groups</h1>
-        <Row>
+        <Row className="groups">
           {!groupData && <h2>No groups yet</h2>}
           {groupData?.map((group: any) => (
             <Col key={group._id}>

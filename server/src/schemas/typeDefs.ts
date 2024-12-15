@@ -37,7 +37,7 @@ const typeDefs = gql`
   type Post {
     _id: ID!
     text: String
-    username: User
+    users: [User]
     comments: [Comment]
   }
 
@@ -130,7 +130,7 @@ const typeDefs = gql`
     ): Book
 
     # Post & Comment Mutations
-    addPostToGroup(input: AddPostToGroupInput): Group
+    addPostToGroup(input: AddPostToGroupInput!): Group
     addCommentToPost(input: AddCommentToPostInput): Post
   }
 `;

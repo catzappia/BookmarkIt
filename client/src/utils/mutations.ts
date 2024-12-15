@@ -133,6 +133,20 @@ export const ADD_USER_TO_GROUP = gql`
           username
         }
       }
-    }
-  `
-;
+    }`
+  export const ADD_POST_TO_GROUP = gql`
+    mutation addPostToGroup($input: AddPostToGroupInput!) {
+      addPostToGroup(input: $input) {
+        _id
+        posts {
+          text
+          _id
+          user {
+            _id
+            username
+          }
+        }
+      }
+    
+  }`;
+    
