@@ -130,7 +130,7 @@ const typeDefs = gql`
     ): Book
 
     # Post & Comment Mutations
-    addPostToGroup(input: AddPostToGroupInput): Group
+    addPostToGroup(input: AddPostToGroupInput): Post
     addCommentToPost(input: AddCommentToPostInput): Post
   }
 `;

@@ -199,7 +199,7 @@ const Group = () => {
           link={groupData.currentBook?.link || "No Link Available"}
         />
       </Row>
-      <PostForm groupId={groupData._id} posts={groupData.posts || []} />
+      <PostForm groupId={groupData._id} posts={groupData.posts || []} handleRefresh={handleRefresh} />
     </Container>
   );
 };

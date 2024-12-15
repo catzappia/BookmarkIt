@@ -12,6 +12,8 @@ import { ADD_POST_TO_GROUP, ADD_COMMENT_TO_POST } from "../utils/mutations";
 interface PostFormProps {
   groupId: string;
   posts: Post[];
+
+  handleRefresh: () => void;
 }
 
 const PostForm = (props: PostFormProps) => {
@@ -31,6 +33,7 @@ const PostForm = (props: PostFormProps) => {
       });
 
       setPostText("");
+      props.handleRefresh();
     } catch (err) {
       console.error(err);
     }
@@ -54,7 +57,7 @@ const PostForm = (props: PostFormProps) => {
     <Container>
       <Form onSubmit={handlePostFormSubmit}>
         <Form.Group>
-          <Form.Label htmlFor="text">Post Text:</Form.Label>
+          <Form.Label htmlFor="text">Add a Post</Form.Label>
           <Form.Control
             as="textarea"
             name="postText"
@@ -71,28 +74,24 @@ const PostForm = (props: PostFormProps) => {
               <Container key={index}>
                 <h5>{post?.user?.username}</h5>
                 <p>{post.text}</p>
+                <Form onSubmit={(e) => handleCommentFormSubmit(e, post.id)}>
+                  <Form.Group>
+                    <Form.Label htmlFor="text">Add a Comment</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      name={post.id}
+                      rows={3}
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Button type="submit">Submit</Button>
+                </Form>
                 {post.comments?.map((comment: Comment, index: number) => {
                   return (
                     <Container key={index}>
                       <h6>{comment.user.username}</h6>
                       <p>{comment.text}</p>
-                      <Form
-                        onSubmit={(e) =>
-                          handleCommentFormSubmit(e, post.id)
-                        }
-                      >
-                        <Form.Group>
-                          <Form.Label htmlFor="text">Comment Text:</Form.Label>
-                          <Form.Control
-                            as="textarea"
-                            name="commentText"
-                            rows={3}
-                            value={commentText}
-                            onChange={(e) => setCommentText(e.target.value)}
-                          />
-                        </Form.Group>
-                        <Button type="submit">Submit</Button>
-                      </Form>
                     </Container>
                   );
                 }) ?? null}

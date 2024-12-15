@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {
@@ -16,7 +16,7 @@ export const ADD_USER = gql`
     addUser(input: $input) {
       user {
         username
-        email 
+        email
         password
         _id
       }
@@ -71,7 +71,7 @@ export const CREATE_GROUP = gql`
       description
     }
   }
-`
+`;
 
 export const DELETE_GROUP = gql`
   mutation deleteGroup($groupId: ID!) {
@@ -80,7 +80,7 @@ export const DELETE_GROUP = gql`
       name
     }
   }
-`
+`;
 
 export const EDIT_GROUP_CURRENT_BOOK = gql`
   mutation editGroupCurrentBook($groupId: ID!, $bookData: BookData) {
@@ -98,7 +98,7 @@ export const EDIT_GROUP_CURRENT_BOOK = gql`
       }
     }
   }
-`
+`;
 
 export const ADD_BOOK_TO_GROUP_LIST = gql`
   mutation addBookToGroupList($groupId: ID!, $bookData: BookData!) {
@@ -113,7 +113,8 @@ export const ADD_BOOK_TO_GROUP_LIST = gql`
         image
       }
     }
-  }`
+  }
+`;
 
 export const ADD_USER_TO_GROUP = gql`
   mutation addUserToGroup($input: AddUserToGroupInput!) {
@@ -130,64 +131,60 @@ export const ADD_USER_TO_GROUP = gql`
         username
       }
     }
-  }`
-  
-  export const LEAVE_GROUP = gql`
-    mutation leaveGroup($input: LeaveGroupInput!) {
-      leaveGroup(input: $input) {
+  }
+`;
+
+export const LEAVE_GROUP = gql`
+  mutation leaveGroup($input: LeaveGroupInput!) {
+    leaveGroup(input: $input) {
+      _id
+      name
+      users {
         _id
-        name
-        users {
-          _id
-          username
-        }
+        username
       }
     }
-  `
+  }
+`;
 
-  export const ADD_POST_TO_GROUP = gql`
-    mutation addPostToGroup($input: AddPostToGroupInput) {
-      addPostToGroup(input: $input) {
+export const ADD_POST_TO_GROUP = gql`
+  mutation addPostToGroup($input: AddPostToGroupInput) {
+    addPostToGroup(input: $input) {
+      _id
+      text
+      user {
         _id
-        name
-        posts {
-          _id
-          text
-          user {
-            _id
-            username
-          }
-          comments {
-            _id
-            text
-            user {
-              _id
-              username
-            }
-          }
-        }
+        username
       }
-    }
-  `
-
-  export const ADD_COMMENT_TO_POST = gql`
-    mutation addCommentToPost($input: AddCommentToPostInput) {
-      addCommentToPost(input: $input) {
+      comments {
         _id
         text
         user {
           _id
           username
         }
-        comments {
+      }
+    }
+  }
+`;
+
+export const ADD_COMMENT_TO_POST = gql`
+  mutation addCommentToPost($input: AddCommentToPostInput) {
+    addCommentToPost(input: $input) {
+      _id
+      text
+      user {
+        _id
+        username
+      }
+      comments {
+        _id
+        text
+        user {
           _id
-          text
-          user {
-            _id
-            username
-          }
+          username
         }
       }
     }
-  `
-;
+  }
+`;

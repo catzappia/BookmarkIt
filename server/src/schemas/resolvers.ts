@@ -65,7 +65,16 @@ const resolvers = {
         throw new AuthenticationError("You need to be logged in!");
       }
       try {
-        return await User.findOne({ _id: context.user._id });
+      return await User.findOne({ _id: context.user._id }).populate([
+        {
+          path: "groups",
+          select: "name"
+        },
+        {
+          path: "adminGroups",
+          select: "name"
+        }
+      ]);
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get user");
@@ -90,7 +99,10 @@ const resolvers = {
     },
     group: async (_parent: any, { groupName }: any): Promise<IGroup | null> => {
       try {
-        return await Group.findOne({ name: groupName });
+        return await Group.findOne({ name: groupName }).populate({
+          path: "posts",
+          populate: [{ path: "user", select: "username" }, { path: "comments" }],
+        });
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get group");
@@ -300,7 +312,7 @@ const resolvers = {
         if (!context.user) {
           throw new AuthenticationError("You need to be logged in!");
         }
-        console.log('Input: ', groupId, text);
+        console.log("Input: ", groupId, text);
         const post = await Post.create({ text, user: context.user._id });
         const updatedGroup = await Group.findOneAndUpdate(
           { _id: groupId },
@@ -316,7 +328,21 @@ const resolvers = {
           },
           { new: true }
         );
-        return updatedGroup;
+        // return updatedGroup?.populate({
+        //   path: 'posts',
+        //   populate: [{ path: 'user' }, { path: 'comments' }]
+        // });
+        console.log("Updated Group: ", updatedGroup);
+        return post.populate([
+          {
+            path: "user",
+            select: "username",
+          },
+          {
+            path: "comments",
+            populate: { path: "user", select: "username" },
+          }
+        ]);
       } catch (err) {
         console.error(err);
         throw new Error("Failed to add post to group");
