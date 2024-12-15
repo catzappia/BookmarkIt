@@ -1,3 +1,4 @@
+
 import {
   signToken,
   AuthenticationError,
@@ -6,7 +7,8 @@ import {
 import User from "../models/User.js";
 import Group, { IGroup } from "../models/Group.js";
 // import { IBook } from '../models/Book.js';
-import Post from "../models/Post.js";
+import Post, { IPost } from "../models/Post.js";
+
 
 interface LoginArgs {
   email: string;
@@ -135,7 +137,20 @@ const resolvers = {
         throw new Error("Failed to get groups");
       }
     },
+
+    // get all posts
+    allPosts: 
+    async (_parent: any, _args: any): Promise<IPost[]> => {
+      try {
+        return await Post.find({}).populate('user', 'username');
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to get posts");
+      }
+      },
   },
+
+
   Mutation: {
     login: async (_parent: any, { email, password }: LoginArgs) => {
       const user = await User.findOne({ email });
