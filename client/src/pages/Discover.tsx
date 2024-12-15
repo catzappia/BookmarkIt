@@ -8,7 +8,6 @@ import Modal from "react-bootstrap/Modal";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "../styles/discovery.css";
 
 import { QUERY_ALL_GROUPS } from "../utils/queries";
 import { CREATE_GROUP } from "../utils/mutations";
@@ -56,13 +55,13 @@ const Discover = () => {
   };
 
   const handleViewButton = (group: any) => {
-    router(`/groups/${group.name}`);
+    router(`/clubs/${group.name}`);
   };
 
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Create Group
+        Create Club
       </Button>
 
       <Modal show={show} onHide={handleClose} size={"xl"}>
@@ -104,8 +103,8 @@ const Discover = () => {
       </Modal>
 
       <Container>
-        <h1>Groups</h1>
-        <Row className="groups">
+        <h1>Clubs</h1>
+        <Row>
           {!groupData && <h2>No groups yet</h2>}
           {groupData?.map((group: any) => (
             <Col key={group._id}>

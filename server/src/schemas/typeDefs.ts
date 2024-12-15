@@ -37,14 +37,14 @@ const typeDefs = gql`
   type Post {
     _id: ID!
     text: String
-    users: [User]
+    user: User
     comments: [Comment]
   }
 
   type Comment {
-    commentId: String
+    _id: String
     text: String
-    username: User
+    user: User
   }
 
   type Auth {
@@ -118,7 +118,7 @@ const typeDefs = gql`
 
     # Group Mutations
     createGroup(input: NewGroupInput!): Group
-    removeGroup(groupId: ID!): Group
+    deleteGroup(groupId: ID!): Group
     editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
 
     # Remove a book from the group
@@ -130,7 +130,7 @@ const typeDefs = gql`
     ): Book
 
     # Post & Comment Mutations
-    addPostToGroup(input: AddPostToGroupInput!): Group
+    addPostToGroup(input: AddPostToGroupInput): Group
     addCommentToPost(input: AddCommentToPostInput): Post
   }
 `;
