@@ -20,7 +20,7 @@ const ClubCard: React.FC<ClubCardProps> = ({ title, description, onView }) => {
         <Card.Title style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{title}</Card.Title>
         <Card.Text style={{ fontSize: '1rem', color: '#666' }}>{description}</Card.Text>
         <Button variant="primary" onClick={onView} style={{ backgroundColor: '#6a8eb3', border: 'none' }}>
-          View Group
+          View
         </Button>
       </Card.Body>
     </Card>
