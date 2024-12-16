@@ -1,14 +1,16 @@
-import { NewBookInput } from '../../models/Book';
-import { GoogleAPIBook } from '../../models/GoogleApiBook';
-import BookList from './bookList';
+import { NewBookInput } from "../../models/Book";
+import { GoogleAPIBook } from "../../models/GoogleApiBook";
+import BookList from "./bookList";
+import '../../styles/bookSearch.css';
 
-import { type FormEvent, useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import { type FormEvent, useState } from "react";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
 
 type BookSearchProps = {
-    onDataChange: (data: any) => NewBookInput | void;
-}
+  onDataChange: (data: any) => NewBookInput | void;
+};
 
 const BookSearch = (props: BookSearchProps) => {
   const [query, setQuery] = useState("");
@@ -17,7 +19,7 @@ const BookSearch = (props: BookSearchProps) => {
 
   const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    
+
     if (!query) {
       return false;
     }
@@ -53,28 +55,31 @@ const BookSearch = (props: BookSearchProps) => {
   };
 
   const handleChildData = (data: NewBookInput): void => {
-    console.log('Data:', data);
+    console.log("Data:", data);
     props.onDataChange(data);
-  }
+  };
 
   return (
-    <Form.Group>
-        <Form.Label>Search for a Book</Form.Label>
+    <Form.Group className="text-center">
+      <Form.Label><h3>Search for a Book</h3></Form.Label>
+      <Row className='alignCenter'>
         <Form.Control
-            type="text"
-            placeholder="Search for a book"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
+          className='searchForm'
+          type="text"
+          placeholder="Search for a book"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
         />
-        <Button type="submit" onClick={handleFormSubmit}>
-            Search
+        <Button className='searchButton' type="submit" onClick={handleFormSubmit}>
+          Search
         </Button>
-        <BookList
-          onDataChange={handleChildData}
-          bookList={searchedBooks}>
-          </BookList>
+      </Row>
+      <BookList
+        onDataChange={handleChildData}
+        bookList={searchedBooks}
+      ></BookList>
     </Form.Group>
-  )
+  );
 };
 
 export default BookSearch;

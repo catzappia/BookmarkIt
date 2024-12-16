@@ -371,10 +371,6 @@ const resolvers = {
           },
           { new: true }
         );
-        // return updatedGroup?.populate({
-        //   path: 'posts',
-        //   populate: [{ path: 'user' }, { path: 'comments' }]
-        // });
         console.log("Updated Group: ", updatedGroup);
         return post.populate([
           {
