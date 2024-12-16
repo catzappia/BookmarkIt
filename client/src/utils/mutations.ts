@@ -25,6 +25,18 @@ export const ADD_USER = gql`
   }
 `;
 
+export const EDIT_USER_BIO = gql`
+  mutation editUserBio($newBio: String!) {
+    editUserBio(newBio: $newBio) {
+      _id
+      username
+      email
+      bio
+    }
+  }
+`
+;
+
 export const SAVE_BOOK = gql`
   mutation saveBook($input: BookInput) {
     saveBook(input: $input) {

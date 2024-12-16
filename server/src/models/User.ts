@@ -12,6 +12,7 @@ export interface IUser extends Document {
     password: string,
 
     isCorrectPassword(password: string): Promise<boolean>,
+    bio?: string,
     savedBooks?: IBook[],
     currentlyReading?: IBook,
     adminGroups?: IGroup[],
@@ -40,6 +41,11 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
         required: true,
         maxlength: 30,
         minlength: 8
+    },
+    bio: {
+        type: String,
+        maxlength: 280,
+        default: ''
     },
     savedBooks: [bookSchema],
     currentlyReading: {

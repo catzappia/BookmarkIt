@@ -6,6 +6,7 @@ const typeDefs = gql`
     username: String
     email: String
     password: String
+    bio: String
     savedBooks: [Book]
     currentlyReading: Book
     adminGroups: [Group]
@@ -93,10 +94,7 @@ const typeDefs = gql`
   input DeletePostInput{
     postId: ID!
     groupId: ID!
-   
-   
   }
-  
 
   type Query {
     # User Queries
@@ -125,6 +123,7 @@ const typeDefs = gql`
     addUserToGroup(input: AddUserToGroupInput): Group
     leaveGroup(input: LeaveGroupInput!): Group
     addBook(input: BookData, groupId: ID!): User
+    editUserBio(newBio: String!): User
 
     # Group Mutations
     createGroup(input: NewGroupInput!): Group
