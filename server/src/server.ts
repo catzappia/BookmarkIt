@@ -39,10 +39,10 @@ const startApolloServer = async () => {
     console.log(`In production mode, from NODE_ENV: ${process.env.NODE_ENV}`);
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-    app.use(express.static(path.join(__dirname, "../client/dist")));
+    app.use(express.static(path.join(__dirname, "../../client/dist")));
 
     app.get("*", (_req: Request, res: Response) => {
-      res.sendFile(path.resolve(process.cwd(), "../client/dist/index.html"));
+      res.sendFile(path.resolve(process.cwd(), "../../client/dist/index.html"));
     });
   }
 
