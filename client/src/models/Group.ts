@@ -1,14 +1,19 @@
+import { IPost } from './../../../server/src/models/Post';
+import { IUser } from './../../../server/src/models/User';
+
 export interface Group {
-    groupId: string;
+    _id: string;
     name: string;
+    description: string;
     is_private: boolean;
-    admin?: string;
-    users?: string[];
+    admin?: IUser;
+    users?: IUser[];
     currentBook?: string;
     books?: string[];
+    posts?: IPost[];
 }
 
 export interface NewGroupInput {
     name: string;
-    is_private: boolean;
+    description: string;
 }

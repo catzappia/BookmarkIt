@@ -3,13 +3,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import App from './App.js';
 import Home from './pages/Home';
-// import Profile from './pages/Profile';
+import Profile from './pages/Profile';
 import Discover from './pages/Discover.js';
 import ErrorPage from './pages/Error';
 import Login from './pages/LoginPage/Login.js'
 import Group from './pages/Group.js'
 import SignupForm from './pages/Signup.js';
-import Profile from './pages/Profile.js';
 
 const router = createBrowserRouter([
     {
@@ -23,33 +22,26 @@ const router = createBrowserRouter([
                 index: true,
                 element: <Home />
             },
-        
-    
             {
-                path: '/discover',
+                path: 'discover',
                 element: <Discover />,
-                errorElement: <ErrorPage />,
         
             },
             {
-                path: '/login',
+                path: 'login',
                 element: <Login />,
-                errorElement: <Login />,
             },
             {
-                path: '/profile',
+                path: 'profile',
                 element: <Profile />,
-                errorElement: <Profile />,
             },
             {
-                path: '/signup',
+                path: 'signup',
                 element: <SignupForm />,
-                errorElement: <ErrorPage />,
             },
            {
-                path: '/:groupName',
+                path: 'clubs/:groupName',
                 element: <Group />,
-                errorElement: <ErrorPage />,
         
             },
         

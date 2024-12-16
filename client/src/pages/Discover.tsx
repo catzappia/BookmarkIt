@@ -1,10 +1,13 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 //import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+
 //import Col from "react-bootstrap/Col";
 import ClubCard from "../components/club-card";
 
@@ -14,17 +17,25 @@ import BookSearch from "../components/bookSearch";
 import { Book } from "../models/Book";
 import '../styles/discover.css'
 
+
 const Discover = () => {
-  const { data } = useQuery(QUERY_ALL_GROUPS);
+  const { data, refetch } = useQuery(QUERY_ALL_GROUPS);
   const groupData: [] = data?.allGroups;
-  console.log(groupData);
+
+  const router = useNavigate();
+
+  const handleRefresh = () => {
+    refetch();
+  };
 
   const [createGroup] = useMutation(CREATE_GROUP);
+
   const [newGroupData, setNewGroupData] = useState({
     name: "",
-    is_private: false,
-    currentBook: {},
+    description: "",
   });
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [show, setShow] = useState(false);
 
@@ -34,11 +45,7 @@ const Discover = () => {
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     setNewGroupData({ ...newGroupData, [name]: value });
-  };
-
-  const handleCheckboxChange = (event: any) => {
-    const { name, checked } = event.target;
-    setNewGroupData({ ...newGroupData, [name]: checked });
+    console.log(newGroupData);
   };
 
   const handleFormSubmit = async (event: any) => {
@@ -48,13 +55,15 @@ const Discover = () => {
       const { data } = await createGroup({
         variables: { input: newGroupData },
       });
-      console.log(data);
+      console.log("Submit create group Data", data);
       handleClose();
-      window.location.reload();
-    } catch (err) {
+      handleRefresh();
+    } catch (err: any) {
       console.error(err);
+      setErrorMessage(err.message);
     }
   };
+
 
   //const handleViewButton = (group: any) => {
   //  window.location.replace('/' + group.name);
@@ -66,11 +75,13 @@ const Discover = () => {
     setNewGroupData({ ...newGroupData, currentBook: newCurrentBook });
   }
 
+
   function handleViewGroup(group: any): void {
     window.location.href = `/${group.name}`;
   }
   return (
     <>
+
       <div className="discover-main">
     {/* Header */}
     <div className="discover-container">
@@ -99,16 +110,19 @@ const Discover = () => {
                 onChange={handleInputChange}
               />
             </Form.Group>
-            <Form.Check>
-              <Form.Check.Input
-                type="checkbox"
-                name="is_private"
-                onChange={handleCheckboxChange}
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                name="description"
+                type="text"
+                placeholder="Description"
+                onChange={handleInputChange}
               />
               <Form.Check.Label className="form-check-label">Is this a private club?</Form.Check.Label>
             </Form.Check>
             <BookSearch onDataChange={handleChildData}/>
           </Form>
+          <p>{errorMessage}</p>
         </Modal.Body>
         <Modal.Footer className="modal-footer">
           <Button className="close-button" onClick={handleClose}>

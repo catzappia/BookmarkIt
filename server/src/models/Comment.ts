@@ -1,9 +1,10 @@
 import { Schema, model, type Document } from 'mongoose';
+import { IUser } from './User.js';
 
 export interface IComment extends Document {
-    commentId: string,
+    id: string,
     text: string,
-    username: string
+    user: IUser
 }
 
 export const commentSchema = new Schema<IComment>({
@@ -13,8 +14,9 @@ export const commentSchema = new Schema<IComment>({
         maxlength: 120,
         minlength: 1
     },
-    username: {
-        type: String,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     },

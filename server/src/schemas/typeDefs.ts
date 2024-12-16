@@ -1,127 +1,147 @@
+
 import { gql } from "graphql-tag";
 const typeDefs = gql`
-    type User {
-        _id: ID!
-        username: String
-        email: String
-        password: String
-        savedBooks: [Book]
-        currentlyReading: Book
-        groups: [Group]
-        posts: [Post]
-        comments: [Comment]
-    }
+  type User {
+    _id: ID!
+    username: String
+    email: String
+    password: String
+    bio: String
+    savedBooks: [Book]
+    currentlyReading: Book
+    adminGroups: [Group]
+    groups: [Group]
+    posts: [Post]
+    comments: [Comment]
+  }
 
-    type Book {
-        bookId: String
-        title: String
-        authors: [String]
-        description: String
-        image: String
-    }
+  type Book {
+    _id: ID!
+    bookId: String
+    title: String
+    authors: [String]
+    description: String
+    image: String
+  }
 
-    type Group {
-        _id: ID!
-        name: String
-        is_private: Boolean
-        users: [User]
-        currentBook: Book
-        books: [Book]
-        posts: [Post]
-    }
+  type Group {
+    _id: ID!
+    name: String
+    admin: User
+    description: String
+    is_private: Boolean
+    users: [User]
+    currentBook: Book
+    books: [Book]
+    posts: [Post]
+  }
 
-    type Post {
-        _id: ID!
-        text: String
-        username: User
-        comments: [Comment]
-    }
+  type Post {
+    _id: ID!
+    text: String
+    user: User
+    comments: [Comment]
+  }
 
-    type Comment {
-        commentId: String
-        text: String
-        username: User
-    }
+  type Comment {
+    _id: String
+    text: String
+    user: User
+  }
 
-    type Auth {
-        token: ID!
-        user: User   
-    }
+  type Auth {
+    token: ID!
+    user: User
+  }
 
-    input NewUserInput {
-        username: String!
-        email: String!
-        password: String!
-    }
+  input NewUserInput {
+    username: String!
+    email: String!
+    password: String!
+  }
 
-    input BookData {
-        bookId: String
-        authors: [String]
-        description: String
-        title: String
-        image: String
-    }
-    
-    input NewGroupInput {
-        name: String!
-        is_private: Boolean!
-        currentBook: BookData
-    }
+  input BookData {
+    bookId: String
+    authors: [String]
+    description: String
+    title: String
+    image: String
+  }
 
-    input AddUserToGroupInput {
-        groupId: ID!
-        userId: ID!
-      
-    }
-   
-   
-  
-    
+  input NewGroupInput {
+    name: String!
+    description: String
+  }
 
-    
-    
-    
-    type Query {
-        me: User
-        allGroups: [Group]
-        group(groupName: String): Group
-    }
-    
-    type Mutation {
-        addUser(input: NewUserInput): Auth
-        login(email: String!, password: String!): Auth
-        # Create a group
-        createGroup(input: NewGroupInput!): Group
-        # Delete a group
-        removeGroup(groupId: ID!): Group
-        # Join a group
-        addUserToGroup(input: AddUserToGroupInput): Group
-        # Leave a group
-        leaveGroup(groupId: ID!, userId: ID!): Group
-      
-        
-        # Add a book to a group
-        addBook(groupId: ID!,  ): Book
-        # Update book details
-        updateBook(bookId: ID!, ): Book
-        # Remove a book from the group
-        removeBook(bookId: ID!, groupId: ID!): Boolean
+  input AddUserToGroupInput {
+    groupId: ID!
+  }
 
-        # Create a post within a group
-        createPost(groupId: ID!, userId: ID!, content: String!): Post
-        # Update an existing post
-        updatePost(postId: ID!, content: String): Post
-        # Delete a post
-        deletePost(postId: ID!): Boolean
+  input LeaveGroupInput {
+    groupId: ID!
+  }
 
-        # Add a comment to a post
-        addComment(postId: ID!, userId: ID!, content: String!): Comment
-        # Update a comment
-        updateComment(commentId: ID!, content: String): Comment
-        # Delete a comment
-        deleteComment(commentId: ID!): Boolean
-}
-    
+  input AddPostToGroupInput {
+    groupId: ID!
+    text: String!
+  }
+
+  input AddCommentToPostInput {
+    postId: ID!
+    text: String!
+  }
+
+  input DeletePostInput{
+    postId: ID!
+    groupId: ID!
+  }
+
+  type Query {
+    # User Queries
+    me: User
+    user(username: String!): User
+    userById(userId: ID!): User
+
+    # Group Queries
+    allGroups: [Group]
+    group(groupName: String): Group
+    groupById(groupId: ID!): Group
+    groupsByIds(groupIds: [ID]!): [Group]
+
+    # Post Queries
+    allPosts: [Post]
+    postsByGroupId(groupId: ID!): [Post]
+  }
+
+  type Mutation {
+    # Auth Mutations
+    addUser(input: NewUserInput): Auth
+    login(email: String!, password: String!): Auth
+
+    #Users Mutations
+    addBookToGroupList(groupId: ID!, bookData: BookData!): Group
+    addUserToGroup(input: AddUserToGroupInput): Group
+    leaveGroup(input: LeaveGroupInput!): Group
+    addBook(input: BookData, groupId: ID!): User
+    editUserBio(newBio: String!): User
+
+    # Group Mutations
+    createGroup(input: NewGroupInput!): Group
+    deleteGroup(groupId: ID!): Group
+    editGroupCurrentBook(groupId: ID!, bookData: BookData): Group
+
+    # Remove a book from the group
+    updateBook(
+      bookId: ID!
+      title: String
+      author: String
+      description: String
+    ): Book
+
+    # Post & Comment Mutations
+    addPostToGroup(input: AddPostToGroupInput): Post
+    addCommentToPost(input: AddCommentToPostInput): Post
+    deletePost(input:DeletePostInput!): Post
+  }
 `;
-
 export default typeDefs;
