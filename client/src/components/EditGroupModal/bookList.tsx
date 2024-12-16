@@ -35,14 +35,6 @@ const BookList = (props: BookListProps) => {
       <Row>
         {props.bookList.map((book: NewBookInput, index: number) => {
           return (
-            // <Col key={index}>
-            //     <Col style={isActive ? activeClass : {}}>
-            //     <h5>{book.title}</h5>
-            //     <img src={book.image} alt={book.title} />
-            //     <p>{book.authors}</p>
-            //     <Button onClick={() => handleSaveButton(book.bookId)}>Set Book</Button>
-            //     </Col>
-            // </Col>
             <Col key={index}>
               <Card style={{ width: "18rem" }}>
                 <Card.Img variant="top" src={book.image} />

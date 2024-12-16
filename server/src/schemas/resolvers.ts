@@ -221,6 +221,27 @@ const resolvers = {
     //     // if user is not authenticated return an error
     //     throw new AuthenticationError('You need to be logged in!');
     // },
+    editUserBio: async (
+      _parent: any,
+      { newBio }: { newBio: string },
+      context: IApolloContext
+    ) => {
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in!");
+      }
+      console.log("Bio Input: ", newBio);
+      try {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { bio: newBio },
+          { new: true }
+        );
+        return updatedUser;
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to edit user bio");
+      }
+    },
     createGroup: async (
       _parent: any,
       { input }: CreateGroupArgs,
