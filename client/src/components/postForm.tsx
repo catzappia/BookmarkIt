@@ -119,7 +119,7 @@ const PostForm = (props: PostFormProps) => {
                 {post.comments?.map((comment: Comment, index: number) => {
                   return (
                     <Container key={index}>
-                      <h6>User: {comment.user?.username}</h6>
+                      <h6>{comment.user?.username}</h6>
                       <p>{comment.text}</p>
                     </Container>
                   );
