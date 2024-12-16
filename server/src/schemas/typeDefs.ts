@@ -1,3 +1,4 @@
+
 import { gql } from "graphql-tag";
 const typeDefs = gql`
   type User {
@@ -5,6 +6,8 @@ const typeDefs = gql`
     username: String
     email: String
     password: String
+    bio: String
+    profilePicture: String
     savedBooks: [Book]
     currentlyReading: Book
     adminGroups: [Group]
@@ -28,6 +31,7 @@ const typeDefs = gql`
     admin: User
     description: String
     is_private: Boolean
+    profilePicture: String
     users: [User]
     currentBook: Book
     books: [Book]
@@ -89,6 +93,11 @@ const typeDefs = gql`
     text: String!
   }
 
+  input DeletePostInput{
+    postId: ID!
+    groupId: ID!
+  }
+
   type Query {
     # User Queries
     me: User
@@ -100,7 +109,7 @@ const typeDefs = gql`
     group(groupName: String): Group
     groupById(groupId: ID!): Group
     groupsByIds(groupIds: [ID]!): [Group]
-    
+
     # Post Queries
     allPosts: [Post]
     postsByGroupId(groupId: ID!): [Post]
@@ -116,6 +125,7 @@ const typeDefs = gql`
     addUserToGroup(input: AddUserToGroupInput): Group
     leaveGroup(input: LeaveGroupInput!): Group
     addBook(input: BookData, groupId: ID!): User
+    editUserBio(newBio: String!): User
 
     # Group Mutations
     createGroup(input: NewGroupInput!): Group
@@ -133,6 +143,7 @@ const typeDefs = gql`
     # Post & Comment Mutations
     addPostToGroup(input: AddPostToGroupInput): Post
     addCommentToPost(input: AddCommentToPostInput): Post
+    deletePost(input:DeletePostInput!): Post
   }
 `;
 export default typeDefs;

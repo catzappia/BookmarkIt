@@ -3,13 +3,13 @@
     padding: 0;
     box-sizing: border-box;
   }
-
-html {
+  
+  html {
     background-color: #ffffff;
 }
 
-/* Sign-Up Form Container */
-.signup-main {
+/* Main content for login form */
+.login-main {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,10 +18,10 @@ html {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-color: #ffffff;
+    background-color: #fff;
 }
 
-.signup-container {
+.login-container {
     background-color: #ffffffc0;
     padding: 30px;
     border-radius: 15px;
@@ -33,7 +33,7 @@ html {
 }
 
 @media screen and (max-width: 870px) {
-    .signup-container {
+    .login-container {
         background-color: #ffffff;
         padding: 30px;
         border-radius: 15px;
@@ -45,21 +45,22 @@ html {
     }
 }
 
-.signup-container h2 {
+/* Centering text and form */
+.login-container h2 {
     font-size: 26px;
     margin-bottom: 20px;
     color: black;
     font-weight: bold;
 }
 
-.signup-form {
+.login-form {
     display: flex;
     flex-direction: column;
     align-items: center; /* Optional, centers form fields horizontally */
 }
 
 .input-field {
-    width: 65%;
+    width: 60%; /* Make sure the input fields take full width */
     border: none;
     padding: 10px;
     margin: 10px 0;
@@ -68,18 +69,16 @@ html {
     outline: none;
 }
 
-#name, #email, #password, #confirmPassword {
+#email, #password {
     width: 60%;
-    border: none;
-    padding: 10px;
-    margin: 10px 0;
     border-radius: 10px;
     background-color: #c4d2e4;
-    color: rgb(37, 37, 37);
+    color: rgba(0, 0, 0, 0.596);
     outline: none;
 }
 
-.signup-btn {
+.signin-btn {
+    width: 60%;
     background-color: #8fc090;
     padding: 10px;
     margin-top: 10px;
@@ -89,17 +88,17 @@ html {
     color: white;
 }
 
-.signup-btn:hover {
-    box-shadow: 0 0 10px #8fc090;
+.signin-btn:hover {
+    box-shadow: 0 0 10px #8799ae;
 }
 
-.existing-user {
-    margin-top: 20px;
-    font-size: 18px;
+.new-user {
+    margin-top: 18px;
+    font-size: 20px;
     color: #000000;
     text-decoration: none;
 }
 
-.existing-user:hover {
+.new-user:hover {
     text-decoration: underline;
 }

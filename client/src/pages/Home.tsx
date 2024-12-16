@@ -25,9 +25,11 @@ const Home: React.FC = () => {
       <div>
         <Poll title={pollData.title} options={pollData.options} duration={30} />
       </div>
+      <div className="login-button-container">
       <div className="login-button">
         <h3><Link to="/login">Log in</Link> to join the conversation</h3>
       </div>
+    </div>
     </div>
   );
 };

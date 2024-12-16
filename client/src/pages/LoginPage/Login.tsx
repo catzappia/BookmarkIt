@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import '../../styles/login.css';
+import { Link } from 'react-router-dom';
 
 
 import Auth from '../../utils/auth';
@@ -9,8 +11,7 @@ import type { UserLogin } from '../../models/UserLogin';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../../utils/mutations';
 
-// biome-ignore lint/correctness/noEmptyPattern: <explanation>
-  const LoginForm = () => {
+const LoginForm = () => {
   const [userFormData, setUserFormData] = useState<UserLogin>({ username: '', email: '', password: '', savedBooks: [],  });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -53,17 +54,20 @@ import { LOGIN_USER } from '../../utils/mutations';
 
   return (
     <>
+    <div className="login-main">
+      <div className="login-container">
+        <h2>Welcome Back!</h2>
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
         <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
           Something went wrong with your login credentials!
         </Alert>
 
 
-        <Form.Group className='mb-3'>
+        <Form.Group className='login-form'>
           <Form.Label htmlFor='email'>Email</Form.Label>
           <Form.Control
             type='text'
-            placeholder='Your email'
+            placeholder='booklover13@gmail.com'
             name='email'
             onChange={handleInputChange}
             value={userFormData.email || ''}
@@ -76,7 +80,7 @@ import { LOGIN_USER } from '../../utils/mutations';
           <Form.Label htmlFor='password'>Password</Form.Label>
           <Form.Control
             type='password'
-            placeholder='Your password'
+            placeholder='iheartbooks9'
             name='password'
             onChange={handleInputChange}
             value={userFormData.password || ''}
@@ -84,13 +88,16 @@ import { LOGIN_USER } from '../../utils/mutations';
           />
           <Form.Control.Feedback type='invalid'>Password is required!</Form.Control.Feedback>
         </Form.Group>
-        <Button
+        <Button className="signin-btn"
           disabled={!(userFormData.email && userFormData.password)}
           type='submit'
           variant='success'>
           Submit
         </Button>
-      </Form>
+      <p className="new-user">New User? <Link to="/SignUp">Create an Account</Link></p>
+    </Form>
+    </div>
+    </div>
     </>
   );
 };

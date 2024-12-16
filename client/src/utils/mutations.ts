@@ -25,6 +25,18 @@ export const ADD_USER = gql`
   }
 `;
 
+export const EDIT_USER_BIO = gql`
+  mutation editUserBio($newBio: String!) {
+    editUserBio(newBio: $newBio) {
+      _id
+      username
+      email
+      bio
+    }
+  }
+`
+;
+
 export const SAVE_BOOK = gql`
   mutation saveBook($input: BookInput) {
     saveBook(input: $input) {
@@ -188,3 +200,28 @@ export const ADD_COMMENT_TO_POST = gql`
     }
   }
 `;
+
+export const DELETE_POST = gql`
+  mutation deletePost($input: DeletePostInput!) {
+    deletePost(input: $input) {
+      _id
+      text
+      user {
+        _id
+        username
+      }
+      comments {
+        _id
+        text
+        user {
+          _id
+          username
+        }
+      }
+  
+    }
+
+  }
+`;
+
+

@@ -44,6 +44,7 @@
     margin-bottom: 10px;
     padding-right: 10px;
   }
+
   
   .nav.open {
     background-color: #6a8eb3; /* Change the background color when open */
@@ -63,6 +64,7 @@
     list-style-type: none;
     display: flex;
     gap: 10px;
+    margin-right: 15px;
   }
   
   .nav-links li {

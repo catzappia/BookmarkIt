@@ -46,11 +46,6 @@ const Header = () => {
           {!token ? (
             <>
               <li>
-                <Link to="/Login" onClick={closeMenu}>
-                  Login
-                </Link>
-              </li>
-              <li>
                 <Link to="/Signup" onClick={closeMenu}>
                   Create an Account
                 </Link>

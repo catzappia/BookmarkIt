@@ -1,0 +1,12 @@
+.searchButton {
+    width: max-content;
+    margin: 10px;
+}
+
+.searchForm {
+    width: 500px;
+}
+
+.alignCenter {
+    justify-content: center;
+}

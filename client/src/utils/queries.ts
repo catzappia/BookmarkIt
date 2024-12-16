@@ -6,9 +6,12 @@ export const QUERY_ME = gql`
       _id
       username
       email
+      bio
+      profilePicture
       adminGroups {
         _id
         name
+        profilePicture
       }
       savedBooks {
         _id
@@ -17,6 +20,7 @@ export const QUERY_ME = gql`
       groups {
         _id
         name
+        profilePicture
       }
     }
   }
@@ -75,9 +79,11 @@ export const QUERY_ALL_GROUPS = gql`
       _id
       name
       description
+      profilePicture
       admin {
         _id
         username
+        profilePicture
       }
     }
   }
@@ -89,9 +95,11 @@ export const QUERY_GROUP_BY_NAME = gql`
       _id
       name
       description
+      profilePicture
       admin {
         _id
         username
+        profilePicture
       }
       is_private
       currentBook {
@@ -120,6 +128,7 @@ export const QUERY_GROUP_BY_NAME = gql`
         user {
           _id
           username
+          profilePicture
         }
         comments {
           _id
@@ -127,6 +136,7 @@ export const QUERY_GROUP_BY_NAME = gql`
           user {
             _id
             username
+            profilePicture
           }
         }
       }
@@ -140,9 +150,11 @@ export const QUERY_GROUP_BY_ID = gql`
       _id
       name
       description
+      profilePicture
       admin {
         _id
         username
+        profilePicture
       }
       is_private
       currentBook {
@@ -171,6 +183,7 @@ export const QUERY_GROUP_BY_ID = gql`
         user {
           _id
           username
+          profilePicture
         }
         comments {
           _id
@@ -178,6 +191,7 @@ export const QUERY_GROUP_BY_ID = gql`
           user {
             _id
             username
+            profilePicture
           }
         }
       }
@@ -191,9 +205,11 @@ export const QUERY_GROUPS_BY_IDS = gql`
       _id
       name
       description
+      profilePicture
       admin {
         _id
         username
+        profilePicture
       }
       is_private
       currentBook {
@@ -227,6 +243,7 @@ export const QUERY_GROUPS_BY_IDS = gql`
         user {
           _id
           username
+          profilePicture
         }
         comments {
           _id
@@ -234,6 +251,7 @@ export const QUERY_GROUPS_BY_IDS = gql`
           user {
             _id
             username
+            profilePicture
           }
         }
       }

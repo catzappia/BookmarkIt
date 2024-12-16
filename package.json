@@ -1,10 +1,10 @@
 {
-  "name": "tech-matchup-app",
+  "name": "bookmarkit",
   "version": "1.0.0",
   "description": "",
   "main": "server/dist/server.js",
   "scripts": {
-    "start": "node server/server.js",
+    "start": "node server/dist/server.js",
     "start:dev": "concurrently \"cd server && npm run watch\" \"wait-on tcp:3001 && cd client && npm run dev\"",
     "server": "cd server && npm start",
     "server:dev": "cd server && npm run dev",
@@ -13,7 +13,7 @@
     "client:dev": "cd client && npm run dev",
     "seed": "cd server && npm run seed",
     "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
-    "render-build": "npm install && npm run build"
+    "render-build": "npm install --include=dev && npm run build"
   },
   "author": "",
   "license": "ISC",

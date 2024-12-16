@@ -23,30 +23,25 @@ const router = createBrowserRouter([
                 element: <Home />
             },
             {
-                path: '/discover',
+                path: 'discover',
                 element: <Discover />,
-                errorElement: <ErrorPage />,
         
             },
             {
-                path: '/login',
+                path: 'login',
                 element: <Login />,
-                errorElement: <Login />,
             },
             {
-                path: '/Profile',
+                path: 'profile',
                 element: <Profile />,
-                errorElement: <Profile />,
             },
             {
-                path: '/signup',
+                path: 'signup',
                 element: <SignupForm />,
-                errorElement: <ErrorPage />,
             },
            {
-                path: '/clubs/:groupName',
+                path: 'clubs/:groupName',
                 element: <Group />,
-                errorElement: <ErrorPage />,
         
             },
         
