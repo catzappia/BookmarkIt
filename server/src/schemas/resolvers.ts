@@ -57,6 +57,12 @@ interface AddCommentToPostArgs {
     text: string;
   };
 }
+interface deletePostArgs {
+  input: {
+    postId: string;
+    groupId: string;
+  };
+}
 
 const resolvers = {
   Query: {
@@ -414,7 +420,41 @@ const resolvers = {
         throw new Error("Failed to add comment to post");
       }
     },
-  },
+    deletePost: async (_parent: any, { input: { postId, groupId } }: deletePostArgs, context: IApolloContext
+    ) => {
+      try {
+        if (!context.user) {
+          throw new AuthenticationError("You need to be logged in!");
+        }
+        const updatedGroup = await Group.findOneAndUpdate(
+          { _id: groupId },
+          {
+            $pull: { posts: postId },
+          },
+          { new: true }
+        );
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          {
+            $pull: { posts: postId },
+          },
+          { new: true }
+        );
+        await Post.findOneAndUpdate(
+          { _id: postId },
+          {
+            $pull: { comments: postId },
+          },
+          { new: true }
+        );
+  
+        return updatedGroup;
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to remove user from group");
+      }
+    }
+    },
 };
 
 export default resolvers;

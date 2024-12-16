@@ -188,3 +188,28 @@ export const ADD_COMMENT_TO_POST = gql`
     }
   }
 `;
+
+export const DELETE_POST = gql`
+  mutation deletePost($input: DeletePostInput!) {
+    deletePost(input: $input) {
+      _id
+      text
+      user {
+        _id
+        username
+      }
+      comments {
+        _id
+        text
+        user {
+          _id
+          username
+        }
+      }
+  
+    }
+
+  }
+`;
+
+

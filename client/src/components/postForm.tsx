@@ -17,6 +17,17 @@ interface PostFormProps {
 }
 
 const PostForm = (props: PostFormProps) => {
+  
+  //Get User Data
+  const token = Auth.loggedIn() ? Auth.getToken() : null;
+  if (!token){
+    return <p>Not Logged In</p>
+  };
+
+  let userData = Auth.getProfile() as { _id: string; [key: string]: any };
+  userData = userData.data;
+  console.log("User Data:", userData);
+
   console.log("Post Props: ", props);
   const [postText, setPostText] = useState("");
 
@@ -31,6 +42,9 @@ const PostForm = (props: PostFormProps) => {
 
   const [addPost] = useMutation(ADD_POST_TO_GROUP);
 
+  const [addComment] = useMutation(ADD_COMMENT_TO_POST);
+  const [deletePost] = useMutation(DELETE_POST);
+
   const handlePostFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -41,6 +55,33 @@ const PostForm = (props: PostFormProps) => {
 
       setPostText("");
       props.handleRefresh();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeletePost = async (postId: string, groupId: string) => {
+    try {
+      await deletePost({
+        variables: { input: { groupId: groupId, postId: postId} },
+      });
+
+      props.handleRefresh();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+
+  const handleCommentFormSubmit = async (event: FormEvent, postId: string) => {
+    event.preventDefault();
+
+    try {
+      await addComment({
+        variables: { input: postId, commentText },
+      });
+
+      setCommentText("");
     } catch (err) {
       console.error(err);
     }
@@ -79,6 +120,20 @@ const PostForm = (props: PostFormProps) => {
                 </Modal>
                 <h5>{post?.user?.username}</h5>
                 <p>{post.text}</p>
+                {userData.username === post.user?.username ? ( <Button variant="danger" onClick={() => handleDeletePost(post._id, props.groupId)}>Delete Post</Button> ) : null}
+                <Form onSubmit={(e) => handleCommentFormSubmit(e, post._id)}>
+                  <Form.Group>
+                    <Form.Label htmlFor="text">Add a Comment</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      name={post._id}
+                      rows={3}
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Button type="submit">Submit</Button>
+                </Form>
                 {post.comments?.map((comment: Comment, index: number) => {
                   return (
                     <Container key={index}>
