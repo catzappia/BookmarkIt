@@ -14,10 +14,14 @@ import { QUERY_ALL_GROUPS } from "../utils/queries";
 import { CREATE_GROUP } from "../utils/mutations";
 
 const Discover = () => {
-  const { data } = useQuery(QUERY_ALL_GROUPS);
+  const { data, refetch } = useQuery(QUERY_ALL_GROUPS);
   const groupData: [] = data?.allGroups;
 
   const router = useNavigate();
+
+  const handleRefresh = () => {
+    refetch();
+  };
 
   const [createGroup] = useMutation(CREATE_GROUP);
 
@@ -48,7 +52,7 @@ const Discover = () => {
       });
       console.log("Submit create group Data", data);
       handleClose();
-      window.location.reload();
+      handleRefresh();
     } catch (err: any) {
       console.error(err);
       setErrorMessage(err.message);
