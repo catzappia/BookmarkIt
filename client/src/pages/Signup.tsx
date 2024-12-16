@@ -3,6 +3,8 @@ import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
+import '../styles/signup.css';
+import { Link } from 'react-router-dom';
 
 import Auth from '../utils/auth';
 
@@ -53,18 +55,21 @@ const SignupForm = () => {
 
   return (
     <>
+    <div className="signup-main">
+    <div className="signup-container">
+      <h2>Create an Account</h2>
       {/* This is needed for the validation functionality above */}
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
         {/* show alert if server response is bad */}
         <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
           Something went wrong with your signup!
         </Alert>
-
+        
         <Form.Group className='mb-3'>
           <Form.Label htmlFor='username'>Username</Form.Label>
           <Form.Control
             type='text'
-            placeholder='Your username'
+            placeholder='PagebyPaige'
             name='username'
             onChange={handleInputChange}
             value={userFormData.username || ''}
@@ -77,7 +82,7 @@ const SignupForm = () => {
           <Form.Label htmlFor='email'>Email</Form.Label>
           <Form.Control
             type='email'
-            placeholder='Your email address'
+            placeholder='pagebypage@gmail.com'
             name='email'
             onChange={handleInputChange}
             value={userFormData.email || ''}
@@ -90,7 +95,7 @@ const SignupForm = () => {
           <Form.Label htmlFor='password'>Password</Form.Label>
           <Form.Control
             type='password'
-            placeholder='Your password'
+            placeholder='pageturner77'
             name='password'
             onChange={handleInputChange}
             value={userFormData.password || ''}
@@ -104,7 +109,10 @@ const SignupForm = () => {
           variant='success'>
           Submit
         </Button>
+        <p className="existing-user">Already have an account? <Link to="/login">Sign In</Link></p>
       </Form>
+    </div>
+    </div>
     </>
   );
 };

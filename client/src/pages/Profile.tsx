@@ -1,117 +1,97 @@
-import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
 
-import { useQuery } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
-import { useMutation } from "@apollo/client";
-import { useState } from "react";
-import { QUERY_ME } from "../utils/queries";
-// import { QUERY_GROUPS_BY_IDS } from '../utils/queries';
-import { EDIT_USER_BIO } from "../utils/mutations";
-import { Group } from "../models/Group";
+import React, { useState } from 'react';
+import { useUserContext } from '../components/context/UserContext';
+import '../styles/profile.css';
 
-function Profile() {
-  const router = useNavigate();
 
-  const { loading, data, refetch } = useQuery(QUERY_ME);
-  const userData = data?.me;
-  console.log("UserData From Profile", data?.me);
+const ProfilePage: React.FC = () => {
+  const { profile, updateProfile } = useUserContext();
 
-  const [editUserBio] = useMutation(EDIT_USER_BIO);
-  const [bio, setBio] = useState("");
-  const [editShow, setEditShow] = useState(false);
-  const handleEditClose = () => setEditShow(false);
-  const handleEditShow = () => setEditShow(true);
+  const [bioInput, setBioInput] = useState(profile.bio);
+  const [isEditingBio, setIsEditingBio] = useState(false);
 
-  const handleRefresh = async () => {
-    refetch;
-  };
 
-  const handleEditBio = async () => {
-    try {
-      await editUserBio({
-        variables: { newBio: bio },
-      });
-    } catch (err) {
-      console.error(err);
+  const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          updateProfile({ profilePicture: reader.result as string });
+        }
+      };
+      reader.readAsDataURL(file);
     }
-    console.log('Bio Updated: ', bio);
-    handleEditClose();
-    handleRefresh();
   };
 
-  const handleEditInputChange = (event: any) => {
-    const { value } = event.target;
-    setBio(value);
-  };
-
-  if (loading) return <p>Loading...</p>;
-
-  const viewGroupPage = (group: any) => {
-    router(`/clubs/${group.name}`);
+  const handleBioSave = () => {
+    updateProfile({ bio: bioInput });
+    setIsEditingBio(false);
   };
 
   return (
-    <Card style={{ width: "18rem" }}>
-      <Card.Body>
-        <Card.Title>{userData.username}</Card.Title>
-        <Card.Text>
-        <p>Bio: {userData?.bio} <a onClick={handleEditShow}>Edit</a></p>
-        </Card.Text>
-      </Card.Body>
-      {data.me.adminGroups?.length > 0 ? (
-        <ListGroup className="list-group-flush">
-          <h3>Clubs I admin</h3>
-          {data.me.adminGroups?.map((group: Group) => (
-            <div key={group._id}>
-              <ListGroup.Item>
-                {group.name}
-                <Button onClick={() => viewGroupPage(group)}>View</Button>
-              </ListGroup.Item>
-            </div>
-          ))}
-        </ListGroup>
-      ) : null}
-      ;
-      {data.me.groups?.length > 0 ? (
-        <ListGroup className="list-group-flush">
-          <h3>Clubs I'm in</h3>
-          {data.me.groups?.map((group: Group) => (
-            <div key={group._id}>
-              <ListGroup.Item>
-                {group.name}
-                <Button onClick={() => viewGroupPage(group)}>View</Button>
-              </ListGroup.Item>
-            </div>
-          ))}
-        </ListGroup>
-      ) : null}
-      ;
-      <Card.Body>
-        <Card.Link href="#">Card Link</Card.Link>
-        <Card.Link href="#">Another Link</Card.Link>
-      </Card.Body>
-      <Modal show={editShow} onHide={handleEditClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Bio</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleEditBio}>
-            <Form.Group controlId="formBasicBio">
-              <Form.Label>Bio</Form.Label>
-              <Form.Control type="text" placeholder="Enter bio" onChange={handleEditInputChange}/>
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-    </Card>
-  );
-}
+    <div className="profile-main">
+    <div className="profile-page">
+      {/* Name */}
+      {profile.name && <h1>{profile.name}</h1>}
+      {/* Profile Picture */}
+      <div className="profile-picture">
+        <label htmlFor="profilePicture">
+          <img
+            src={profile.profilePicture || "https://media.newyorker.com/photos/5c1d0d7781ab3335f580e163/master/w_2240,c_limit/TNY-MoreBooksWeLoved2018.jpg"}
+            alt="A stack of books"
+            style={{ width: '150px', height: '150px', borderRadius: '50%' }}
+          />
+        </label>
+        <input
+          id="profilePicture"
+          name="profilePicture"
+          type="file"
+          accept="image/*"
+          onChange={handleProfilePictureChange}
+          style={{ display: 'none' }}
+        />
+      </div>
 
-export default Profile;
+      {/* Bio */}
+      <div className="bio-container">
+        {isEditingBio ? (
+          <>
+            <textarea
+              value={bioInput}
+              onChange={(e) => setBioInput(e.target.value)}
+              rows={3}
+              style={{ width: '100%' }}
+            />
+            <button onClick={handleBioSave}>Save</button>
+            <button onClick={() => setIsEditingBio(false)}>Cancel</button>
+          </>
+        ) : (
+          <>
+            <p>{profile.bio}</p>
+            <button onClick={() => setIsEditingBio(true)}>Edit Bio</button>
+          </>
+        )}
+      </div>
+
+      {/* Clubs */}
+      <div className="clubs-container">
+        <h3>Clubs</h3>
+        {profile.clubs.length > 0 ? (
+          <ul>
+            {profile.clubs.map((club) => (
+              <li key={club.id}>
+                <a href={club.link}>{club.name}</a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="no-clubs">No clubs joined yet.</p>
+        )}
+      </div>
+    </div>
+    </div>
+  );
+};
+
+export default ProfilePage;
