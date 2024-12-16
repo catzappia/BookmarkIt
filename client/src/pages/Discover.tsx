@@ -11,7 +11,6 @@ import ClubCard from "../components/club-card";
 import { QUERY_ALL_GROUPS } from "../utils/queries";
 import { CREATE_GROUP } from "../utils/mutations";
 import "../styles/discover.css";
-import { DropdownDivider } from "react-bootstrap";
 
 const Discover = () => {
   const { data, refetch } = useQuery(QUERY_ALL_GROUPS);
@@ -64,7 +63,7 @@ const Discover = () => {
   };
 
   return (
-    <div>
+    <>
       <div className="discover-main">
         {/* Header */}
         <div className="discover-container">
@@ -143,7 +142,7 @@ const Discover = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
