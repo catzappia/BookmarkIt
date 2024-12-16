@@ -5,14 +5,15 @@ import { Card, Button } from 'react-bootstrap';
 interface ClubCardProps {
   title: string;
   description: string;
+  profilePicture: string;
   onView: () => void;
 }
 
-const ClubCard: React.FC<ClubCardProps> = ({ title, description, onView }) => {
+const ClubCard: React.FC<ClubCardProps> = ({ title, description, profilePicture, onView }) => {
   return (
-    <Card style={{ width: 'fit-content', margin: '1rem', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)'}}>
+    <Card style={{ width: '18rem', margin: '1rem', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)'}}>
       <Card.Img
-        src={'https://preview.redd.it/slo4soywz9l91.jpg?width=1080&crop=smart&auto=webp&s=beb1b8421b6fb4f13ae5d3a07965fabe5c7ba4b7'}
+        src={profilePicture? profilePicture : 'https://preview.redd.it/slo4soywz9l91.jpg?width=1080&crop=smart&auto=webp&s=beb1b8421b6fb4f13ae5d3a07965fabe5c7ba4b7'}
         alt="Club Cover"
         style={{ height: '150px', width: 'fit-content', objectFit: 'cover', margin: '1rem' }}
       />
