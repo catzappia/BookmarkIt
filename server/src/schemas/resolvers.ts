@@ -86,7 +86,6 @@ const resolvers = {
         throw new Error("Failed to get user");
       }
     },
-
     userById: async (_parent: any, { userId }: any) => {
       try {
         return await User.findOne({ _id: userId });
@@ -109,7 +108,20 @@ const resolvers = {
           {
             path: "posts",
             select: "text",
-            populate: { path: "user", select: "username" },
+            populate: [
+              {
+                path: "user",
+                select: "username",
+              },
+              {
+                path: "comments",
+                select: ["text", "user"],
+                populate: {
+                  path: "user",
+                  select: "username",
+                },
+              },
+            ],
           },
           {
             path: "admin",
@@ -365,10 +377,6 @@ const resolvers = {
           },
           { new: true }
         );
-        // return updatedGroup?.populate({
-        //   path: 'posts',
-        //   populate: [{ path: 'user' }, { path: 'comments' }]
-        // });
         console.log("Updated Group: ", updatedGroup);
         return post.populate([
           {
@@ -377,7 +385,10 @@ const resolvers = {
           },
           {
             path: "comments",
-            populate: { path: "user", select: "username" },
+            populate: {
+              path: "user",
+              select: "username",
+            },
           },
         ]);
       } catch (err) {

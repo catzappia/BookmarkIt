@@ -8,6 +8,7 @@ import Modal from "react-bootstrap/Modal";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import '../styles/discovery.css';
 
 import { QUERY_ALL_GROUPS } from "../utils/queries";
 import { CREATE_GROUP } from "../utils/mutations";
@@ -50,7 +51,7 @@ const Discover = () => {
       window.location.reload();
     } catch (err: any) {
       console.error(err);
-      setErrorMessage(err.message)
+      setErrorMessage(err.message);
     }
   };
 
@@ -60,10 +61,6 @@ const Discover = () => {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Create Club
-      </Button>
-
       <Modal show={show} onHide={handleClose} size={"xl"}>
         <Modal.Header closeButton>
           <Modal.Title>Create Your Own Club</Modal.Title>
@@ -103,7 +100,12 @@ const Discover = () => {
       </Modal>
 
       <Container>
-        <h1>Clubs</h1>
+        <Row>
+          <h1>Clubs</h1>
+          <Button className='createButton' onClick={handleShow}>
+            Create Club
+          </Button>
+        </Row>
         <Row>
           {!groupData && <h2>No groups yet</h2>}
           {groupData?.map((group: any) => (

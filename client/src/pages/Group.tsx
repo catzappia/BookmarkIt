@@ -11,26 +11,30 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-import { QUERY_GROUP_BY_NAME, } from "../utils/queries";
-import { EDIT_GROUP_CURRENT_BOOK, ADD_BOOK_TO_GROUP_LIST, ADD_USER_TO_GROUP, LEAVE_GROUP, DELETE_GROUP } from "../utils/mutations";
+import { QUERY_GROUP_BY_NAME } from "../utils/queries";
+import {
+  EDIT_GROUP_CURRENT_BOOK,
+  ADD_BOOK_TO_GROUP_LIST,
+  ADD_USER_TO_GROUP,
+  LEAVE_GROUP,
+  DELETE_GROUP,
+} from "../utils/mutations";
 import { NewBookInput } from "../models/Book";
-import BookSearch from '../components/EditGroupModal/bookSearch';
-import PostForm from '../components/postForm';
+import BookSearch from "../components/EditGroupModal/bookSearch";
+import PostForm from "../components/postForm";
 import Auth from "../utils/auth";
 
 const Group = () => {
-
   const router = useNavigate();
 
   //Get User Data
   const token = Auth.loggedIn() ? Auth.getToken() : null;
-  if (!token){
-    return <p>Not Logged In</p>
-  };
+  if (!token) {
+    return <p>Not Logged In</p>;
+  }
 
   let userData = Auth.getProfile() as { _id: string; [key: string]: any };
   userData = userData.data;
-  console.log("User Data:", userData);
 
   const handleRefresh = () => {
     refetch();
@@ -56,20 +60,9 @@ const Group = () => {
   });
 
   const groupData = data?.group;
-  console.log("Group Data:", groupData);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
-
-  // const { data: adminDataResult, loading: loadingAdminData, error: errorAdminData } = useQuery(QUERY_USER_BY_ID, 
-  //   { variables: { userId: data?.group.admin._id },
-  //   skip: !groupData?.admin?._id 
-  // },);
-  
-  // if (loadingAdminData) return <p>Loading...</p>;
-  // if (errorAdminData) return <p>Error: {errorAdminData.message}</p>;
-  // console.log("Admin Data:", adminDataResult);
-  // const adminData = adminDataResult?.userById?.username;
 
   const handleJoinButton = async () => {
     await addUserToGroup({
@@ -84,8 +77,8 @@ const Group = () => {
       variables: { input: { groupId: groupData._id } },
     });
     console.log("User left group");
-    handleRefresh()
-  }
+    handleRefresh();
+  };
 
   const handleDeleteButton = async () => {
     await deleteGroup({
@@ -93,7 +86,7 @@ const Group = () => {
     });
     console.log("Group deleted");
     router("/discover");
-  }
+  };
 
   let setter: NewBookInput = {
     bookId: "",
@@ -152,11 +145,11 @@ const Group = () => {
       }
     }
     return false;
-  }
+  };
 
   return (
     <Container>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} size={"xl"}>
         <Modal.Header closeButton>
           <Modal.Title>Change Current Book</Modal.Title>
         </Modal.Header>
@@ -172,25 +165,46 @@ const Group = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Row>
-        <Col>Group Name: {groupData.name}</Col>
+
+      <Row className="text-center">
+        <Col>
+          <h2>{groupData.name}</h2>
+        </Col>
         <Col>Created by: {groupData?.admin?.username}</Col>
-        <Col> {userData._id === groupData.admin._id ? <Button onClick={handleDeleteButton}>Delete</Button> : (Array.isArray(groupData.users) && checkUsers(groupData.users) ? <Button onClick={handleLeaveButton}>Leave Group</Button> : <Button onClick={handleJoinButton}>Join Group</Button>)}
+        <Col>
+          {userData._id === groupData.admin._id ? (
+            <Button onClick={handleDeleteButton}>Delete Group</Button>
+          ) : Array.isArray(groupData.users) && checkUsers(groupData.users) ? (
+            <Button onClick={handleLeaveButton}>Leave Group</Button>
+          ) : (
+            <Button onClick={handleJoinButton}>Join Group</Button>
+          )}
         </Col>
       </Row>
-      <Row>
-        <Col>{groupData.currentBook?.title}</Col>
-        <Col>{groupData.currentBook?.authors}</Col>
+
+      <Row className="text-center">
         <Col>
-          Current Book:
-          <img src={groupData.currentBook?.image}></img>
+          <p>
+            Current Book : {groupData.currentBook?.title}{" "}
+            {userData._id === groupData.admin._id ? (
+              <a className="editButton" onClick={handleShow}>
+                Edit
+              </a>
+            ) : null}
+          </p>
+          <p>Written By: {groupData.currentBook?.authors}</p>
+          <img
+            className="currentImage"
+            src={groupData.currentBook?.image}
+          ></img>
+          <Row></Row>
+          <Button
+            className="descriptionButton"
+            onClick={() => setModalShow(true)}
+          >
+            Book Description
+          </Button>
         </Col>
-        <Col>
-        {userData._id === groupData.admin._id ? <p onClick={handleShow}>Edit</p> : null}
-        </Col>
-        <Button className="primary" onClick={() => setModalShow(true)}>
-          Book Description
-        </Button>
 
         <DescriptionModal
           show={modalShow}
@@ -200,7 +214,11 @@ const Group = () => {
           link={groupData.currentBook?.link || "No Link Available"}
         />
       </Row>
-      <PostForm groupId={groupData._id} posts={groupData.posts} handleRefresh={handleRefresh}/>
+      <PostForm
+        groupId={groupData._id}
+        posts={groupData.posts}
+        handleRefresh={handleRefresh}
+      />
     </Container>
   );
 };

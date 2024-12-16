@@ -1,5 +1,5 @@
 {
-  "name": "tech-matchup-app",
+  "name": "bookmarkit",
   "version": "1.0.0",
   "description": "",
   "main": "server/dist/server.js",
@@ -13,7 +13,8 @@
     "client:dev": "cd client && npm run dev",
     "seed": "cd server && npm run seed",
     "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
-    "render-build": "npm install && npm run build"
+    "server": "cd server && npm run start",
+    "render-build": "npm install --include=dev && npm run build"
   },
   "author": "",
   "license": "ISC",

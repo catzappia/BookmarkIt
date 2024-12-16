@@ -109,7 +109,7 @@ const typeDefs = gql`
     group(groupName: String): Group
     groupById(groupId: ID!): Group
     groupsByIds(groupIds: [ID]!): [Group]
-    
+
     # Post Queries
     allPosts: [Post]
     postsByGroupId(groupId: ID!): [Post]
