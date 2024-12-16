@@ -86,7 +86,7 @@ const Group = () => {
       variables: { groupId: groupData._id },
     });
     console.log("Group deleted");
-    router("/discover");
+    window.location.href = "/";
   };
 
   let setter: NewBookInput = {
