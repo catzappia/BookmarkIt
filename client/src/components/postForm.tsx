@@ -6,12 +6,16 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 // import Col from "react-bootstrap/Col";
 // import Row from "react-bootstrap/Row";
+import Auth from "../utils/auth";
 
 import { Post, Comment } from "../models/Post";
-import { ADD_POST_TO_GROUP, ADD_COMMENT_TO_POST } from "../utils/mutations";
+import { ADD_POST_TO_GROUP, ADD_COMMENT_TO_POST, DELETE_POST } from "../utils/mutations";
 // import { QUERY_POSTS_BY_GROUP_ID } from "../utils/queries";
 
+
+
 interface PostFormProps {
+ 
   groupId: string;
   posts: Post[];
 
@@ -19,6 +23,16 @@ interface PostFormProps {
 }
 
 const PostForm = (props: PostFormProps) => {
+
+  //Get User Data
+  const token = Auth.loggedIn() ? Auth.getToken() : null;
+  if (!token){
+    return <p>Not Logged In</p>
+  };
+
+  let userData = Auth.getProfile() as { _id: string; [key: string]: any };
+  userData = userData.data;
+  console.log("User Data:", userData);
 
   console.log("Post Props: ", props);
   const [postText, setPostText] = useState("");
@@ -31,6 +45,8 @@ const PostForm = (props: PostFormProps) => {
   // if (error) return <p>Error: {error.message}</p>;
   const [addPost] = useMutation(ADD_POST_TO_GROUP);
   const [addComment] = useMutation(ADD_COMMENT_TO_POST);
+  const [deletePost] = useMutation(DELETE_POST);
+  
 
   const handlePostFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -46,6 +62,19 @@ const PostForm = (props: PostFormProps) => {
       console.error(err);
     }
   };
+
+  const handleDeletePost = async (postId: string, groupId: string) => {
+    try {
+      await deletePost({
+        variables: { input: { groupId: groupId, postId: postId} },
+      });
+
+      props.handleRefresh();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
 
   const handleCommentFormSubmit = async (event: FormEvent, postId: string) => {
     event.preventDefault();
@@ -82,12 +111,14 @@ const PostForm = (props: PostFormProps) => {
               <Container key={index}>
                 <h5>{post?.user?.username}</h5>
                 <p>{post.text}</p>
-                <Form onSubmit={(e) => handleCommentFormSubmit(e, post.id)}>
+                {userData.username === post.user?.username ? ( <Button variant="danger" onClick={() => handleDeletePost(post._id, props.groupId)}>Delete Post</Button> ) : null}
+                
+                <Form onSubmit={(e) => handleCommentFormSubmit(e, post._id)}>
                   <Form.Group>
                     <Form.Label htmlFor="text">Add a Comment</Form.Label>
                     <Form.Control
                       as="textarea"
-                      name={post.id}
+                      name={post._id}
                       rows={3}
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}

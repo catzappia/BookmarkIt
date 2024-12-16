@@ -1,7 +1,7 @@
 import { User } from './UserData';
 
 export interface Post {
-    id: string;
+    _id: string;
     text: string;
     user: User;
     comments: Comment[] | null;

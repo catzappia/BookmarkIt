@@ -1,3 +1,4 @@
+
 import { gql } from "graphql-tag";
 const typeDefs = gql`
   type User {
@@ -89,6 +90,14 @@ const typeDefs = gql`
     text: String!
   }
 
+  input DeletePostInput{
+    postId: ID!
+    groupId: ID!
+   
+   
+  }
+  
+
   type Query {
     # User Queries
     me: User
@@ -133,6 +142,7 @@ const typeDefs = gql`
     # Post & Comment Mutations
     addPostToGroup(input: AddPostToGroupInput): Post
     addCommentToPost(input: AddCommentToPostInput): Post
+    deletePost(input:DeletePostInput!): Post
   }
 `;
 export default typeDefs;
