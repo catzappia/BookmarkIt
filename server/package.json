@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node server/dist/server.js",
-    "watch": "nodemon dist/server.js",
+    "start": "node dist/server.js",
+    "watch": "npx nodemon",
     "seed": "node dist/seeds/seed.js"
   },
   "author": "",
