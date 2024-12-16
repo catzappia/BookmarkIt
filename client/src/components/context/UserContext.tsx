@@ -21,12 +21,21 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [profile, setProfile] = useState<Profile>({
-    name: 'John Doe', // Replace with dynamic data
-    bio: 'Short bio goes here!',
-    profilePicture: null,
-    clubs: [],
+  const [profile, setProfile] = useState<Profile>(() => {
+    const storedProfile = localStorage.getItem('userProfile');
+    return storedProfile
+      ? JSON.parse(storedProfile)
+      : {
+        name: localStorage.getItem('userName') || 'Book Lover', // Replace with dynamic data
+        bio: 'Short bio goes here!',
+        profilePicture: null,
+        clubs: [],
+      };
   });
+
+  React.useEffect(() => {
+    localStorage.setItem('userProfile', JSON.stringify(profile));
+  }, [profile]);
 
   const updateProfile = (updatedProfile: Partial<Profile>) => {
     setProfile((prevProfile) => ({
@@ -50,3 +59,5 @@ export const useUserContext = (): UserContextType => {
   }
   return context;
 };
+
+export default UserContext;

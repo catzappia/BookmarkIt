@@ -5,17 +5,18 @@ interface PollOption {
     id: number;
     label: string;
     votes: number;
+    date: string;
 }
 
 interface PollProps {
-    title: string; // title of poll
-    options: string[]; // poll options
-    duration?: number; // poll duration in seconds
+  title: string; // title of poll
+  options: string[]; // poll options for each day
+  duration?: number; // poll duration in seconds
 }
 
 const Poll: React.FC<PollProps> = ({ title, options: optionLabels, duration = 15 }) => {
     const [options, setOptions] = useState<PollOption[]>(
-        optionLabels.map((label, index) => ({ id: index + 1, label, votes: 0 }))
+        optionLabels.map((label, index) => ({ id: index + 1, label, votes: 0, date: new Date().toISOString() }))
       );
       const [totalVotes, setTotalVotes] = useState(0);
       const [pollActive, setPollActive] = useState(true);

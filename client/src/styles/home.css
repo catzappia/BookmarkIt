@@ -12,20 +12,31 @@
   font-family: 'Times New Roman', Times, serif;
 }
 
+.login-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .login-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #6a8eb3;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    color: white;
-    text-decoration: none;
-    width: 80%; /* Set a responsive width */
-    max-width: 600px; /* Ensure it doesn't exceed 600px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6a8eb3;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  width: 80%; /* Set a responsive width */
+  max-width: 600px; /* Ensure it doesn't exceed 600px */
+}
+
+.login-button a {
+  color: white;
+  text-decoration: none;
 }
   
   

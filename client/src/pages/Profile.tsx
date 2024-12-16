@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useUserContext } from '../components/context/UserContext';
+import '../styles/profile.css';
+
 
 const ProfilePage: React.FC = () => {
   const { profile, updateProfile } = useUserContext();
@@ -27,20 +29,22 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="profile-main">
+    <div className="profile-page">
       {/* Name */}
-      <h1>{profile.name}</h1>
+      {profile.name && <h1>{profile.name}</h1>}
       {/* Profile Picture */}
-      <div>
+      <div className="profile-picture">
         <label htmlFor="profilePicture">
           <img
-            src={profile.profilePicture || 'https://via.placeholder.com/150'}
-            alt="Profile"
+            src={profile.profilePicture || "https://media.newyorker.com/photos/5c1d0d7781ab3335f580e163/master/w_2240,c_limit/TNY-MoreBooksWeLoved2018.jpg"}
+            alt="A stack of books"
             style={{ width: '150px', height: '150px', borderRadius: '50%' }}
           />
         </label>
         <input
           id="profilePicture"
+          name="profilePicture"
           type="file"
           accept="image/*"
           onChange={handleProfilePictureChange}
@@ -49,7 +53,7 @@ const ProfilePage: React.FC = () => {
       </div>
 
       {/* Bio */}
-      <div>
+      <div className="bio-container">
         {isEditingBio ? (
           <>
             <textarea
@@ -70,7 +74,7 @@ const ProfilePage: React.FC = () => {
       </div>
 
       {/* Clubs */}
-      <div>
+      <div className="clubs-container">
         <h3>Clubs</h3>
         {profile.clubs.length > 0 ? (
           <ul>
@@ -81,9 +85,10 @@ const ProfilePage: React.FC = () => {
             ))}
           </ul>
         ) : (
-          <p>No clubs joined yet.</p>
+          <p className="no-clubs">No clubs joined yet.</p>
         )}
       </div>
+    </div>
     </div>
   );
 };

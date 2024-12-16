@@ -46,18 +46,8 @@ return (
                     </Link>
                 </li>
                 <li>
-                    <Link to="/Signup" onClick={closeMenu}>
-                    Create an Account
-                    </Link>
-                </li>
-                <li>
                     <Link to="/Profile" onClick={closeMenu}>
                     My Profile
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/book-clubs" onClick={closeMenu}>
-                        Book Clubs
                     </Link>
                 </li>
                 <li>
