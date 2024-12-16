@@ -1,4 +1,3 @@
-
 import {
   signToken,
   AuthenticationError,
@@ -8,7 +7,6 @@ import User from "../models/User.js";
 import Group, { IGroup } from "../models/Group.js";
 // import { IBook } from '../models/Book.js';
 import Post, { IPost } from "../models/Post.js";
-
 
 interface LoginArgs {
   email: string;
@@ -67,22 +65,21 @@ const resolvers = {
         throw new AuthenticationError("You need to be logged in!");
       }
       try {
-      return await User.findOne({ _id: context.user._id }).populate([
-        {
-          path: "groups",
-          select: "name"
-        },
-        {
-          path: "adminGroups",
-          select: "name"
-        }
-      ]);
+        return await User.findOne({ _id: context.user._id }).populate([
+          {
+            path: "groups",
+            select: "name",
+          },
+          {
+            path: "adminGroups",
+            select: "name",
+          },
+        ]);
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get user");
       }
     },
-
     userById: async (_parent: any, { userId }: any) => {
       try {
         return await User.findOne({ _id: userId });
@@ -105,13 +102,26 @@ const resolvers = {
           {
             path: "posts",
             select: "text",
-            populate: { path: "user", select: "username" }
+            populate: [
+              {
+                path: "user",
+                select: "username",
+              },
+              {
+                path: "comments",
+                select: ["text", "user"],
+                populate: {
+                  path: "user",
+                  select: "username",
+                },
+              },
+            ],
           },
           {
             path: "admin",
-            select: "username"
-          }
-        ])
+            select: "username",
+          },
+        ]);
         console.log("Group Result: ", result);
         return result;
       } catch (err) {
@@ -148,23 +158,25 @@ const resolvers = {
     },
 
     // get all posts
-    allPosts: 
-    async (_parent: any, _args: any): Promise<IPost[]> => {
+    allPosts: async (_parent: any, _args: any): Promise<IPost[]> => {
       try {
-        return await Post.find({}).populate('user', 'username');
+        return await Post.find({}).populate("user", "username");
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get posts");
       }
-      },
-      postsByGroupId: async (_parent: any, { groupId }: any): Promise<IPost[]> => {
-        try {
-          return await Post.find({ group: groupId }).populate('user', 'username');
-        } catch (err) {
-          console.error(err);
-          throw new Error("Failed to get posts");
-        }
+    },
+    postsByGroupId: async (
+      _parent: any,
+      { groupId }: any
+    ): Promise<IPost[]> => {
+      try {
+        return await Post.find({ group: groupId }).populate("user", "username");
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to get posts");
       }
+    },
   },
 
   Mutation: {
@@ -371,8 +383,11 @@ const resolvers = {
           },
           {
             path: "comments",
-            populate: { path: "user", select: "username" },
-          }
+            populate: {
+              path: "user",
+              select: "username",
+            },
+          },
         ]);
       } catch (err) {
         console.error(err);

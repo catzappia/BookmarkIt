@@ -1,15 +1,13 @@
-
 import { type FormEvent, useState } from "react";
 import { useMutation } from "@apollo/client";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-// import Col from "react-bootstrap/Col";
-// import Row from "react-bootstrap/Row";
+import Modal from "react-bootstrap/Modal";
 
 import { Post, Comment } from "../models/Post";
-import { ADD_POST_TO_GROUP, ADD_COMMENT_TO_POST } from "../utils/mutations";
-// import { QUERY_POSTS_BY_GROUP_ID } from "../utils/queries";
+import { ADD_POST_TO_GROUP } from "../utils/mutations";
+import CommentComponent from "../components/comment";
 
 interface PostFormProps {
   groupId: string;
@@ -19,18 +17,19 @@ interface PostFormProps {
 }
 
 const PostForm = (props: PostFormProps) => {
-
   console.log("Post Props: ", props);
   const [postText, setPostText] = useState("");
-  const [commentText, setCommentText] = useState("");
 
-  // const { data, loading, error, refetch } = useQuery(QUERY_POSTS_BY_GROUP_ID, { variables: { groupId: props.groupId } });
-  // console.log("Post Data:", data);
+  const [modalState, setModalState] = useState<{ [key: string]: boolean }>({});
+  const handleShow = (postId: string) => {
+    setModalState((prev) => ({ ...prev, [postId]: true }));
+  };
 
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error.message}</p>;
+  const handleClose = (postId: string) => {
+    setModalState((prev) => ({ ...prev, [postId]: false }));
+  };
+
   const [addPost] = useMutation(ADD_POST_TO_GROUP);
-  const [addComment] = useMutation(ADD_COMMENT_TO_POST);
 
   const handlePostFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -42,20 +41,6 @@ const PostForm = (props: PostFormProps) => {
 
       setPostText("");
       props.handleRefresh();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleCommentFormSubmit = async (event: FormEvent, postId: string) => {
-    event.preventDefault();
-
-    try {
-      await addComment({
-        variables: { input: postId, commentText },
-      });
-
-      setCommentText("");
     } catch (err) {
       console.error(err);
     }
@@ -80,29 +65,31 @@ const PostForm = (props: PostFormProps) => {
         ? props.posts?.map((post: Post, index: number) => {
             return (
               <Container key={index}>
+                <Modal
+                  show={modalState[post._id]}
+                  onHide={() => handleClose(post._id)}
+                >
+                  <Modal.Header>
+                    <Modal.Title>Comments</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <CommentComponent postId={post._id} handleRefresh={() => handleClose(post._id)}/>
+                    <Button onClick={() => handleClose(post._id)}>Close</Button>
+                  </Modal.Body>
+                </Modal>
                 <h5>{post?.user?.username}</h5>
                 <p>{post.text}</p>
-                <Form onSubmit={(e) => handleCommentFormSubmit(e, post.id)}>
-                  <Form.Group>
-                    <Form.Label htmlFor="text">Add a Comment</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      name={post.id}
-                      rows={3}
-                      value={commentText}
-                      onChange={(e) => setCommentText(e.target.value)}
-                    />
-                  </Form.Group>
-                  <Button type="submit">Submit</Button>
-                </Form>
                 {post.comments?.map((comment: Comment, index: number) => {
                   return (
                     <Container key={index}>
-                      <h6>{comment.user.username}</h6>
+                      <h6>{comment?.user?.username}</h6>
                       <p>{comment.text}</p>
                     </Container>
                   );
-                }) ?? null}
+                })}
+                <Button onClick={() => handleShow(post._id)}>
+                  Add Comment
+                </Button>
               </Container>
             );
           })
