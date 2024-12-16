@@ -175,11 +175,11 @@ const Group = () => {
         <Col>Created by: {groupData?.admin?.username}</Col>
         <Col>
           {userData._id === groupData.admin._id ? (
-            <Button onClick={handleDeleteButton}>Delete Group</Button>
+            <Button onClick={handleDeleteButton}>Delete Club</Button>
           ) : Array.isArray(groupData.users) && checkUsers(groupData.users) ? (
-            <Button onClick={handleLeaveButton}>Leave Group</Button>
+            <Button onClick={handleLeaveButton}>Leave Club</Button>
           ) : (
-            <Button onClick={handleJoinButton}>Join Group</Button>
+            <Button onClick={handleJoinButton}>Join Club</Button>
           )}
         </Col>
       </Row>
@@ -187,25 +187,25 @@ const Group = () => {
       <Row className="text-center">
         <Col>
           <p>
-            Current Book : {groupData.currentBook?.title}{" "}
+            Current Book: {groupData.currentBook?.title ? groupData.currentBook.title : null}{" "}
             {userData._id === groupData.admin._id ? (
               <a className="editButton" onClick={handleShow}>
                 Edit
               </a>
             ) : null}
           </p>
-          <p>Written By: {groupData.currentBook?.authors}</p>
+          {groupData.currentBook?.authors ? <p>Written By: {groupData.currentBook?.authors}</p> : null}
           <img
             className="currentImage"
             src={groupData.currentBook?.image}
           ></img>
           <Row></Row>
-          <Button
+          {groupData.currentBook?.description? <Button
             className="descriptionButton"
             onClick={() => setModalShow(true)}
           >
             Book Description
-          </Button>
+          </Button> : null}
         </Col>
 
         <DescriptionModal

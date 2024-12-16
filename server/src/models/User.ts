@@ -13,6 +13,7 @@ export interface IUser extends Document {
 
     isCorrectPassword(password: string): Promise<boolean>,
     bio?: string,
+    profilePicture?: string,
     savedBooks?: IBook[],
     currentlyReading?: IBook,
     adminGroups?: IGroup[],
@@ -46,6 +47,10 @@ export const userSchema: Schema<IUser> = new Schema<IUser>({
         type: String,
         maxlength: 280,
         default: ''
+    },
+    profilePicture: {
+        type: String,
+        default: 'https://media.newyorker.com/photos/5c1d0d7781ab3335f580e163/master/w_2240,c_limit/TNY-MoreBooksWeLoved2018.jpg'
     },
     savedBooks: [bookSchema],
     currentlyReading: {

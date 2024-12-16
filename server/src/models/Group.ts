@@ -8,6 +8,7 @@ export interface IGroup extends Document {
     name: string,
     description: string,
     is_private: boolean,
+    profilePicture?: string,
     admin: IUser,
     users?: IUser[],
     currentBook?: IBook,
@@ -31,6 +32,10 @@ export const groupSchema = new Schema<IGroup>({
         type: Boolean,
         required: true,
         default: false
+    },
+    profilePicture: {
+        type: String,
+        default: 'https://preview.redd.it/slo4soywz9l91.jpg?width=1080&crop=smart&auto=webp&s=beb1b8421b6fb4f13ae5d3a07965fabe5c7ba4b7'
     },
     admin: {
         type: Schema.Types.ObjectId,

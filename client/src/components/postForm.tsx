@@ -19,12 +19,11 @@ interface PostFormProps {
 }
 
 const PostForm = (props: PostFormProps) => {
-  
   //Get User Data
   const token = Auth.loggedIn() ? Auth.getToken() : null;
-  if (!token){
-    return <p>Not Logged In</p>
-  };
+  if (!token) {
+    return <p>Not Logged In</p>;
+  }
 
   let userData = Auth.getProfile() as { _id: string; [key: string]: any };
   userData = userData.data;
@@ -64,14 +63,14 @@ const PostForm = (props: PostFormProps) => {
   const handleDeletePost = async (postId: string, groupId: string) => {
     try {
       await deletePost({
-        variables: { input: { groupId: groupId, postId: postId} },
+        variables: { input: { groupId: groupId, postId: postId } },
       });
 
       props.handleRefresh();
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   return (
     <Container>
@@ -100,17 +99,27 @@ const PostForm = (props: PostFormProps) => {
                     <Modal.Title>Comments</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <CommentComponent postId={post._id} handleRefresh={() => handleClose(post._id)}/>
+                    <CommentComponent
+                      postId={post._id}
+                      handleRefresh={() => handleClose(post._id)}
+                    />
                     <Button onClick={() => handleClose(post._id)}>Close</Button>
                   </Modal.Body>
                 </Modal>
                 <h5>{post?.user?.username}</h5>
                 <p>{post.text}</p>
-                {userData.username === post.user?.username ? ( <Button variant="danger" onClick={() => handleDeletePost(post._id, props.groupId)}>Delete Post</Button> ) : null}
+                {userData.username === post.user?.username ? (
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDeletePost(post._id, props.groupId)}
+                  >
+                    Delete Post
+                  </Button>
+                ) : null}
                 {post.comments?.map((comment: Comment, index: number) => {
                   return (
                     <Container key={index}>
-                      <h6>User: {comment.user?.username}</h6>
+                      <h6>{comment.user?.username}</h6>
                       <p>{comment.text}</p>
                     </Container>
                   );

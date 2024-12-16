@@ -7,6 +7,7 @@ const typeDefs = gql`
     email: String
     password: String
     bio: String
+    profilePicture: String
     savedBooks: [Book]
     currentlyReading: Book
     adminGroups: [Group]
@@ -30,6 +31,7 @@ const typeDefs = gql`
     admin: User
     description: String
     is_private: Boolean
+    profilePicture: String
     users: [User]
     currentBook: Book
     books: [Book]

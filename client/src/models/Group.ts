@@ -7,6 +7,7 @@ export interface Group {
     description: string;
     is_private: boolean;
     admin?: IUser;
+    profilePicture?: string;
     users?: IUser[];
     currentBook?: string;
     books?: string[];
