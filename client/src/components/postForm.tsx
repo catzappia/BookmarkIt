@@ -7,7 +7,9 @@ import Modal from "react-bootstrap/Modal";
 
 import { Post, Comment } from "../models/Post";
 import { ADD_POST_TO_GROUP } from "../utils/mutations";
+import { DELETE_POST } from "../utils/mutations";
 import CommentComponent from "../components/comment";
+import Auth from "../utils/auth";
 
 interface PostFormProps {
   groupId: string;
@@ -42,7 +44,6 @@ const PostForm = (props: PostFormProps) => {
 
   const [addPost] = useMutation(ADD_POST_TO_GROUP);
 
-  const [addComment] = useMutation(ADD_COMMENT_TO_POST);
   const [deletePost] = useMutation(DELETE_POST);
 
   const handlePostFormSubmit = async (event: FormEvent) => {
@@ -71,21 +72,6 @@ const PostForm = (props: PostFormProps) => {
       console.error(err);
     }
   }
-
-
-  const handleCommentFormSubmit = async (event: FormEvent, postId: string) => {
-    event.preventDefault();
-
-    try {
-      await addComment({
-        variables: { input: postId, commentText },
-      });
-
-      setCommentText("");
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   return (
     <Container>
@@ -121,23 +107,10 @@ const PostForm = (props: PostFormProps) => {
                 <h5>{post?.user?.username}</h5>
                 <p>{post.text}</p>
                 {userData.username === post.user?.username ? ( <Button variant="danger" onClick={() => handleDeletePost(post._id, props.groupId)}>Delete Post</Button> ) : null}
-                <Form onSubmit={(e) => handleCommentFormSubmit(e, post._id)}>
-                  <Form.Group>
-                    <Form.Label htmlFor="text">Add a Comment</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      name={post._id}
-                      rows={3}
-                      value={commentText}
-                      onChange={(e) => setCommentText(e.target.value)}
-                    />
-                  </Form.Group>
-                  <Button type="submit">Submit</Button>
-                </Form>
                 {post.comments?.map((comment: Comment, index: number) => {
                   return (
                     <Container key={index}>
-                      <h6>{comment?.user?.username}</h6>
+                      <h6>User: {comment.user?.username}</h6>
                       <p>{comment.text}</p>
                     </Container>
                   );

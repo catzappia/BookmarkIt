@@ -414,13 +414,29 @@ const resolvers = {
           },
           { new: true }
         );
-        return updatedPost;
+        return updatedPost?.populate([
+          {
+            path: "user",
+            select: "username",
+          },
+          {
+            path: "comments",
+            select: ["text", "user"],
+            populate: {
+              path: "user",
+              select: "username",
+            },
+          },
+        ]);
       } catch (err) {
         console.error(err);
         throw new Error("Failed to add comment to post");
       }
     },
-    deletePost: async (_parent: any, { input: { postId, groupId } }: deletePostArgs, context: IApolloContext
+    deletePost: async (
+      _parent: any,
+      { input: { postId, groupId } }: deletePostArgs,
+      context: IApolloContext
     ) => {
       try {
         if (!context.user) {
@@ -447,14 +463,14 @@ const resolvers = {
           },
           { new: true }
         );
-  
+
         return updatedGroup;
       } catch (err) {
         console.error(err);
         throw new Error("Failed to remove user from group");
       }
-    }
     },
+  },
 };
 
 export default resolvers;
