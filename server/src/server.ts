@@ -42,15 +42,7 @@ const startApolloServer = async () => {
     app.use(express.static(path.join(__dirname, "../../client/dist")));
 
     app.get("*", (_req: Request, res: Response) => {
-      res.sendFile(
-        path.join(__dirname, "../../client/dist/index.html"),
-        (err) => {
-          if (err) {
-            console.error("Error serving index.html:", err);
-            res.status(500).send("Server error");
-          }
-        }
-      );
+      res.sendFile(path.resolve(process.cwd(), "../../client/dist/index.html"));
     });
   }
 
