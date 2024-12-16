@@ -170,6 +170,7 @@ const Group = () => {
       <Row className="text-center">
         <Col>
           <h2>{groupData.name}</h2>
+          <p>{groupData.description}</p>
         </Col>
         <Col>Created by: {groupData?.admin?.username}</Col>
         <Col>
