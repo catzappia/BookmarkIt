@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import DescriptionModal from "../components/Modal-desc";
 import "../styles/group.css";
 
@@ -25,7 +25,7 @@ import PostForm from "../components/postForm";
 import Auth from "../utils/auth";
 
 const Group = () => {
-  const router = useNavigate();
+  // const router = useNavigate();
 
   //Get User Data
   const token = Auth.loggedIn() ? Auth.getToken() : null;
