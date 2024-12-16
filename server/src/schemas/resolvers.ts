@@ -6,8 +6,7 @@ import {
 import User from "../models/User.js";
 import Group, { IGroup } from "../models/Group.js";
 // import { IBook } from '../models/Book.js';
-import Post from "../models/Post.js";
-
+import Post, { IPost } from "../models/Post.js";
 
 interface LoginArgs {
   email: string;
@@ -35,9 +34,9 @@ interface UserJoinGroupArgs {
   };
 }
 
-interface RemoveGroupArgs {
-  groupId: string;
-}
+// interface DeleteGroupArgs {
+//   groupId: string;
+// }
 
 interface LeaveGroupArgs {
   input: {
@@ -58,6 +57,12 @@ interface AddCommentToPostArgs {
     text: string;
   };
 }
+interface deletePostArgs {
+  input: {
+    postId: string;
+    groupId: string;
+  };
+}
 
 const resolvers = {
   Query: {
@@ -66,13 +71,22 @@ const resolvers = {
         throw new AuthenticationError("You need to be logged in!");
       }
       try {
-        return await User.findOne({ _id: context.user._id });
+        return await User.findOne({ _id: context.user._id }).populate([
+          {
+            path: "groups",
+            select: "name",
+          },
+          {
+            path: "adminGroups",
+            select: "name",
+          },
+        ]);
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get user");
       }
     },
-    
+
     userById: async (_parent: any, { userId }: any) => {
       try {
         return await User.findOne({ _id: userId });
@@ -91,7 +105,19 @@ const resolvers = {
     },
     group: async (_parent: any, { groupName }: any): Promise<IGroup | null> => {
       try {
-        return await Group.findOne({ name: groupName });
+        const result = await Group.findOne({ name: groupName }).populate([
+          {
+            path: "posts",
+            select: "text",
+            populate: { path: "user", select: "username" },
+          },
+          {
+            path: "admin",
+            select: "username",
+          },
+        ]);
+        console.log("Group Result: ", result);
+        return result;
       } catch (err) {
         console.error(err);
         throw new Error("Failed to get group");
@@ -124,7 +150,29 @@ const resolvers = {
         throw new Error("Failed to get groups");
       }
     },
+
+    // get all posts
+    allPosts: async (_parent: any, _args: any): Promise<IPost[]> => {
+      try {
+        return await Post.find({}).populate("user", "username");
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to get posts");
+      }
+    },
+    postsByGroupId: async (
+      _parent: any,
+      { groupId }: any
+    ): Promise<IPost[]> => {
+      try {
+        return await Post.find({ group: groupId }).populate("user", "username");
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to get posts");
+      }
+    },
   },
+
   Mutation: {
     login: async (_parent: any, { email, password }: LoginArgs) => {
       const user = await User.findOne({ email });
@@ -225,7 +273,7 @@ const resolvers = {
     },
 
     //remove group
-    removeGroup: async (_parent: any, { groupId }: RemoveGroupArgs) => {
+    deleteGroup: async (_parent: any, { groupId }: any) => {
       try {
         return await Group.findOneAndDelete({ _id: groupId });
       } catch (err) {
@@ -235,7 +283,11 @@ const resolvers = {
     },
 
     // Users can join a group
-    addUserToGroup: async (_parent: any,{ input }: UserJoinGroupArgs,context: IApolloContext) => {
+    addUserToGroup: async (
+      _parent: any,
+      { input }: UserJoinGroupArgs,
+      context: IApolloContext
+    ) => {
       try {
         if (!context.user) {
           throw new AuthenticationError("You need to be logged in!");
@@ -261,7 +313,11 @@ const resolvers = {
       }
     },
     // Users can leave a group
-    leaveGroup: async (_parent: any,{ input }: LeaveGroupArgs,context: IApolloContext) => {
+    leaveGroup: async (
+      _parent: any,
+      { input }: LeaveGroupArgs,
+      context: IApolloContext
+    ) => {
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
@@ -284,11 +340,16 @@ const resolvers = {
     },
 
     // add post to group
-    addPostToGroup: async (_parent: any,{ input: { groupId, text, } }: AddPostToGroupArgs, context:IApolloContext) => {
+    addPostToGroup: async (
+      _parent: any,
+      { input: { groupId, text } }: AddPostToGroupArgs,
+      context: IApolloContext
+    ) => {
       try {
         if (!context.user) {
           throw new AuthenticationError("You need to be logged in!");
         }
+        console.log("Input: ", groupId, text);
         const post = await Post.create({ text, user: context.user._id });
         const updatedGroup = await Group.findOneAndUpdate(
           { _id: groupId },
@@ -304,7 +365,21 @@ const resolvers = {
           },
           { new: true }
         );
-        return updatedGroup;
+        // return updatedGroup?.populate({
+        //   path: 'posts',
+        //   populate: [{ path: 'user' }, { path: 'comments' }]
+        // });
+        console.log("Updated Group: ", updatedGroup);
+        return post.populate([
+          {
+            path: "user",
+            select: "username",
+          },
+          {
+            path: "comments",
+            populate: { path: "user", select: "username" },
+          },
+        ]);
       } catch (err) {
         console.error(err);
         throw new Error("Failed to add post to group");
@@ -314,7 +389,9 @@ const resolvers = {
     // add comment to post
     addCommentToPost: async (
       _parent: any,
-      { input: { postId, text, } }: AddCommentToPostArgs, context: IApolloContext) => {
+      { input: { postId, text } }: AddCommentToPostArgs,
+      context: IApolloContext
+    ) => {
       try {
         if (!context.user) {
           throw new AuthenticationError("You need to be logged in!");
@@ -322,21 +399,51 @@ const resolvers = {
         const updatedPost = await Post.findOneAndUpdate(
           { _id: postId },
           {
-            $push: { comments: { text, user:context.user._id } },
+            $push: { comments: { text, user: context.user._id } },
           },
           { new: true }
         );
-        
-
-        
-
         return updatedPost;
       } catch (err) {
         console.error(err);
         throw new Error("Failed to add comment to post");
       }
     },
-  },
+    deletePost: async (_parent: any, { input: { postId, groupId } }: deletePostArgs, context: IApolloContext
+    ) => {
+      try {
+        if (!context.user) {
+          throw new AuthenticationError("You need to be logged in!");
+        }
+        const updatedGroup = await Group.findOneAndUpdate(
+          { _id: groupId },
+          {
+            $pull: { posts: postId },
+          },
+          { new: true }
+        );
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          {
+            $pull: { posts: postId },
+          },
+          { new: true }
+        );
+        await Post.findOneAndUpdate(
+          { _id: postId },
+          {
+            $pull: { comments: postId },
+          },
+          { new: true }
+        );
+  
+        return updatedGroup;
+      } catch (err) {
+        console.error(err);
+        throw new Error("Failed to remove user from group");
+      }
+    }
+    },
 };
 
 export default resolvers;

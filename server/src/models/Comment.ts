@@ -2,7 +2,7 @@ import { Schema, model, type Document } from 'mongoose';
 import { IUser } from './User.js';
 
 export interface IComment extends Document {
-    commentId: string,
+    id: string,
     text: string,
     user: IUser
 }

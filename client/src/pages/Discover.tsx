@@ -55,13 +55,13 @@ const Discover = () => {
   };
 
   const handleViewButton = (group: any) => {
-    router(`/groups/${group.name}`);
+    router(`/clubs/${group.name}`);
   };
 
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Create Group
+        Create Club
       </Button>
 
       <Modal show={show} onHide={handleClose} size={"xl"}>
@@ -103,7 +103,7 @@ const Discover = () => {
       </Modal>
 
       <Container>
-        <h1>Groups</h1>
+        <h1>Clubs</h1>
         <Row>
           {!groupData && <h2>No groups yet</h2>}
           {groupData?.map((group: any) => (
