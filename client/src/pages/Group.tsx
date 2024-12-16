@@ -60,6 +60,7 @@ const Group = () => {
   });
 
   const groupData = data?.group;
+  console.log("Group Data:", groupData);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;

@@ -27,6 +27,7 @@ const Comment = (props: CommentProps) => {
       });
 
       setCommentText("");
+      props.handleRefresh();
     } catch (err) {
       console.error(err);
     }
